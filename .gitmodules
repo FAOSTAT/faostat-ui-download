@@ -1,0 +1,6 @@
+[submodule "js/modules/faostat-tree"]
+	path = js/modules/faostat-tree
+	url = https://github.com/FAOSTAT3/faostat-tree.git
+[submodule "js/modules/faostat-download-selector"]
+	path = js/modules/faostat-download-selector
+	url = https://github.com/FAOSTAT3/faostat-download-selector.git
