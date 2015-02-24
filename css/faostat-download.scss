@@ -1,5 +1,9 @@
 .left_placeholder {
-  width: 195px;
+  width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.bulk_downloads_placeholder {
+  float: right;
 }

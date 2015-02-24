@@ -1,6 +1,6 @@
 {
 "version": 3,
-"mappings": "AAAA,iBAAkB;EAChB,KAAK,EAAE,KAAK;EACZ,UAAU,EAAE,IAAI;EAChB,UAAU,EAAE,MAAM",
+"mappings": "AAAA,iBAAkB;EAChB,KAAK,EAAE,IAAI;EACX,UAAU,EAAE,IAAI;EAChB,UAAU,EAAE,MAAM;;AAGpB,2BAA4B;EAC1B,KAAK,EAAE,KAAK",
 "sources": ["faostat-download.scss"],
 "names": [],
 "file": "faostat-download.css"
