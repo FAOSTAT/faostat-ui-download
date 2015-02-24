@@ -12,8 +12,8 @@ require.config({
         FAOSTAT_BULK_DOWNLOADS: root + 'faostat-bulk-downloads/faostat-bulk-downloads',
         faostat_bulk_downloads: root + 'faostat-bulk-downloads',
         //
-        //FAOSTAT_DOWNLOAD_OPTIONS: root + 'faostat-download-options/faostat-download-options',
-        //faostat_download_options: root + 'faostat-download-options',
+        FAOSTAT_DOWNLOAD_OPTIONS: root + 'faostat-download-options/faostat-download-options',
+        faostat_download_options: root + 'faostat-download-options',
         //
         //FAOSTAT_DOWNLOAD_SUMMARY: root + 'faostat-download-summary/faostat-download-summary',
         //faostat_download_summary: root + 'faostat-download-summary',
@@ -33,7 +33,7 @@ require.config({
 
 });
 
-require(['FAOSTAT_BULK_DOWNLOADS', 'FAOSTAT_TREE'], function(BULK, TREE) {
+require(['FAOSTAT_BULK_DOWNLOADS', 'FAOSTAT_TREE', 'FAOSTAT_DOWNLOAD_OPTIONS'], function(BULK, TREE, OPTIONS) {
 
     /* Language. */
     var lang = 'S';
@@ -41,6 +41,7 @@ require(['FAOSTAT_BULK_DOWNLOADS', 'FAOSTAT_TREE'], function(BULK, TREE) {
     /* Initiate components. */
     var tree = new TREE();
     var bulk = new BULK();
+    var options = new OPTIONS();
 
     /* Initiate tree. */
     tree.init({
@@ -52,6 +53,12 @@ require(['FAOSTAT_BULK_DOWNLOADS', 'FAOSTAT_TREE'], function(BULK, TREE) {
     bulk.init({
         placeholder_id: 'bulk_downloads_placeholder',
         domain: 'GE',
+        lang: lang
+    });
+
+    /* Initiate options. */
+    options.init({
+        placeholder_id: 'options_placeholder',
         lang: lang
     });
 
