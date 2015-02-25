@@ -17,6 +17,7 @@
     </head>
 
     <body>
+        <div style='margin-top: 16px;'></div>
         <div class='container'>
             <div class='row'>
                 <div class='col-xs-12 col-sm-2 col-md-2 col-lg-2'>
@@ -27,58 +28,89 @@
                 <div class='col-xs-12 col-sm-10 col-md-10 col-lg-10'>
                     <div id='right_placeholder'>
                         <div class='row'>
-                            <div class='col-xs-12 col-sm-6 col-md-6 col-lg-6'>
-                                BREADCRUMB
-                            </div>
-                            <div class='col-xs-12 col-sm-6 col-md-6 col-lg-6'>
-                                <div id='bulk_downloads_placeholder' class='bulk_downloads_placeholder'></div>
-                            </div>
-                        </div>
-                        <div class='row'>
-                            <div class='col-xs-12 col-sm-6 col-md-6 col-lg-6'>
-                                <div id='selector_1_placeholder'></div>
-                            </div>
-                            <div class='col-xs-12 col-sm-6 col-md-6 col-lg-6'>
-                                <div id='selector_2_placeholder'></div>
-                            </div>
-                        </div>
-                        <div class='row'>
-                            <div class='col-xs-12 col-sm-6 col-md-6 col-lg-6'>
-                                <div id='selector_3_placeholder'></div>
-                            </div>
-                            <div class='col-xs-12 col-sm-6 col-md-6 col-lg-6'>
-                                <div id='selector_4_placeholder'></div>
+                            <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
+                                <div class='standard-title'>Production > Crops</div>
+                                <hr class='standard-hr'>
                             </div>
                         </div>
                         <div class='row'>
                             <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
-                                SUMMARY
-                            </div>
-                        </div>
-                        <div class='row'>
-                            <div class='col-xs-12 col-sm-6 col-md-6 col-lg-6'>
-                                DISPLAY OUTPUT AS
-                            </div>
-                            <div class='col-xs-12 col-sm-2 col-md-2 col-lg-2'>
-                                <button class='btn btn-default' style='width: 100%;'>
-                                    <i class='fa fa-search'></i> Preview
-                                </button>
-                            </div>
-                            <div class='col-xs-12 col-sm-2 col-md-2 col-lg-2'>
-                                <button class='btn btn-default' style='width: 100%;'>
-                                    <i class='fa fa-file-code-o'></i> CSV
-                                </button>
-                            </div>
-                            <div class='col-xs-12 col-sm-2 col-md-2 col-lg-2'>
-                                <button class='btn btn-default' style='width: 100%;'>
-                                    <i class='fa fa-file-excel-o'></i> Excel
-                                </button>
-                            </div>
-                        </div>
-                        <div id='options_placeholder'></div>
-                        <div class='row'>
-                            <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
-                                PREVIEW
+                                <div role='tabpanel'>
+                                    <ul class='nav nav-tabs' role='tablist'>
+                                        <li role='presentation' class='active'>
+                                            <a href='#metadata' aria-controls='metadata' role='tab' data-toggle='tab'>
+                                                Metadata
+                                            </a>
+                                        </li>
+                                        <li role='presentation'>
+                                            <a href='#bulk' aria-controls='bulk' role='tab' data-toggle='tab'>
+                                                Bulk Downloads
+                                            </a>
+                                        </li>
+                                        <li role='presentation'>
+                                            <a href='#download' aria-controls='download' role='tab' data-toggle='tab'>
+                                                Custom Download
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div class='tab-content'>
+                                        <div role='tabpanel' class='tab-pane active' id='metadata' style='padding: 5px 0 5px 0;'>
+                                            Content
+                                        </div>
+                                        <div role='tabpanel' class='tab-pane' id='bulk' style='padding: 5px 0 5px 0;'>
+                                            Content
+                                        </div>
+                                        <div role='tabpanel' class='tab-pane' id='download' style='padding: 5px 0 5px 0;'>
+                                            <div class='row'>
+                                                <div class='col-xs-12 col-sm-6 col-md-6 col-lg-6'>
+                                                    <div id='selector_1_placeholder'></div>
+                                                </div>
+                                                <div class='col-xs-12 col-sm-6 col-md-6 col-lg-6'>
+                                                    <div id='selector_2_placeholder'></div>
+                                                </div>
+                                            </div>
+                                            <div class='row'>
+                                                <div class='col-xs-12 col-sm-6 col-md-6 col-lg-6'>
+                                                    <div id='selector_3_placeholder'></div>
+                                                </div>
+                                                <div class='col-xs-12 col-sm-6 col-md-6 col-lg-6'>
+                                                    <div id='selector_4_placeholder'></div>
+                                                </div>
+                                            </div>
+                                            <div class='row'>
+                                                <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
+                                                    SUMMARY
+                                                </div>
+                                            </div>
+                                            <div class='row'>
+                                                <div class='col-xs-12 col-sm-6 col-md-6 col-lg-6'>
+                                                    DISPLAY OUTPUT AS
+                                                </div>
+                                                <div class='col-xs-12 col-sm-2 col-md-2 col-lg-2'>
+                                                    <button class='btn btn-default' style='width: 100%;'>
+                                                        <i class='fa fa-search'></i> Preview
+                                                    </button>
+                                                </div>
+                                                <div class='col-xs-12 col-sm-2 col-md-2 col-lg-2'>
+                                                    <button class='btn btn-default' style='width: 100%;'>
+                                                        <i class='fa fa-file-code-o'></i> CSV
+                                                    </button>
+                                                </div>
+                                                <div class='col-xs-12 col-sm-2 col-md-2 col-lg-2'>
+                                                    <button class='btn btn-default' style='width: 100%;'>
+                                                        <i class='fa fa-file-excel-o'></i> Excel
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div id='options_placeholder'></div>
+                                            <div class='row'>
+                                                <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
+                                                    PREVIEW
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
