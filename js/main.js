@@ -62,6 +62,7 @@ require(['FAOSTAT_BULK_DOWNLOADS',
         domain: 'GE',
         lang: lang
     });
+    bulk.create_flat_list();
 
     /* Initiate options. */
     options.init({
