@@ -915,9 +915,9 @@ rispetto a questo div */
     padding-bottom: 10px;
 }
 
-#METADATA {
-    width: 148px !important;
-}
+/*#METADATA {*/
+    /*width: 148px !important;*/
+/*}*/
 
 .title-note-icon {
     display: inline-block;

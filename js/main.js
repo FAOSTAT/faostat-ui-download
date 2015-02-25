@@ -22,7 +22,10 @@ require.config({
         faostat_download_selector: root + 'faostat-download-summary-2/js/modules/faostat-download-selector',
 
         FAOSTAT_TREE: root + 'faostat-tree/faostat-tree',
-        faostat_tree: root + 'faostat-tree'
+        faostat_tree: root + 'faostat-tree',
+
+        FENIX_UI_METADATA_VIEWER: root + 'fenix-ui-metadata-viewer/fenix-ui-metadata-viewer',
+        fenix_ui_metadata_viewer: root + 'fenix-ui-metadata-viewer'
 
     },
 
@@ -39,7 +42,8 @@ require.config({
 require(['FAOSTAT_BULK_DOWNLOADS',
          'FAOSTAT_TREE',
          'FAOSTAT_DOWNLOAD_OPTIONS',
-         'FAOSTAT_DOWNLOAD_SUMMARY'], function(BULK, TREE, OPTIONS, SUMMARY) {
+         'FAOSTAT_DOWNLOAD_SUMMARY',
+         'FENIX_UI_METADATA_VIEWER'], function(BULK, TREE, OPTIONS, SUMMARY, METADATDA) {
 
     /* Language. */
     var lang = 'S';
@@ -49,6 +53,7 @@ require(['FAOSTAT_BULK_DOWNLOADS',
     var bulk = new BULK();
     var options = new OPTIONS();
     var summary = new SUMMARY();
+    var metadata = new METADATDA();
 
     /* Initiate tree. */
     tree.init({
@@ -73,6 +78,14 @@ require(['FAOSTAT_BULK_DOWNLOADS',
     /* Initiate summary. */
     summary.init({
         placeholder_id: 'options_placeholder',
+        lang: lang
+    });
+
+    /* Initiate metadata. */
+    /* Initiate bulk downloads. */
+    metadata.init({
+        placeholder_id: 'metadata_placeholder',
+        domain: 'GE',
         lang: lang
     });
 
