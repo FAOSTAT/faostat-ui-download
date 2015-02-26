@@ -58,7 +58,8 @@ require(['FAOSTAT_BULK_DOWNLOADS',
     /* Initiate tree. */
     tree.init({
         placeholder_id: 'left_placeholder',
-        lang: lang
+        lang: lang,
+        max_label_width: 10
     });
 
     /* Initiate bulk downloads. */
