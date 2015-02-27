@@ -47,6 +47,7 @@ require(['FAOSTAT_BULK_DOWNLOADS',
 
     /* Language. */
     var lang = 'S';
+    var domain = 'GE';
 
     /* Initiate components. */
     var tree = new TREE();
@@ -65,7 +66,7 @@ require(['FAOSTAT_BULK_DOWNLOADS',
     /* Initiate bulk downloads. */
     bulk.init({
         placeholder_id: 'bulk_downloads_placeholder',
-        domain: 'GE',
+        domain: domain,
         lang: lang
     });
     bulk.create_flat_list();
@@ -83,11 +84,11 @@ require(['FAOSTAT_BULK_DOWNLOADS',
     });
 
     /* Initiate metadata. */
-    /* Initiate bulk downloads. */
     metadata.init({
         placeholder_id: 'metadata_placeholder',
-        domain: 'GE',
-        lang: lang
+        domain: domain,
+        lang: lang,
+        view_type: 'accordion'
     });
 
 });
