@@ -10,3 +10,6 @@
 [submodule "js/modules/fenix-ui-metadata-viewer"]
 	path = js/modules/fenix-ui-metadata-viewer
 	url = https://github.com/FENIX-Platform/fenix-ui-metadata-viewer.git
+[submodule "js/modules/faostat-selector"]
+	path = js/modules/faostat-selector
+	url = https://github.com/FAOSTAT3/faostat-download-selector.git
