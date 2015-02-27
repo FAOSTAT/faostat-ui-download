@@ -7,9 +7,6 @@
 [submodule "js/modules/faostat-bulk-downloads"]
 	path = js/modules/faostat-bulk-downloads
 	url = https://github.com/FAOSTAT3/faostat-bulk-downloads.git
-[submodule "js/modules/faostat-download-summary-2"]
-	path = js/modules/faostat-download-summary-2
-	url = https://github.com/FAOSTAT3/faostat-download-summary.git
 [submodule "js/modules/fenix-ui-metadata-viewer"]
 	path = js/modules/fenix-ui-metadata-viewer
 	url = https://github.com/FENIX-Platform/fenix-ui-metadata-viewer.git
