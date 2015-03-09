@@ -52,6 +52,7 @@ require(['FAOSTAT_BULK_DOWNLOADS',
     var lang = 'S';
     var domain = 'GE';
     var datasource = 'faostat';
+    var prefix = 'faostat_download_';
 
     /* Initiate components. */
     var tree = new TREE();
@@ -78,8 +79,10 @@ require(['FAOSTAT_BULK_DOWNLOADS',
     /* Initiate options. */
     options.init({
         placeholder_id: 'options_placeholder',
-        lang: lang
+        lang: lang,
+        prefix: prefix
     });
+    options.show_as_modal_window();
 
     /* Initiate metadata. */
     metadata.init({
