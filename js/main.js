@@ -80,12 +80,14 @@ require(['FAOSTAT_BULK_DOWNLOADS',
 
     /* Initiate download options. */
     download_options.init({
-        placeholder_id: 'download_options_placeholder',
         lang: lang,
-        prefix: prefix + 'download_'
+        prefix: prefix + 'download_',
+        placeholder_id: 'download_options_placeholder'
     });
     download_options.show_as_modal_window();
-    download_options.download_action(function(user_selection, data) {
+    download_options.onDownload({
+        foo: 'bar'
+    },function(user_selection, data) {
         switch (user_selection.output_format) {
             default:
                 console.log(user_selection.output_format);
@@ -93,7 +95,7 @@ require(['FAOSTAT_BULK_DOWNLOADS',
                 console.log(data);
                 break;
         }
-    }, {foo: 'bar'});
+    });
 
 
     /* Initiate preview options. */
