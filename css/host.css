@@ -499,7 +499,7 @@ body {
   font: normal normal 300 13px/normal "Roboto"; }
 
 a {
-  color: #379bce; }
+  color: #336600; }
   a:focus {
     outline: none; }
   a:active {
@@ -511,24 +511,24 @@ a {
 
 h1 {
   font: normal normal 100 36px/normal "Roboto";
-  color: #379bce; }
+  color: #336600; }
 
 h2 {
   font: normal normal 100 18px/normal "sansation_lightlight";
-  color: #5c8fa9; }
+  color: #33570f; }
 
 h3 {
   font: normal normal 500 14px/normal "Roboto";
-  color: #758790; }
+  color: #334d19; }
 
 h4 {
   font: normal normal 500 14px/normal "Roboto";
-  color: #838383; }
+  color: #334224; }
 
 h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, .h1 small, .h2 small, .h3 small, .h4 small, .h5 small, .h6 small, h1 .small, h2 .small, h3 .small, h4 .small, h5 .small, h6 .small, .h1 .small, .h2 .small, .h3 .small, .h4 .small, .h5 .small, .h6 .small {
   font-family: Roboto;
   font-weight: 700;
-  color: #379bce;
+  color: #336600;
   text-transform: uppercase;
   font-size: 12px; }
 
@@ -555,18 +555,18 @@ input[type="button"]::-moz-focus-inner {
   border: 0; }
 
 .btn {
-  background-color: #379bce;
+  background-color: #336600;
   color: white;
   border-color: transparent;
   font: normal normal 300 13px/normal "Roboto"; }
   .btn:hover {
     background-color: transparent;
-    color: #379bce;
-    border-color: #379bce; }
+    color: #336600;
+    border-color: #336600; }
   .btn:active {
     background-color: transparent;
-    color: #379bce;
-    border-color: #379bce;
+    color: #336600;
+    border-color: #336600;
     -webkit-box-shadow: 0 0 0 white;
     -moz-box-shadow: 0 0 0 white;
     box-shadow: 0 0 0 white; }
@@ -603,8 +603,8 @@ input[type="button"]::-moz-focus-inner {
 , .btn-primary.disabled.active
 , .btn-primary[disabled].active
 , fieldset[disabled] .btn-primary.active {
-  background-color: #758790;
-  border-color: #758790; }
+  background-color: #334d19;
+  border-color: #334d19; }
 
 /* Fenix - Circle Number Component */
 .fx-circle-number {
@@ -615,7 +615,7 @@ input[type="button"]::-moz-focus-inner {
   width: 20px;
   line-height: 20px;
   text-align: center;
-  background-color: #379bce;
+  background-color: #336600;
   -webkit-border-radius: 100%;
   -moz-border-radius: 100%;
   -ms-border-radius: 100%;
@@ -633,9 +633,9 @@ input[type="button"]::-moz-focus-inner {
     -ms-border-radius: 0;
     border-radius: 0; }
   .datepicker .datepicker-days .day.active {
-    background-color: #379bce; }
+    background-color: #336600; }
   .datepicker .datepicker-days .day.today:before {
-    border-bottom-color: #379bce; }
+    border-bottom-color: #336600; }
   .datepicker .datepicker-days .day.active.today:before {
     border-bottom-color: white; }
 
@@ -731,7 +731,7 @@ legend {
   top: 4px;
   left: 30px;
   font-weight: 300;
-  color: #758790; }
+  color: #334d19; }
 
 .fx-catalog-modular-form-content {
   padding: 10px 10px 10px 10px;
@@ -746,17 +746,17 @@ div[data-module="region"] .fx-catalog-modular-form-content {
   border-width: 0; }
 
 .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
-  border-color: #379bce; }
+  border-color: #336600; }
 
 .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
   background-color: transparent;
   color: #666666; }
 
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
-  color: #379bce; }
+  color: #336600; }
 
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
-  border-bottom: 1px solid #379bce; }
+  border-bottom: 1px solid #336600; }
 
 /* Fenix - Object Box Component */
 .obj-box, .obj-box-radius10, .obj-box-title {
@@ -786,7 +786,7 @@ div[data-module="region"] .fx-catalog-modular-form-content {
 .obj-box-title {
   padding-top: 5px; }
   .obj-box-title h4 {
-    color: #379bce;
+    color: #336600;
     font: normal normal 500 14px/normal "Roboto"; }
 
 /* Fenix - Panel Component */
@@ -825,7 +825,7 @@ div[data-module="region"] .fx-catalog-modular-form-content {
         .panel-group .panel-heading .panel-title a:focus {
           text-decoration: none; }
   .panel-group .panel-heading.fx-active-panel .panel-title a {
-    color: #379bce; }
+    color: #336600; }
   .panel-group .panel-body .btn {
     background-color: transparent;
     color: #666666;
@@ -910,7 +910,7 @@ div[data-module="region"] .fx-catalog-modular-form-content {
   min-height: 60px; }
 
 .fx-resume-title {
-  color: #379bce;
+  color: #336600;
   padding-left: 15px;
   padding-top: 5px;
   font: normal normal 400 10px/normal "Roboto";
@@ -925,7 +925,7 @@ div[data-module="region"] .fx-catalog-modular-form-content {
 #fx-catalog-submit-btn {
   color: white;
   text-transform: uppercase;
-  background-color: #379bce;
+  background-color: #336600;
   width: 150px;
   position: absolute;
   bottom: 0;
@@ -948,7 +948,7 @@ div[data-module="region"] .fx-catalog-modular-form-content {
     padding-left: 15px; }
     .fx-resume-item-selected .fx-resume-module-title em {
       font: normal normal 400 10px/normal "Roboto";
-      color: #379bce;
+      color: #336600;
       font-size: 12px;
       /* Not expected */
       position: absolute;
@@ -1029,14 +1029,14 @@ div[data-module="region"] .fx-catalog-modular-form-content {
 
 .bs-docs-sidebar .nav > li > a:hover, .bs-docs-sidebar .nav > li > a:focus {
   background-color: transparent;
-  border-left: 1px solid #379bce;
-  color: #379bce;
+  border-left: 1px solid #336600;
+  color: #336600;
   text-decoration: none; }
 
 .bs-docs-sidebar .nav > .active > a, .bs-docs-sidebar .nav > .active:hover > a, .bs-docs-sidebar .nav > .active:focus > a {
   background-color: transparent;
-  border-left: 1px solid #379bce;
-  color: #379bce;
+  border-left: 1px solid #336600;
+  color: #336600;
   font-weight: 700; }
 
 .bs-docs-sidebar .nav .nav {
@@ -1093,11 +1093,11 @@ div[data-module="region"] .fx-catalog-modular-form-content {
   position: relative; }
   .fx-widget .nav-tabs > li > a:hover, .fx-widget .nav-tabs > li > a:focus, .fx-widget .nav-tabs > li > a:active {
     background-color: transparent;
-    color: #379bce;
+    color: #336600;
     border-color: transparent; }
   .fx-widget .nav-tabs > li.active > a, .fx-widget .nav-tabs > li.active > a:hover, .fx-widget .nav-tabs > li.active > a:focus {
     background-color: white;
-    color: #379bce;
+    color: #336600;
     border-left-color: #d8d8d8;
     border-top-color: #d8d8d8;
     border-right-color: #d8d8d8;
@@ -1210,15 +1210,15 @@ div[data-module="region"] .fx-catalog-modular-form-content {
   display: none; }
 
 .fx-closepanel-container {
-  border-bottom: 1px solid #379bce;
+  border-bottom: 1px solid #336600;
   padding: 5px 10px; }
   .fx-closepanel-container .fx-widget-icons {
-    color: #379bce;
+    color: #336600;
     margin-right: 5px;
     cursor: pointer; }
   .fx-closepanel-container #fx-ws-close-btn {
     text-transform: uppercase;
-    color: #379bce;
+    color: #336600;
     cursor: pointer;
     line-height: 1;
     display: inline-block;
@@ -1243,7 +1243,7 @@ div[data-module="region"] .fx-catalog-modular-form-content {
   list-style-type: none;
   padding: 16px 16px 35px 16px;
   position: relative;
-  border-bottom: 1px solid #379bce; }
+  border-bottom: 1px solid #336600; }
 
 .fx-sessionstore-item-title {
   text-transform: uppercase;
@@ -1280,7 +1280,7 @@ div[data-module="region"] .fx-catalog-modular-form-content {
   width: 20px;
   line-height: 20px;
   text-align: center;
-  background-color: #379bce;
+  background-color: #336600;
   -webkit-border-radius: 100%;
   -moz-border-radius: 100%;
   -ms-border-radius: 100%;
@@ -1299,7 +1299,7 @@ div[data-module="region"] .fx-catalog-modular-form-content {
 
 .introjs-button:hover, .introjs-button:active, .introjs-button:focus {
   text-shadow: none;
-  color: #379bce;
+  color: #336600;
   text-decoration: none; }
 
 /* Fenix - JQwidgets */
@@ -1316,14 +1316,14 @@ div[data-module="region"] .fx-catalog-modular-form-content {
   color: #666666;
   text-shadow: none;
   border-color: transparent;
-  background-color: #dbedf6;
-  background-image: -moz-linear-gradient(top, #dbedf6, #dbedf6);
-  background-image: -ms-linear-gradient(top, #dbedf6, #dbedf6);
-  background-image: -o-linear-gradient(top, #dbedf6, #dbedf6);
-  background-image: -webkit-gradient(linear, center top, center bottom, from(#dbedf6), to(#dbedf6));
-  background-image: -webkit-linear-gradient(top, #dbedf6, #dbedf6);
-  background-image: linear-gradient(top, #dbedf6, #dbedf6);
-  background-image: linear-gradient(to bottom, #dbedf6, #dbedf6);
+  background-color: #99ff33;
+  background-image: -moz-linear-gradient(top, #99ff33, #99ff33);
+  background-image: -ms-linear-gradient(top, #99ff33, #99ff33);
+  background-image: -o-linear-gradient(top, #99ff33, #99ff33);
+  background-image: -webkit-gradient(linear, center top, center bottom, from(#99ff33), to(#99ff33));
+  background-image: -webkit-linear-gradient(top, #99ff33, #99ff33);
+  background-image: linear-gradient(top, #99ff33, #99ff33);
+  background-image: linear-gradient(to bottom, #99ff33, #99ff33);
   -moz-background-clip: padding;
   background-clip: padding-box;
   -webkit-background-clip: padding-box;
@@ -1390,14 +1390,14 @@ div[data-module="region"] .fx-catalog-modular-form-content {
   color: #666666;
   text-shadow: none;
   border-color: transparent;
-  background-color: #dbedf6;
-  background-image: -moz-linear-gradient(top, #dbedf6, #dbedf6);
-  background-image: -ms-linear-gradient(top, #dbedf6, #dbedf6);
-  background-image: -o-linear-gradient(top, #dbedf6, #dbedf6);
-  background-image: -webkit-gradient(linear, center top, center bottom, from(#dbedf6), to(#dbedf6));
-  background-image: -webkit-linear-gradient(top, #dbedf6, #dbedf6);
-  background-image: linear-gradient(top, #dbedf6, #dbedf6);
-  background-image: linear-gradient(to bottom, #dbedf6, #dbedf6);
+  background-color: #99ff33;
+  background-image: -moz-linear-gradient(top, #99ff33, #99ff33);
+  background-image: -ms-linear-gradient(top, #99ff33, #99ff33);
+  background-image: -o-linear-gradient(top, #99ff33, #99ff33);
+  background-image: -webkit-gradient(linear, center top, center bottom, from(#99ff33), to(#99ff33));
+  background-image: -webkit-linear-gradient(top, #99ff33, #99ff33);
+  background-image: linear-gradient(top, #99ff33, #99ff33);
+  background-image: linear-gradient(to bottom, #99ff33, #99ff33);
   -moz-background-clip: padding;
   background-clip: padding-box;
   -webkit-background-clip: padding-box;
@@ -1406,15 +1406,15 @@ div[data-module="region"] .fx-catalog-modular-form-content {
 .jqx-fill-state-pressed, .jqx-widget .jqx-grid-cell-selected {
   color: #666666;
   text-shadow: none;
-  border-color: #89c4e2;
-  background-color: #89c4e2;
-  background-image: -moz-linear-gradient(top, #89c4e2, #89c4e2);
-  background-image: -ms-linear-gradient(top, #89c4e2, #89c4e2);
-  background-image: -o-linear-gradient(top, #89c4e2, #89c4e2);
-  background-image: -webkit-gradient(linear, center top, center bottom, from(#89c4e2), to(#89c4e2));
-  background-image: -webkit-linear-gradient(top, #89c4e2, #89c4e2);
-  background-image: linear-gradient(top, #89c4e2, #89c4e2);
-  background-image: linear-gradient(to bottom, #89c4e2, #89c4e2);
+  border-color: #66cc00;
+  background-color: #66cc00;
+  background-image: -moz-linear-gradient(top, #66cc00, #66cc00);
+  background-image: -ms-linear-gradient(top, #66cc00, #66cc00);
+  background-image: -o-linear-gradient(top, #66cc00, #66cc00);
+  background-image: -webkit-gradient(linear, center top, center bottom, from(#66cc00), to(#66cc00));
+  background-image: -webkit-linear-gradient(top, #66cc00, #66cc00);
+  background-image: linear-gradient(top, #66cc00, #66cc00);
+  background-image: linear-gradient(to bottom, #66cc00, #66cc00);
   -moz-background-clip: padding;
   background-clip: padding-box;
   -webkit-background-clip: padding-box;
@@ -1719,11 +1719,11 @@ div[data-module="region"] .fx-catalog-modular-form-content {
 
 .jstree-default .jstree-wholerow-clicked {
   background: none;
-  background-color: #89c4e2; }
+  background-color: #66cc00; }
 
 .jstree-default .jstree-wholerow-hovered {
   background: none;
-  background-color: #dbedf6; }
+  background-color: #99ff33; }
 
 /* Leaflet */
 /* Fenix Leaflet Import */
@@ -1741,5 +1741,8 @@ div[data-module="region"] .fx-catalog-modular-form-content {
   border-radius: 3px;
   margin: 3px 3px 3px 0;
   padding: 2px 5px; }
+
+.v-space {
+  margin-top: 16px; }
 
 /*# sourceMappingURL=host.css.map */

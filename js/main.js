@@ -62,6 +62,9 @@ require(['FAOSTAT_BULK_DOWNLOADS',
     var preview_options = new OPTIONS();
     var metadata = new METADATDA();
     var selector_1 = new SELECTOR();
+    var selector_2 = new SELECTOR();
+    var selector_3 = new SELECTOR();
+    var selector_4 = new SELECTOR();
 
     /* Initiate tree. */
     tree.init({
@@ -120,16 +123,55 @@ require(['FAOSTAT_BULK_DOWNLOADS',
         view_type: 'accordion'
     });
 
-    /* Initiate selector. */
-    var rest_1 = wds + 'rest/procedures/usp_GetListBox/' + datasource + '/' + domain + '/1/1/' + lang;
-    var rest_2 = wds + 'rest/procedures/usp_GetListBox/' + datasource + '/' + domain + '/1/2/' + lang;
+    /* Initiate selector 1. */
+    var rest_1_1 = wds + 'rest/procedures/usp_GetListBox/' + datasource + '/' + domain + '/1/1/' + lang;
+    var rest_1_2 = wds + 'rest/procedures/usp_GetListBox/' + datasource + '/' + domain + '/1/2/' + lang;
+    var rest_1_3 = wds + 'rest/procedures/usp_GetListBox/' + datasource + '/' + domain + '/1/3/' + lang;
     selector_1.init({
         lang: lang,
         placeholder_id: 'selector_1_placeholder',
         suffix: 'area',
         tabs :   [
-            {label: 'Country', rest: rest_1},
-            {label: 'Group', rest: rest_2}
+            {label: 'Countries', rest: rest_1_1},
+            {label: 'Regions', rest: rest_1_2},
+            {label: 'Special Groups', rest: rest_1_3}
+        ]
+    });
+
+    /* Initiate selector 2. */
+    var rest_2_1 = wds + 'rest/procedures/usp_GetListBox/' + datasource + '/' + domain + '/2/1/' + lang;
+    selector_2.init({
+        lang: lang,
+        placeholder_id: 'selector_2_placeholder',
+        suffix: 'element',
+        tabs :   [
+            {label: 'Elements', rest: rest_2_1}
+        ]
+    });
+
+    /* Initiate selector 3. */
+    var rest_3_1 = wds + 'rest/procedures/usp_GetListBox/' + datasource + '/' + domain + '/3/1/' + lang;
+    var rest_3_2 = wds + 'rest/procedures/usp_GetListBox/' + datasource + '/' + domain + '/3/2/' + lang;
+    selector_3.init({
+        lang: lang,
+        placeholder_id: 'selector_3_placeholder',
+        suffix: 'item',
+        tabs :   [
+            {label: 'Items', rest: rest_3_1},
+            {label: 'Item Aggregated', rest: rest_3_2}
+        ]
+    });
+
+    /* Initiate selector 4. */
+    var rest_4_1 = wds + 'rest/procedures/usp_GetListBox/' + datasource + '/' + domain + '/4/1/' + lang;
+    var rest_4_2 = wds + 'rest/procedures/usp_GetListBox/' + datasource + '/' + domain + '/4/2/' + lang;
+    selector_4.init({
+        lang: lang,
+        placeholder_id: 'selector_4_placeholder',
+        suffix: 'year',
+        tabs :   [
+            {label: 'Years', rest: rest_4_1},
+            {label: 'Year Projections', rest: rest_4_2}
         ]
     });
 

@@ -16,3 +16,6 @@
 [submodule "js/modules/fenix-ui-common"]
 	path = js/modules/fenix-ui-common
 	url = https://github.com/FENIX-Platform/fenix-ui-common.git
+[submodule "js/modules/faostat-download-selectors-manager"]
+	path = js/modules/faostat-download-selectors-manager
+	url = https://github.com/FAOSTAT3/faostat-download-selectors-manager.git
