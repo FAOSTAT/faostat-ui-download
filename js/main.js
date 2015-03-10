@@ -9,7 +9,8 @@ require.config({
     paths: {
 
         jquery : repository + 'jquery/1.10.2/jquery-1.10.2.min',
-        'bootstrap': repository + 'bootstrap/3.2/js/bootstrap.min',
+        bootstrap: repository + 'bootstrap/3.2/js/bootstrap.min',
+        amplify: repository + 'amplify/1.1.2/amplify.min',
 
         FAOSTAT_BULK_DOWNLOADS: root + 'faostat-bulk-downloads/faostat-bulk-downloads',
         faostat_bulk_downloads: root + 'faostat-bulk-downloads',
@@ -57,7 +58,8 @@ require(['FAOSTAT_BULK_DOWNLOADS',
     /* Initiate components. */
     var tree = new TREE();
     var bulk = new BULK();
-    var options = new OPTIONS();
+    var download_options = new OPTIONS();
+    var preview_options = new OPTIONS();
     var metadata = new METADATDA();
     var selector_1 = new SELECTOR();
 
@@ -76,13 +78,37 @@ require(['FAOSTAT_BULK_DOWNLOADS',
     });
     bulk.create_flat_list();
 
-    /* Initiate options. */
-    options.init({
-        placeholder_id: 'options_placeholder',
+    /* Initiate download options. */
+    download_options.init({
+        placeholder_id: 'download_options_placeholder',
         lang: lang,
-        prefix: prefix
+        prefix: prefix + 'download_'
     });
-    options.show_as_modal_window();
+    download_options.show_as_modal_window();
+    download_options.download_action(function(user_selection, data) {
+        switch (user_selection.output_format) {
+            default:
+                console.log(user_selection.output_format);
+                console.log(user_selection);
+                console.log(data);
+                break;
+        }
+    }, {foo: 'bar'});
+
+
+    /* Initiate preview options. */
+    preview_options.init({
+        placeholder_id: 'preview_options_placeholder',
+        lang: lang,
+        prefix: prefix + 'preview_',
+        csv_button: false,
+        excel_button: false,
+        pdf_button: false,
+        ok_button: true,
+        button_label: 'Preview Options',
+        header_label: 'Preview Options'
+    });
+    preview_options.show_as_modal_window();
 
     /* Initiate metadata. */
     metadata.init({
