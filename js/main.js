@@ -1,7 +1,8 @@
 require(['../js/modules/fenix-ui-common/js/Compiler',
          '../js/modules/faostat-tree/js/paths',
-         '../js/modules/faostat-bulk-downloads/js/paths'
-        ], function(Compiler, TREE, BULK) {
+         '../js/modules/faostat-bulk-downloads/js/paths',
+         '../js/modules/faostat-download-options/js/paths'
+        ], function(Compiler, TREE, BULK, OPTIONS) {
 
     var treeConfig = TREE;
     treeConfig['baseUrl'] = 'js/modules/faostat-tree/js';
@@ -9,7 +10,10 @@ require(['../js/modules/fenix-ui-common/js/Compiler',
     var bulkConfig = BULK;
     bulkConfig['baseUrl'] = 'js/modules/faostat-bulk-downloads/js';
 
-    Compiler.resolve([treeConfig, bulkConfig],
+    var optionsConfig = OPTIONS;
+    optionsConfig['baseUrl'] = 'js/modules/faostat-download-options/js';
+
+    Compiler.resolve([treeConfig, bulkConfig, optionsConfig],
         {
             placeholders: {
                FENIX_CDN: '//fenixapps.fao.org/repository'
@@ -49,20 +53,10 @@ require(['../js/modules/fenix-ui-common/js/Compiler',
         /* Common settings. */
         var lang = 'E';
         var domain = 'GT';
+        var prefix = 'faostat_download_';
 
         /* Initiate application and modules. */
-        app.init({
-            lang: lang,
-            tree: {
-                lang: lang,
-                placeholder_id: 'left_placeholder'
-            },
-            bulk: {
-                lang: lang,
-                domain: domain,
-                placeholder_id: 'bulk_downloads_placeholder'
-            }
-        });
+        app.init();
 
     });
 
