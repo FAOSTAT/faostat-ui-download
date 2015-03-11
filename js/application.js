@@ -67,7 +67,8 @@ define([], function() {
         require(['FAOSTAT_TREE',
                  'FAOSTAT_BULK_DOWNLOADS',
                  'FAOSTAT_DOWNLOAD_OPTIONS',
-                 'FENIX_UI_METADATA_VIEWER'], function(TREE, BULK, OPTIONS, METADATDA) {
+                 'FENIX_UI_METADATA_VIEWER',
+                 'FAOSTAT_DOWNLOAD_SELECTORS_MANAGER'], function(TREE, BULK, OPTIONS, METADATDA, SELECTOR_MGR) {
 
             /* Tree. */
             var tree = new TREE();
@@ -102,6 +103,10 @@ define([], function() {
             /* Metadata. */
             var metadata = new METADATDA();
             metadata.init(_this.CONFIG.metadata);
+
+            /* Download selectors manager. */
+            var selector_mgr = new SELECTOR_MGR();
+            selector_mgr.init({});
 
         });
 

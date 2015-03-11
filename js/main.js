@@ -2,8 +2,10 @@ require(['../js/modules/fenix-ui-common/js/Compiler',
          '../js/modules/faostat-tree/js/paths',
          '../js/modules/faostat-bulk-downloads/js/paths',
          '../js/modules/faostat-download-options/js/paths',
-         '../js/modules/fenix-ui-metadata-viewer/js/paths'
-        ], function(Compiler, TREE, BULK, OPTIONS, METADATA) {
+         '../js/modules/fenix-ui-metadata-viewer/js/paths',
+         '../js/modules/faostat-download-selectors-manager/js/paths',
+         '../js/modules/faostat-download-selectors-manager/js/modules/faostat-download-selector/js/paths'
+        ], function(Compiler, TREE, BULK, OPTIONS, METADATA, SELECTORS_MGR, SELECTOR) {
 
     var treeConfig = TREE;
     treeConfig['baseUrl'] = 'js/modules/faostat-tree/js';
@@ -17,7 +19,13 @@ require(['../js/modules/fenix-ui-common/js/Compiler',
     var metadataConfig = METADATA;
     metadataConfig['baseUrl'] = 'js/modules/fenix-ui-metadata-viewer/js';
 
-    Compiler.resolve([treeConfig, bulkConfig, optionsConfig, metadataConfig],
+    var downloadSelectorsManagerConfig = SELECTORS_MGR;
+    downloadSelectorsManagerConfig['baseUrl'] = 'js/modules/faostat-download-selectors-manager/js';
+
+    var downloadSelectorConfig = SELECTOR;
+    downloadSelectorConfig['baseUrl'] = 'js/modules/faostat-download-selectors-manager/js/modules/faostat-download-selector/js';
+
+    Compiler.resolve([treeConfig, bulkConfig, optionsConfig, metadataConfig, downloadSelectorsManagerConfig, downloadSelectorConfig],
         {
             placeholders: {
                FENIX_CDN: '//fenixapps.fao.org/repository'
