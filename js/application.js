@@ -39,6 +39,13 @@ define([], function() {
                 button_label: 'Preview Options',
                 header_label: 'Preview Options',
                 placeholder_id: 'preview_options_placeholder'
+            },
+
+            metadata: {
+                lang: lang,
+                domain: domain,
+                view_type: 'accordion',
+                placeholder_id: 'metadata_placeholder'
             }
 
         };
@@ -59,7 +66,8 @@ define([], function() {
         /* Initiate components. */
         require(['FAOSTAT_TREE',
                  'FAOSTAT_BULK_DOWNLOADS',
-                 'FAOSTAT_DOWNLOAD_OPTIONS'], function(TREE, BULK, OPTIONS) {
+                 'FAOSTAT_DOWNLOAD_OPTIONS',
+                 'FENIX_UI_METADATA_VIEWER'], function(TREE, BULK, OPTIONS, METADATDA) {
 
             /* Tree. */
             var tree = new TREE();
@@ -90,6 +98,10 @@ define([], function() {
             var preview_options = new OPTIONS();
             preview_options.init(_this.CONFIG.preview_options);
             preview_options.show_as_modal_window();
+
+            /* Metadata. */
+            var metadata = new METADATDA();
+            metadata.init(_this.CONFIG.metadata);
 
         });
 

@@ -1,8 +1,9 @@
 require(['../js/modules/fenix-ui-common/js/Compiler',
          '../js/modules/faostat-tree/js/paths',
          '../js/modules/faostat-bulk-downloads/js/paths',
-         '../js/modules/faostat-download-options/js/paths'
-        ], function(Compiler, TREE, BULK, OPTIONS) {
+         '../js/modules/faostat-download-options/js/paths',
+         '../js/modules/fenix-ui-metadata-viewer/js/paths'
+        ], function(Compiler, TREE, BULK, OPTIONS, METADATA) {
 
     var treeConfig = TREE;
     treeConfig['baseUrl'] = 'js/modules/faostat-tree/js';
@@ -13,7 +14,10 @@ require(['../js/modules/fenix-ui-common/js/Compiler',
     var optionsConfig = OPTIONS;
     optionsConfig['baseUrl'] = 'js/modules/faostat-download-options/js';
 
-    Compiler.resolve([treeConfig, bulkConfig, optionsConfig],
+    var metadataConfig = METADATA;
+    metadataConfig['baseUrl'] = 'js/modules/fenix-ui-metadata-viewer/js';
+
+    Compiler.resolve([treeConfig, bulkConfig, optionsConfig, metadataConfig],
         {
             placeholders: {
                FENIX_CDN: '//fenixapps.fao.org/repository'
@@ -50,12 +54,7 @@ require(['../js/modules/fenix-ui-common/js/Compiler',
         /* Initiate components. */
         var app = new APP();
 
-        /* Common settings. */
-        var lang = 'E';
-        var domain = 'GT';
-        var prefix = 'faostat_download_';
-
-        /* Initiate application and modules. */
+        /* Initiate the application. */
         app.init();
 
     });
