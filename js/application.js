@@ -11,8 +11,14 @@ define([], function() {
             tree: {
                 lang: 'E',
                 placeholder_id: 'tree_placeholder'
+            },
+
+            bulk: {
+                lang: 'E',
+                domain: 'QC',
+                placeholder_id: 'bulk_downloads_placeholder'
             }
-            
+
         };
 
     }
@@ -25,17 +31,23 @@ define([], function() {
         /* Fix the language, if needed. */
         this.CONFIG.lang = this.CONFIG.lang != null ? this.CONFIG.lang : 'E';
 
-        /* Initiate components. */
-        this.init_tree();
-
-    };
-
-    APP.prototype.init_tree = function() {
+        /* This... */
         var _this = this;
-        require(['FAOSTAT_TREE'], function(TREE) {
+
+        /* Initiate components. */
+        require(['FAOSTAT_TREE', 'FAOSTAT_BULK_DOWNLOADS'], function(TREE, BULK) {
+
+            /* Tree. */
             var tree = new TREE();
             tree.init(_this.CONFIG.tree);
+
+            /* Bulk downloads. */
+            var bulk = new BULK();
+            bulk.init(_this.CONFIG.bulk);
+            bulk.create_flat_list();
+
         });
+
     };
 
     return APP;
