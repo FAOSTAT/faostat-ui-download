@@ -14,7 +14,13 @@ define([], function() {
 
             tree: {
                 lang: lang,
-                placeholder_id: 'left_placeholder'
+                placeholder_id: 'left_placeholder',
+                onClick_group: function(id) {
+
+                },
+                onClick_domain: function(id) {
+
+                }
             },
 
             bulk: {
@@ -46,6 +52,14 @@ define([], function() {
                 domain: domain,
                 view_type: 'accordion',
                 placeholder_id: 'metadata_placeholder'
+            },
+
+            selector_mgr: {
+                lang: 'E',
+                domain: 'GT',
+                prefix: 'faostat_selectors_',
+                datasource: 'faostatdb',
+                placeholder_id: 'selectors_placeholder'
             }
 
         };
@@ -106,7 +120,7 @@ define([], function() {
 
             /* Download selectors manager. */
             var selector_mgr = new SELECTOR_MGR();
-            selector_mgr.init({});
+            selector_mgr.init(_this.CONFIG.selector_mgr);
 
         });
 
