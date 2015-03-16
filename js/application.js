@@ -104,6 +104,7 @@ define([], function() {
             /* Bulk downloads. */
             var bulk = new BULK();
             bulk.init(_this.CONFIG.bulk);
+            _this.CONFIG.bulk.domain = domain_code;
             bulk.create_flat_list();
 
             /* Download options. */
@@ -134,6 +135,7 @@ define([], function() {
 
             /* Download selectors manager. */
             var selector_mgr = new SELECTOR_MGR();
+            _this.CONFIG.selector_mgr.domain = domain_code;
             selector_mgr.init(_this.CONFIG.selector_mgr);
 
         });
