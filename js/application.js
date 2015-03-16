@@ -14,13 +14,7 @@ define([], function() {
 
             tree: {
                 lang: lang,
-                placeholder_id: 'left_placeholder',
-                onClick_group: function(id) {
-
-                },
-                onClick_domain: function(id) {
-
-                }
+                placeholder_id: 'left_placeholder'
             },
 
             bulk: {
@@ -56,7 +50,7 @@ define([], function() {
 
             selector_mgr: {
                 lang: 'E',
-                domain: 'GT',
+                domain: domain,
                 prefix: 'faostat_selectors_',
                 datasource: 'faostatdb',
                 placeholder_id: 'selectors_placeholder'
@@ -84,9 +78,28 @@ define([], function() {
                  'FENIX_UI_METADATA_VIEWER',
                  'FAOSTAT_DOWNLOAD_SELECTORS_MANAGER'], function(TREE, BULK, OPTIONS, METADATDA, SELECTOR_MGR) {
 
-            /* Tree. */
+            /* Initiate tree. */
             var tree = new TREE();
             tree.init(_this.CONFIG.tree);
+
+            /* Bind UI creation on domain leaf click. */
+            tree.onDomainClick(function(id) {
+                _this.load_faostat_domain_ui(id)
+            });
+
+        });
+
+    };
+
+    APP.prototype.load_faostat_domain_ui = function(domain_code) {
+
+        /* This... */
+        var _this = this;
+
+        require(['FAOSTAT_BULK_DOWNLOADS',
+                 'FAOSTAT_DOWNLOAD_OPTIONS',
+                 'FENIX_UI_METADATA_VIEWER',
+                 'FAOSTAT_DOWNLOAD_SELECTORS_MANAGER'], function(BULK, OPTIONS, METADATDA, SELECTOR_MGR) {
 
             /* Bulk downloads. */
             var bulk = new BULK();
@@ -116,6 +129,7 @@ define([], function() {
 
             /* Metadata. */
             var metadata = new METADATDA();
+            _this.CONFIG.metadata.domain = domain_code;
             metadata.init(_this.CONFIG.metadata);
 
             /* Download selectors manager. */
