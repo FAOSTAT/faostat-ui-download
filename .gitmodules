@@ -16,3 +16,6 @@
 [submodule "js/modules/faostat-download-selectors-manager"]
 	path = js/modules/faostat-download-selectors-manager
 	url = https://github.com/FAOSTAT3/faostat-download-selectors-manager.git
+[submodule "submodules/faostat-tree"]
+	path = submodules/faostat-tree
+	url = https://github.com/FAOSTAT4/faostat-tree.git
