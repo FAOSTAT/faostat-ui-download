@@ -14,9 +14,11 @@ define(['jquery',
 
         this.CONFIG = {
             lang: 'en',
+            group: null,
+            domain: null,
             lang_faostat: 'E',
-            placeholder_id: 'faostat_ui_download',
-            prefix: 'faostat_ui_download_'
+            prefix: 'faostat_ui_download_',
+            placeholder_id: 'faostat_ui_download'
         };
 
     }
@@ -43,6 +45,8 @@ define(['jquery',
         var tree = new TREE();
         tree.init({
             lang: this.CONFIG.lang,
+            group: this.CONFIG.group,
+            domain: this.CONFIG.domain,
             placeholder_id: 'left_placeholder'
         });
 
