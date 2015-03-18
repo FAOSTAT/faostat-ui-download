@@ -16,3 +16,15 @@
 [submodule "js/modules/faostat-download-selectors-manager"]
 	path = js/modules/faostat-download-selectors-manager
 	url = https://github.com/FAOSTAT3/faostat-download-selectors-manager.git
+[submodule "submodules/faostat-ui-bulk-downloads"]
+	path = submodules/faostat-ui-bulk-downloads
+	url = https://github.com/FAOSTAT4/faostat-ui-bulk-downloads.git
+[submodule "submodules/fenix-ui-download-options"]
+	path = submodules/fenix-ui-download-options
+	url = https://github.com/FENIX-Platform/fenix-ui-download-options.git
+[submodule "submodules/fenix-ui-metadata-viewer"]
+	path = submodules/fenix-ui-metadata-viewer
+	url = https://github.com/FENIX-Platform/fenix-ui-metadata-viewer.git
+[submodule "submodules/faostat-ui-download-selectors-manager"]
+	path = submodules/faostat-ui-download-selectors-manager
+	url = https://github.com/FAOSTAT4/faostat-ui-download-selectors-manager.git
