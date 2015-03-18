@@ -10,7 +10,7 @@ define(['jquery',
 
     'use strict';
 
-    function MENU() {
+    function DWLD() {
 
         this.CONFIG = {
             lang: 'en',
@@ -23,7 +23,7 @@ define(['jquery',
 
     }
 
-    MENU.prototype.init = function(config) {
+    DWLD.prototype.init = function(config) {
 
         /* Extend default configuration. */
         this.CONFIG = $.extend(true, {}, this.CONFIG, config);
@@ -33,6 +33,9 @@ define(['jquery',
 
         /* Store FAOSTAT language. */
         this.CONFIG.lang_faostat = Commons.iso2faostat(this.CONFIG.lang);
+
+        /* This... */
+        var _this = this;
 
         /* Load template. */
         var source = $(templates).filter('#faostat_ui_download_structure').html();
@@ -52,11 +55,62 @@ define(['jquery',
 
         /* Bind UI creation on domain leaf click. */
         tree.onDomainClick(function(id) {
-            this.load_faostat_domain_ui(id)
+            _this.load_faostat_domain_ui(id)
         });
 
     };
 
-    return MENU;
+    DWLD.prototype.load_faostat_domain_ui = function(domain_code) {
+
+        /* This... */
+        var _this = this;
+
+        require(['FAOSTAT_UI_BULK_DOWNLOADS',
+                 'FAOSTAT_UI_DOWNLOAD_OPTIONS',
+                 'FENIX_UI_METADATA_VIEWER',
+                 'FAOSTAT_DOWNLOAD_SELECTORS_MANAGER'], function(BULK, OPTIONS, METADATDA, SELECTOR_MGR) {
+
+            /* Bulk downloads. */
+            var bulk = new BULK();
+            bulk.init(_this.CONFIG.bulk);
+            _this.CONFIG.bulk.domain = domain_code;
+            bulk.create_flat_list();
+
+            /* Download options. */
+            var download_options = new OPTIONS();
+            download_options.init(_this.CONFIG.download_options);
+            download_options.show_as_modal_window();
+            download_options.onDownload({
+                foo: 'bar'
+            },function(user_selection, data) {
+                switch (user_selection.output_format) {
+                    default:
+                        console.log(user_selection.output_format);
+                        console.log(user_selection);
+                        console.log(data);
+                        break;
+                }
+            });
+
+            /* Preview options. */
+            var preview_options = new OPTIONS();
+            preview_options.init(_this.CONFIG.preview_options);
+            preview_options.show_as_modal_window();
+
+            /* Metadata. */
+            var metadata = new METADATDA();
+            _this.CONFIG.metadata.domain = domain_code;
+            metadata.init(_this.CONFIG.metadata);
+
+            /* Download selectors manager. */
+            var selector_mgr = new SELECTOR_MGR();
+            _this.CONFIG.selector_mgr.domain = domain_code;
+            selector_mgr.init(_this.CONFIG.selector_mgr);
+
+        });
+
+    };
+
+    return DWLD;
 
 });
