@@ -1,0 +1,81 @@
+<script type='text/x-handlebars-template' id='faostat_ui_download_structure'>
+    <div class='row'>
+        <div class='col-xs-12 col-sm-2 col-md-2 col-lg-2'>
+            <div class='standard-title'>FAOSTAT Domains</div>
+            <hr class='standard-hr'>
+            <div id='left_placeholder' class='left_placeholder'></div>
+        </div>
+        <div class='col-xs-12 col-sm-10 col-md-10 col-lg-10'>
+            <div id='right_placeholder'>
+                <div class='row'>
+                    <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
+                        <div class='standard-title'>Production > Crops</div>
+                        <hr class='standard-hr'>
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
+                        <div role='tabpanel'>
+                            <ul class='nav nav-tabs' role='tablist'>
+                                <li role='presentation' class='active'>
+                                    <a href='#metadata' aria-controls='metadata' role='tab' data-toggle='tab'>
+                                        <i class='fa fa-info'></i> Metadata
+                                    </a>
+                                </li>
+                                <li role='presentation'>
+                                    <a href='#bulk' aria-controls='bulk' role='tab' data-toggle='tab'>
+                                        <i class='fa fa-archive'></i> Bulk Downloads
+                                    </a>
+                                </li>
+                                <li role='presentation'>
+                                    <a href='#download' aria-controls='download' role='tab' data-toggle='tab'>
+                                        <i class='fa fa-download'></i> Custom Download
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class='tab-content'>
+                                <div role='tabpanel' class='tab-pane active' id='metadata'>
+                                    <div class='row'>
+                                        <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
+                                            <div id='metadata_placeholder'></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role='tabpanel' class='tab-pane' id='bulk'>
+                                    <div id='bulk_downloads_placeholder'></div>
+                                </div>
+                                <div role='tabpanel' class='tab-pane' id='download'>
+                                    <div id='selectors_placeholder'></div>
+                                    <div class='v-space'></div>
+                                    <div class='row'>
+                                        <div class='col-xs-12 col-sm-6 col-md-6 col-lg-6'>
+                                            &nbsp;
+                                        </div>
+                                        <div class='col-xs-12 col-sm-2 col-md-2 col-lg-2'>
+                                            <button class='btn btn-default' style='width: 100%;'>
+                                                <i class='fa fa-search'></i> Preview
+                                            </button>
+                                        </div>
+                                        <div class='col-xs-12 col-sm-2 col-md-2 col-lg-2'>
+                                            <div id='preview_options_placeholder'></div>
+                                        </div>
+                                        <div class='col-xs-12 col-sm-2 col-md-2 col-lg-2'>
+                                            <div id='download_options_placeholder'></div>
+                                        </div>
+                                    </div>
+                                    <div class='v-space'></div>
+                                    <div class='v-space'></div>
+                                    <div class='row'>
+                                        <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
+                                            PREVIEW
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
