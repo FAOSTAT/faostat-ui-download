@@ -66,19 +66,26 @@ define(['jquery',
         var _this = this;
 
         require(['FAOSTAT_UI_BULK_DOWNLOADS',
-                 'FAOSTAT_UI_DOWNLOAD_OPTIONS',
+                 'FENIX_UI_DOWNLOAD_OPTIONS',
                  'FENIX_UI_METADATA_VIEWER',
-                 'FAOSTAT_DOWNLOAD_SELECTORS_MANAGER'], function(BULK, OPTIONS, METADATDA, SELECTOR_MGR) {
+                 'FAOSTAT_UI_DOWNLOAD_SELECTORS_MANAGER'], function(BULK, OPTIONS, METADATDA, SELECTOR_MGR) {
 
             /* Bulk downloads. */
             var bulk = new BULK();
-            bulk.init(_this.CONFIG.bulk);
-            _this.CONFIG.bulk.domain = domain_code;
+            bulk.init({
+                lang: _this.CONFIG.lang,
+                domain: _this.CONFIG.domain,
+                placeholder_id: 'bulk_downloads_placeholder'
+            });
             bulk.create_flat_list();
 
             /* Download options. */
             var download_options = new OPTIONS();
-            download_options.init(_this.CONFIG.download_options);
+            download_options.init({
+                lang: _this.CONFIG.lang,
+                prefix: _this.CONFIG.prefix + 'download_',
+                placeholder_id: 'download_options_placeholder'
+            });
             download_options.show_as_modal_window();
             download_options.onDownload({
                 foo: 'bar'
@@ -94,18 +101,37 @@ define(['jquery',
 
             /* Preview options. */
             var preview_options = new OPTIONS();
-            preview_options.init(_this.CONFIG.preview_options);
+            preview_options.init({
+                lang: _this.CONFIG.lang,
+                ok_button: true,
+                csv_button: false,
+                pdf_button: false,
+                excel_button: false,
+                prefix: _this.CONFIG.prefix + 'preview_',
+                button_label: 'Preview Options',
+                header_label: 'Preview Options',
+                placeholder_id: 'preview_options_placeholder'
+            });
             preview_options.show_as_modal_window();
 
             /* Metadata. */
             var metadata = new METADATDA();
-            _this.CONFIG.metadata.domain = domain_code;
-            metadata.init(_this.CONFIG.metadata);
+            metadata.init({
+                lang: _this.CONFIG.lang,
+                domain: _this.CONFIG.domain,
+                view_type: 'accordion',
+                placeholder_id: 'metadata_placeholder'
+            });
 
             /* Download selectors manager. */
             var selector_mgr = new SELECTOR_MGR();
-            _this.CONFIG.selector_mgr.domain = domain_code;
-            selector_mgr.init(_this.CONFIG.selector_mgr);
+            selector_mgr.init({
+                lang: _this.CONFIG.lang,
+                domain: _this.CONFIG.domain,
+                prefix: 'faostat_selectors_',
+                datasource: 'faostatdb',
+                placeholder_id: 'selectors_placeholder'
+            });
 
         });
 
