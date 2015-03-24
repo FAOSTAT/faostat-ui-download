@@ -119,7 +119,7 @@ define(['jquery',
             metadata.init({
                 lang: _this.CONFIG.lang,
                 domain: _this.CONFIG.domain,
-                view_type: 'accordion',
+                group: _this.CONFIG.group,
                 placeholder_id: 'metadata_placeholder'
             });
 
