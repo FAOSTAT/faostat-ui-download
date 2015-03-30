@@ -55,6 +55,7 @@ define(['jquery',
 
         /* Bind UI creation on domain leaf click. */
         tree.onDomainClick(function(id) {
+            Backbone.history.navigate('/' + _this.CONFIG.lang + '/download/' + _this.CONFIG.group.toUpperCase() + '/' + id.toUpperCase(), true);
             _this.load_faostat_domain_ui(id)
         });
 
@@ -74,7 +75,7 @@ define(['jquery',
             var bulk = new BULK();
             bulk.init({
                 lang: _this.CONFIG.lang,
-                domain: _this.CONFIG.domain,
+                domain: domain_code,
                 placeholder_id: 'bulk_downloads_placeholder'
             });
             bulk.create_flat_list();
@@ -118,7 +119,7 @@ define(['jquery',
             var metadata = new METADATDA();
             metadata.init({
                 lang: _this.CONFIG.lang,
-                domain: _this.CONFIG.domain,
+                domain: domain_code,
                 group: _this.CONFIG.group,
                 placeholder_id: 'metadata_placeholder'
             });
@@ -127,7 +128,7 @@ define(['jquery',
             var selector_mgr = new SELECTOR_MGR();
             selector_mgr.init({
                 lang: _this.CONFIG.lang,
-                domain: _this.CONFIG.domain,
+                domain: domain_code,
                 prefix: 'faostat_selectors_',
                 datasource: 'faostatdb',
                 placeholder_id: 'selectors_placeholder'
