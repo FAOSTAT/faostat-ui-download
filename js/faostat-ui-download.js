@@ -55,7 +55,10 @@ define(['jquery',
 
         /* Bind UI creation on domain leaf click. */
         tree.onDomainClick(function(id) {
-            Backbone.history.navigate('/' + _this.CONFIG.lang + '/download/' + _this.CONFIG.group.toUpperCase() + '/' + id.toUpperCase(), true);
+            Backbone.history.navigate('/' + _this.CONFIG.lang +
+                                      '/download/' + _this.CONFIG.group.toUpperCase() +
+                                      '/' + id.toUpperCase() +
+                                      '/' + _this.CONFIG.section, true);
             _this.load_faostat_domain_ui(id)
         });
 
@@ -133,6 +136,19 @@ define(['jquery',
                 datasource: 'faostatdb',
                 placeholder_id: 'selectors_placeholder'
             });
+
+            /* Select tab. */
+            switch (_this.CONFIG.section) {
+                case 'metadata':
+                    $('#download_tab_panel li:eq(0) a').tab('show');
+                    break;
+                case 'bulk':
+                    $('#download_tab_panel li:eq(1) a').tab('show');
+                    break;
+                case 'custom':
+                    $('#download_tab_panel li:eq(2) a').tab('show');
+                    break;
+            }
 
         });
 
