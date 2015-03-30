@@ -137,6 +137,12 @@ define(['jquery',
                 placeholder_id: 'selectors_placeholder'
             });
 
+            /* Preview button. */
+            $('#download_preview_button').click(function() {
+                var out = selector_mgr.get_user_selection();
+                console.log(out);
+            });
+
             /* Select tab. */
             switch (_this.CONFIG.section) {
                 case 'metadata':
