@@ -180,7 +180,6 @@ define(['jquery',
                 var json = response;
                 if (typeof json == 'string')
                     json = $.parseJSON(response);
-                console.log(json);
                 $('#download_output_area').html(json);
             },
             error: function(a) {
