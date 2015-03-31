@@ -17,6 +17,7 @@ define(['jquery',
             group: null,
             domain: null,
             lang_faostat: 'E',
+            datasource: 'faostatdb',
             prefix: 'faostat_ui_download_',
             placeholder_id: 'faostat_ui_download'
         };
@@ -139,8 +140,7 @@ define(['jquery',
 
             /* Preview button. */
             $('#download_preview_button').click(function() {
-                var out = selector_mgr.get_user_selection();
-                console.log(out);
+                _this.preview(selector_mgr, preview_options);
             });
 
             /* Select tab. */
@@ -158,6 +158,39 @@ define(['jquery',
 
         });
 
+    };
+
+    DWLD.prototype.preview = function(selector_mgr, preview_options) {
+        var user_selection = selector_mgr.get_user_selection();
+        var dwld_options = preview_options.collect_user_selection();
+        var data = {};
+        data = $.extend(true, {}, data, user_selection);
+        data = $.extend(true, {}, data, dwld_options);
+        data.datasource = this.CONFIG.datasource;
+        data.domainCode = this.CONFIG.domain;
+        data.lang = this.CONFIG.lang_faostat;
+        data.limit = -1;
+        $.ajax({
+            type: 'POST',
+            url: 'http://faostat3.fao.org/wds/rest/procedures/data',
+            data: {
+                'payload': JSON.stringify(data)
+            },
+            success: function (response) {
+                var json = response;
+                if (typeof json == 'string')
+                    json = $.parseJSON(response);
+                console.log(json);
+                $('#download_output_area').html(json);
+            },
+            error: function(a) {
+                swal({
+                    title: translate.error,
+                    type: 'error',
+                    text: a.responseText
+                });
+            }
+        });
     };
 
     return DWLD;
