@@ -28,6 +28,3 @@
 [submodule "submodules/faostat-ui-download-selectors-manager"]
 	path = submodules/faostat-ui-download-selectors-manager
 	url = https://github.com/FAOSTAT4/faostat-ui-download-selectors-manager.git
-[submodule "submodules/fenix-ui-olap"]
-	path = submodules/fenix-ui-olap
-	url = https://github.com/FENIX-Platform/fenix-ui-olap.git
