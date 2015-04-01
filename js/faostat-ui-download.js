@@ -63,6 +63,33 @@ define(['jquery',
             _this.load_faostat_domain_ui(id)
         });
 
+        /* Show group metadata on group leaf click. */
+        tree.onGroupClick(function(id) {
+            Backbone.history.navigate('/' + _this.CONFIG.lang +
+                                      '/download/' + _this.CONFIG.group.toUpperCase(), {trigger: false});
+            _this.load_faostat_group_ui(id)
+        });
+
+    };
+
+    DWLD.prototype.load_faostat_group_ui = function(group_code) {
+
+        /* This... */
+        var _this = this;
+
+        require(['FENIX_UI_METADATA_VIEWER'], function(METADATDA) {
+
+            /* Metadata. */
+            var metadata = new METADATDA();
+            metadata.init({
+                lang: _this.CONFIG.lang,
+                domain: null,
+                group: group_code,
+                placeholder_id: 'download_tab_panel'
+            });
+
+        });
+
     };
 
     DWLD.prototype.load_faostat_domain_ui = function(domain_code) {
