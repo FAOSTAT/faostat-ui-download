@@ -1,21 +1,3 @@
-[submodule "js/modules/faostat-tree"]
-	path = js/modules/faostat-tree
-	url = https://github.com/FAOSTAT3/faostat-tree.git
-[submodule "js/modules/faostat-download-options"]
-	path = js/modules/faostat-download-options
-	url = https://github.com/FAOSTAT3/faostat-download-options.git
-[submodule "js/modules/faostat-bulk-downloads"]
-	path = js/modules/faostat-bulk-downloads
-	url = https://github.com/FAOSTAT3/faostat-bulk-downloads.git
-[submodule "js/modules/fenix-ui-metadata-viewer"]
-	path = js/modules/fenix-ui-metadata-viewer
-	url = https://github.com/FENIX-Platform/fenix-ui-metadata-viewer.git
-[submodule "js/modules/fenix-ui-common"]
-	path = js/modules/fenix-ui-common
-	url = https://github.com/FENIX-Platform/fenix-ui-common.git
-[submodule "js/modules/faostat-download-selectors-manager"]
-	path = js/modules/faostat-download-selectors-manager
-	url = https://github.com/FAOSTAT3/faostat-download-selectors-manager.git
 [submodule "submodules/faostat-ui-bulk-downloads"]
 	path = submodules/faostat-ui-bulk-downloads
 	url = https://github.com/FAOSTAT4/faostat-ui-bulk-downloads.git
