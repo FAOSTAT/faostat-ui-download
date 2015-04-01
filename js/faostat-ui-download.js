@@ -59,7 +59,7 @@ define(['jquery',
             Backbone.history.navigate('/' + _this.CONFIG.lang +
                                       '/download/' + _this.CONFIG.group.toUpperCase() +
                                       '/' + id.toUpperCase() +
-                                      '/' + _this.CONFIG.section, true);
+                                      '/' + _this.CONFIG.section, {trigger: false});
             _this.load_faostat_domain_ui(id)
         });
 
