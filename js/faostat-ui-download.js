@@ -94,6 +94,13 @@ define(['jquery',
 
     DWLD.prototype.load_faostat_domain_ui = function(domain_code) {
 
+        /* Load template. */
+        var source = $(templates).filter('#faostat_ui_download_domain').html();
+        var template = Handlebars.compile(source);
+        var dynamic_data = {};
+        var html = template(dynamic_data);
+        $('#faostat_ui_download_main_content').html(html);
+
         /* This... */
         var _this = this;
 
