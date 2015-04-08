@@ -101,6 +101,15 @@ define(['jquery',
         var html = template(dynamic_data);
         $('#faostat_ui_download_main_content').html(html);
 
+        /* Update the URL on tab's click. */
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var target = $(e.target).attr('href');
+            Backbone.history.navigate('/' + _this.CONFIG.lang +
+                                      '/download/' + _this.CONFIG.group.toUpperCase() +
+                                      '/' + _this.CONFIG.domain.toUpperCase() +
+                                      '/' + target.substr(1), {trigger: false});
+        });
+
         /* This... */
         var _this = this;
 
