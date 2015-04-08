@@ -74,6 +74,13 @@ define(['jquery',
 
     DWLD.prototype.load_faostat_group_ui = function(group_code) {
 
+        /* Load template. */
+        var source = $(templates).filter('#faostat_ui_download_group').html();
+        var template = Handlebars.compile(source);
+        var dynamic_data = {};
+        var html = template(dynamic_data);
+        $('#faostat_ui_download_main_content').html(html);
+
         /* This... */
         var _this = this;
 
@@ -85,7 +92,7 @@ define(['jquery',
                 lang: _this.CONFIG.lang,
                 domain: null,
                 group: group_code,
-                placeholder_id: 'download_tab_panel'
+                placeholder_id: 'metadata_panel'
             });
 
         });
