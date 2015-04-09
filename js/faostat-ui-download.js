@@ -155,38 +155,40 @@ define(['jquery',
             });
 
             /* Preview options. */
-            var preview_options = new OPTIONS();
-            preview_options.init({
+            var preview_options_config = {
                 lang: _this.CONFIG.lang,
-                ok_button: true,
-                csv_button: false,
-                pdf_button: false,
-                excel_button: false,
                 prefix: _this.CONFIG.prefix + 'preview_',
                 button_label: 'Preview Options',
                 header_label: 'Preview Options',
                 placeholder_id: 'preview_options_placeholder'
-            });
+            };
+            preview_options_config = $.extend(true, {}, preview_options_config, _this.CONFIG.preview_options);
+            var preview_options = new OPTIONS();
+            preview_options.init(preview_options_config);
             preview_options.show_as_modal_window();
 
             /* Metadata. */
-            var metadata = new METADATDA();
-            metadata.init({
+            var metadata_config = {
                 lang: _this.CONFIG.lang,
                 domain: domain_code,
                 group: _this.CONFIG.group,
                 placeholder_id: 'metadata_placeholder'
-            });
+            };
+            metadata_config = $.extend(true, {}, metadata_config, _this.CONFIG.metadata);
+            var metadata = new METADATDA();
+            metadata.init(metadata_config);
 
             /* Download selectors manager. */
-            var selector_mgr = new SELECTOR_MGR();
-            selector_mgr.init({
+            var selector_mgr_config = {
                 lang: _this.CONFIG.lang,
                 domain: domain_code,
                 prefix: 'faostat_selectors_',
                 datasource: 'faostatdb',
                 placeholder_id: 'selectors_placeholder'
-            });
+            };
+            selector_mgr_config = $.extend(true, {}, selector_mgr_config, _this.CONFIG.selector_manager);
+            var selector_mgr = new SELECTOR_MGR();
+            selector_mgr.init(selector_mgr_config);
 
             /* Preview button. */
             $('#download_preview_button').click(function() {
