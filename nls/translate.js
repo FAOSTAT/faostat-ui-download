@@ -1,7 +1,11 @@
 define({
     root : {
-        error: 'FAOSTAT UI Download Error'
+        error: 'FAOSTAT UI Download Error',
+        metadata: 'Metadata',
+        bulk: 'Bulk Downloads',
+        custom: 'Custom Download',
+        preview: 'Preview'
     },
-    F : true,
-    S : true
+    fr : true,
+    es : true
 });
