@@ -111,10 +111,11 @@ define(['jquery',
         /* Update the URL on tab's click. */
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             var target = $(e.target).attr('href');
+            var section = target.substr(1);
             Backbone.history.navigate('/' + _this.CONFIG.lang +
                                       '/download/' + _this.CONFIG.group.toUpperCase() +
                                       '/' + _this.CONFIG.domain.toUpperCase() +
-                                      '/' + target.substr(1), {trigger: false});
+                                      '/' + section, {trigger: false});
         });
 
         /* This... */
