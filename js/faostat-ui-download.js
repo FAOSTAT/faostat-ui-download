@@ -222,12 +222,13 @@ define(['jquery',
         var user_selection = selector_mgr.get_user_selection();
         var dwld_options = preview_options.collect_user_selection();
         var data = {};
+        var _this = this;
         data = $.extend(true, {}, data, user_selection);
         data = $.extend(true, {}, data, dwld_options);
         data.datasource = this.CONFIG.datasource;
         data.domainCode = this.CONFIG.domain;
         data.lang = this.CONFIG.lang_faostat;
-        data.limit = -1;
+        data.limit = 50;
         $.ajax({
             type: 'POST',
             url: 'http://faostat3.fao.org/wds/rest/procedures/data',
@@ -238,7 +239,7 @@ define(['jquery',
                 var json = response;
                 if (typeof json == 'string')
                     json = $.parseJSON(response);
-                $('#download_output_area').html(json);
+                $('#download_output_area').html(_this.create_tmp_table(json));
             },
             error: function(a) {
                 swal({
@@ -248,6 +249,31 @@ define(['jquery',
                 });
             }
         });
+    };
+
+    DWLD.prototype.create_tmp_table = function(data) {
+        var blacklist = [0, 1, 14, 15, 16, 17, 18, 19];
+        var s = '<table class="table table-striped table-bordered table-condensed table-responsive">';
+        try {
+            s += '<thead><tr>';
+            for (var i = 0 ; i < data[0].length ; i++) {
+                if ($.inArray(i, blacklist) < 0)
+                    s += '<th>' + data[0][i] + '</th>';
+            }
+            s += '</tr></thead>';
+            for (i = 1; i < data.length; i++) {
+                s += '<tr>';
+                for (var j = 0; j < data[i].length; j++) {
+                    if ($.inArray(j, blacklist) < 0)
+                        s += '<td>' + data[i][j] + '</td>';
+                }
+                s += '</tr>';
+            }
+        } catch (e) {
+
+        }
+        s += '</table>';
+        return s;
     };
 
     return DWLD;
