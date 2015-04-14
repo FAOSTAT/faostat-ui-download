@@ -80,6 +80,9 @@ define(['jquery',
                                       '/download/' + _this.CONFIG.group.toUpperCase(), {trigger: true});
         });
 
+        /* Highlight selected language. */
+        $('#' + this.CONFIG.lang + '_language_selector').css('text-decoration', 'underline');
+
         /* Load template. */
         var source = $(templates).filter('#faostat_ui_download_group').html();
         var template = Handlebars.compile(source);
@@ -114,6 +117,9 @@ define(['jquery',
                                      '/' + _this.CONFIG.domain.toUpperCase() +
                                      '/' + _this.CONFIG.section, {trigger: true});
         });
+
+        /* Highlight selected language. */
+        $('#' + this.CONFIG.lang + '_language_selector').css('text-decoration', 'underline');
 
         /* Load template. */
         var source = $(templates).filter('#faostat_ui_download_domain').html();
