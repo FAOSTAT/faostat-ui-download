@@ -74,6 +74,12 @@ define(['jquery',
 
     DWLD.prototype.load_faostat_group_ui = function(group_code) {
 
+        /* Implementation of the language change from the main menu. */
+        amplify.subscribe('language_event', function(data) {
+            Backbone.history.navigate('/' + data.language +
+                                      '/download/' + _this.CONFIG.group.toUpperCase(), {trigger: true});
+        });
+
         /* Load template. */
         var source = $(templates).filter('#faostat_ui_download_group').html();
         var template = Handlebars.compile(source);
@@ -89,9 +95,9 @@ define(['jquery',
             /* Metadata. */
             var metadata = new METADATDA();
             metadata.init({
-                lang: _this.CONFIG.lang,
                 domain: null,
                 group: group_code,
+                lang: _this.CONFIG.lang,
                 placeholder_id: 'metadata_panel'
             });
 
@@ -100,6 +106,14 @@ define(['jquery',
     };
 
     DWLD.prototype.load_faostat_domain_ui = function(domain_code) {
+
+        /* Implementation of the language change from the main menu. */
+        amplify.subscribe('language_event', function(data) {
+            Backbone.history.navigate('/' + data.language +
+                                     '/download/' + _this.CONFIG.group.toUpperCase() +
+                                     '/' + _this.CONFIG.domain.toUpperCase() +
+                                     '/' + _this.CONFIG.section, {trigger: true});
+        });
 
         /* Load template. */
         var source = $(templates).filter('#faostat_ui_download_domain').html();
