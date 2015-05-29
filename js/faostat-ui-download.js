@@ -4,9 +4,14 @@ define(['jquery',
         'i18n!faostat_ui_download/nls/translate',
         'FAOSTAT_UI_COMMONS',
         'FAOSTAT_UI_TREE',
+        'pivot',
+        'pivotRenderers',
+        'pivotAggregators',
+        'submodules/faostat-ui-download/submodules/fenix-ui-olap/config/dataConfig',
         'bootstrap',
         'sweetAlert',
-        'amplify'], function ($, Handlebars, templates, translate, Commons, TREE) {
+        'amplify'], function ($, Handlebars, templates, translate, Commons, TREE,
+                              pivot, pivotRenderers, pivotAggregators, dataConfig) {
 
     'use strict';
 
@@ -256,10 +261,17 @@ define(['jquery',
                 'payload': JSON.stringify(data)
             },
             success: function (response) {
+
+                /* Cast data, if needed. */
                 var json = response;
                 if (typeof json == 'string')
                     json = $.parseJSON(response);
-                $('#download_output_area').html(_this.create_tmp_table(json));
+
+                /* Create OLAP. */
+                dataConfig = _.extend(dataConfig, {rendererDisplay: pivotRenderers});
+                var p = new pivot();
+                p.render('download_output_area', data, dataConfig);
+
             },
             error: function(a) {
                 swal({
