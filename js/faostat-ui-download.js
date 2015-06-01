@@ -266,8 +266,10 @@ define(['jquery',
                 var json = response;
                 if (typeof json == 'string')
                     json = $.parseJSON(response);
+                console.log(json);
 
                 /* Create OLAP. */
+                dataConfig = _.extend(dataConfig, {aggregatorDisplay: pivotAggregators});
                 dataConfig = _.extend(dataConfig, {rendererDisplay: pivotRenderers});
                 var p = new pivot();
                 p.render('download_output_area', data, dataConfig);
