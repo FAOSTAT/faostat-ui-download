@@ -272,7 +272,7 @@ define(['jquery',
                 dataConfig = _.extend(dataConfig, {aggregatorDisplay: pivotAggregators});
                 dataConfig = _.extend(dataConfig, {rendererDisplay: pivotRenderers});
                 var p = new pivot();
-                p.render('download_output_area', data, dataConfig);
+                p.render('download_output_area', json, dataConfig);
 
             },
             error: function(a) {
