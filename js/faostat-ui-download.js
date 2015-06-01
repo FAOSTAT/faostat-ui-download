@@ -266,7 +266,6 @@ define(['jquery',
                 var json = response;
                 if (typeof json == 'string')
                     json = $.parseJSON(response);
-                console.log(json);
 
                 /* Create OLAP. */
                 dataConfig = _.extend(dataConfig, {aggregatorDisplay: pivotAggregators});
