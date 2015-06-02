@@ -1,8 +1,8 @@
 define(['jquery',
         'handlebars',
-        'text!faostat_ui_download/html/templates.html',
+        'text!faostat_ui_download/html/templates.hbs',
         'i18n!faostat_ui_download/nls/translate',
-        'FAOSTAT_UI_COMMONS',
+        'faostat_commons',
         'FAOSTAT_UI_TREE',
         'pivot',
         'pivotRenderers',
@@ -10,7 +10,7 @@ define(['jquery',
         'submodules/faostat-ui-download/submodules/fenix-ui-olap/config/dataConfig',
         'bootstrap',
         'sweetAlert',
-        'amplify'], function ($, Handlebars, templates, translate, Commons, TREE,
+        'amplify'], function ($, Handlebars, templates, translate, FAOSTATCommons, TREE,
                               pivot, pivotRenderers, pivotAggregators, dataConfig) {
 
     'use strict';
@@ -38,7 +38,7 @@ define(['jquery',
         this.CONFIG.lang = this.CONFIG.lang != null ? this.CONFIG.lang : 'en';
 
         /* Store FAOSTAT language. */
-        this.CONFIG.lang_faostat = Commons.iso2faostat(this.CONFIG.lang);
+        this.CONFIG.lang_faostat = FAOSTATCommons.iso2faostat(this.CONFIG.lang);
 
         /* This... */
         var _this = this;
@@ -56,23 +56,21 @@ define(['jquery',
             lang: this.CONFIG.lang,
             group: this.CONFIG.group,
             domain: this.CONFIG.domain,
-            placeholder_id: 'left_placeholder'
-        });
-
-        /* Bind UI creation on domain leaf click. */
-        tree.onDomainClick(function(id) {
-            Backbone.history.navigate('/' + _this.CONFIG.lang +
-                                      '/download/' + _this.CONFIG.group.toUpperCase() +
-                                      '/' + id.toUpperCase() +
-                                      '/' + _this.CONFIG.section, {trigger: false});
-            _this.load_faostat_domain_ui(id)
-        });
-
-        /* Show group metadata on group leaf click. */
-        tree.onGroupClick(function(id) {
-            Backbone.history.navigate('/' + _this.CONFIG.lang +
-                                      '/download/' + _this.CONFIG.group.toUpperCase(), {trigger: false});
-            _this.load_faostat_group_ui(id)
+            placeholder_id: 'left_placeholder',
+            callback: {
+                onGroupClick: function(config) {
+                    Backbone.history.navigate('/' + _this.CONFIG.lang +
+                                              '/download/' + _this.CONFIG.group.toUpperCase(), {trigger: false});
+                    _this.load_faostat_group_ui(config.id)
+                },
+                onDomainClick: function(config) {
+                    Backbone.history.navigate('/' + _this.CONFIG.lang +
+                                              '/download/' + _this.CONFIG.group.toUpperCase() +
+                                              '/' + config.id.toUpperCase() +
+                                              '/' + _this.CONFIG.section, {trigger: false});
+                    _this.load_faostat_domain_ui(config.id)
+                }
+            }
         });
 
     };
