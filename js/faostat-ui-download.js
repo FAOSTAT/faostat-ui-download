@@ -8,10 +8,10 @@ define(['jquery',
         'pivotRenderers',
         'pivotAggregators',
         'pivotConfig',
-        'bootstrap',
         'sweetAlert',
+        'bootstrap',
         'amplify'], function ($, Handlebars, templates, translate, FAOSTATCommons, TREE,
-                              pivot, pivotRenderers, pivotAggregators, dataConfig) {
+                              pivot, pivotRenderers, pivotAggregators, dataConfig, swal) {
 
     'use strict';
 
