@@ -185,10 +185,11 @@ define(['jquery',
 
             /* Preview options. */
             var preview_options_config = {
+                ok_button: true,
                 lang: _this.CONFIG.lang,
-                prefix: _this.CONFIG.prefix + 'preview_',
                 button_label: 'Preview Options',
                 header_label: 'Preview Options',
+                prefix: _this.CONFIG.prefix + 'preview_',
                 placeholder_id: 'preview_options_placeholder'
             };
             preview_options_config = $.extend(true, {}, preview_options_config, _this.CONFIG.preview_options);
