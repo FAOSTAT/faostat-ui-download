@@ -24,7 +24,8 @@ define(['jquery',
             lang_faostat: 'E',
             datasource: 'faostatdb',
             prefix: 'faostat_ui_download_',
-            placeholder_id: 'faostat_ui_download'
+            placeholder_id: 'faostat_ui_download',
+            pivot: null
         };
 
     }
@@ -168,7 +169,8 @@ define(['jquery',
             download_options.init({
                 lang: _this.CONFIG.lang,
                 prefix: _this.CONFIG.prefix + 'download_',
-                placeholder_id: 'download_options_placeholder'
+                placeholder_id: 'download_options_placeholder',
+                pdf_button: false
             });
             download_options.show_as_modal_window();
             download_options.onDownload({
@@ -269,8 +271,8 @@ define(['jquery',
                 /* Create OLAP. */
                 dataConfig = _.extend(dataConfig, {aggregatorDisplay: pivotAggregators});
                 dataConfig = _.extend(dataConfig, {rendererDisplay: pivotRenderers});
-                var p = new pivot();
-                p.render('download_output_area', json, dataConfig);
+                _this.CONFIG.pivot = new pivot();
+                _this.CONFIG.pivot.render('download_output_area', json, dataConfig);
 
             },
             error: function(a) {
