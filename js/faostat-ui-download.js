@@ -203,7 +203,7 @@ define(['jquery',
             preview_options.get_radio_button('flags').change(function() {
                 _this.CONFIG.pivot.showFlags($(this).is(':checked'));
             });
-            preview_options.get_radio_button('units').change(function() {
+            preview_options.get_radio_button('unit').change(function() {
                 _this.CONFIG.pivot.showUnit($(this).is(':checked'));
             });
             preview_options.get_radio_button('codes').change(function() {
@@ -283,7 +283,7 @@ define(['jquery',
                 dataConfig = _.extend(dataConfig, {aggregatorDisplay: pivotAggregators});
                 dataConfig = _.extend(dataConfig, {rendererDisplay: pivotRenderers});
                 _this.CONFIG.pivot = new pivot();
-                _this.CONFIG.pivot.render('download_output_area', json, dataConfig);
+                _this.CONFIG.pivot.render('downloadOutputArea', json, dataConfig);
 
             },
             error: function (a) {
