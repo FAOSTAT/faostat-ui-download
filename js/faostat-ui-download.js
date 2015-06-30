@@ -192,12 +192,23 @@ define(['jquery',
                 button_label: 'Preview Options',
                 header_label: 'Preview Options',
                 prefix: _this.CONFIG.prefix + 'preview_',
-                placeholder_id: 'preview_options_placeholder'
+                placeholder_id: 'preview_options_placeholder',
+                decimal_separators: false,
+                thousand_separators: false
             };
             preview_options_config = $.extend(true, {}, preview_options_config, _this.CONFIG.preview_options);
             var preview_options = new OPTIONS();
             preview_options.init(preview_options_config);
             preview_options.show_as_modal_window();
+            preview_options.get_radio_button('flags').change(function() {
+                _this.CONFIG.pivot.showFlags($(this).is(':checked'));
+            });
+            preview_options.get_radio_button('units').change(function() {
+                _this.CONFIG.pivot.showUnit($(this).is(':checked'));
+            });
+            preview_options.get_radio_button('codes').change(function() {
+                _this.CONFIG.pivot.showCode($(this).is(':checked'));
+            });
 
             /* Metadata. */
             var metadata_config = {
@@ -275,7 +286,8 @@ define(['jquery',
                 _this.CONFIG.pivot.render('download_output_area', json, dataConfig);
 
             },
-            error: function(a) {
+            error: function (a) {
+                console.log(a);
                 swal({
                     title: translate.error,
                     type: 'error',
