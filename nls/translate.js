@@ -3,7 +3,7 @@ define({
         error: 'FAOSTAT UI Download Error',
         metadata: 'Metadata',
         bulk: 'Bulk Downloads',
-        custom: 'Custom Download',
+        custom: 'Interactive Download',
         preview: 'Preview'
     },
     fr : true,

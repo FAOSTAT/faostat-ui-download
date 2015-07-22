@@ -178,9 +178,6 @@ define(['jquery',
             },function(user_selection, data) {
                 switch (user_selection.output_format) {
                     default:
-                        console.log(user_selection.output_format);
-                        console.log(user_selection);
-                        console.log(data);
                         break;
                 }
             });
@@ -240,13 +237,13 @@ define(['jquery',
 
             /* Select tab. */
             switch (_this.CONFIG.section) {
-                case 'metadata':
+                case 'custom':
                     $('#download_tab_panel li:eq(0) a').tab('show');
                     break;
                 case 'bulk':
                     $('#download_tab_panel li:eq(1) a').tab('show');
                     break;
-                case 'custom':
+                case 'metadata':
                     $('#download_tab_panel li:eq(2) a').tab('show');
                     break;
             }
@@ -268,7 +265,7 @@ define(['jquery',
         data.limit = 50;
         $.ajax({
             type: 'POST',
-            url: 'http://faostat3.fao.org/wds/rest/procedures/data',
+            url: 'http://fenixapps2.fao.org/wds_5.2/rest/procedures/data',
             data: {
                 'payload': JSON.stringify(data)
             },
@@ -287,7 +284,6 @@ define(['jquery',
 
             },
             error: function (a) {
-                console.log(a);
                 swal({
                     title: translate.error,
                     type: 'error',
