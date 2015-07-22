@@ -78,6 +78,10 @@ define(['jquery',
 
     DWLD.prototype.load_faostat_group_ui = function(group_code) {
 
+        /* Show group and domain label. */
+        $('#group_label').html($('#' + this.CONFIG.group.toUpperCase()).children('a').text());
+        $('#domain_label').html('Please select a domain');
+
         /* Implementation of the language change from the main menu. */
         amplify.subscribe('language_event', function(data) {
             Backbone.history.navigate('/' + data.language +
@@ -113,6 +117,10 @@ define(['jquery',
     };
 
     DWLD.prototype.load_faostat_domain_ui = function(domain_code) {
+
+        /* Show group and domain label. */
+        $('#group_label').html($('#' + this.CONFIG.group.toUpperCase()).children('a').text());
+        $('#domain_label').html($('#' + this.CONFIG.domain.toUpperCase()).children('a').text());
 
         /* Implementation of the language change from the main menu. */
         amplify.subscribe('language_event', function(data) {
