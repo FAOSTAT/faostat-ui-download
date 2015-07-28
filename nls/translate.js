@@ -4,7 +4,8 @@ define({
         metadata: 'Metadata',
         bulk: 'Bulk Downloads',
         custom: 'Interactive Download',
-        preview: 'Preview'
+        preview: 'Preview',
+        faostat_domains_label: 'FAOSTAT Domains'
     },
     fr : true,
     es : true

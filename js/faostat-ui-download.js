@@ -47,7 +47,9 @@ define(['jquery',
         /* Load template. */
         var source = $(templates).filter('#faostat_ui_download_structure').html();
         var template = Handlebars.compile(source);
-        var dynamic_data = {};
+        var dynamic_data = {
+            faostat_domains_label: translate.faostat_domains_label
+        };
         var html = template(dynamic_data);
         $('#' + this.CONFIG.placeholder_id).html(html);
 
