@@ -7,3 +7,6 @@
 [submodule "submodules/faostat-ui-download-selectors-manager"]
 	path = submodules/faostat-ui-download-selectors-manager
 	url = https://github.com/FAOSTAT4/faostat-ui-download-selectors-manager.git
+[submodule "submodules/fenix-ui-reports"]
+	path = submodules/fenix-ui-reports
+	url = https://github.com/FENIX-Platform/fenix-ui-reports.git
