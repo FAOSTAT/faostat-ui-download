@@ -100,6 +100,45 @@ define(['jquery',
 
     };
 
+    DOWNLOAD.prototype.download = function () {
+       /* 1. get data size */
+       /* 2. get data */
+       /* 3. switch preview/download */
+       /* 4. switch table/pivot */
+    };
+
+    DOWNLOAD.prototype.preview_table = function () {
+
+    };
+
+    DOWNLOAD.prototype.preview_pivot = function () {
+
+    };
+
+    DOWNLOAD.prototype.download_table = function () {
+
+    };
+
+    DOWNLOAD.prototype.download_pivot = function () {
+
+    };
+
+    DOWNLOAD.prototype.validate_user_selection = function () {
+
+    };
+
+    DOWNLOAD.prototype.get_user_selection = function () {
+
+    };
+
+    DOWNLOAD.prototype.get_download_options = function () {
+
+    };
+
+    DOWNLOAD.prototype.get_preview_options = function () {
+
+    };
+
     DOWNLOAD.prototype.render_section = function () {
         switch (this.CONFIG.section) {
         case 'metadata':
