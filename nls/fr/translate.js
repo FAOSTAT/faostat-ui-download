@@ -1,3 +1,4 @@
+/*global define*/
 define({
     metadata: 'Métadonnées',
     bulk: 'Donnes Completes',
