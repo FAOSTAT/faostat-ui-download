@@ -1,4 +1,4 @@
-/*global define*/
+/*global define, document, window, unescape, encodeURIComponent*/
 define(['jquery',
         'globals/Common',
         'handlebars',
@@ -129,11 +129,18 @@ define(['jquery',
         /* Variables. */
         var user_selection,
             options,
-            that = this;
+            that = this,
+            event;
 
         /* Get user selection. */
         user_selection = that.get_user_selection();
         console.debug(user_selection);
+
+        /* Get options. */
+        options = that.get_options();
+        console.debug(options);
+        event = that.get_event(options);
+        console.debug(event);
 
         /* Validate user selection. */
         try {
@@ -141,21 +148,33 @@ define(['jquery',
             /* Validate user selection. */
             that.validate_user_selection(user_selection);
 
-            /* Get options. */
-            options = that.get_options();
-            console.debug(options);
-
             /* Evaluate query size. */
             that.query_size(user_selection).then(function (query_size) {
+                console.debug(query_size);
 
                 /* Validate query size. */
                 that.validate_query_size(options, query_size).then(function () {
 
-                    /* Get data. */
-                    that.get_data(user_selection, options).then(function (data) {
-                        console.debug(data);
-                        that.process_data(data, options);
-                    });
+                    console.debug(event);
+
+                    /* The DOWNLOAD_TABLE event downloads the data by itself. */
+                    if (event === 'DOWNLOAD_TABLE') {
+
+                        console.debug('download_table');
+                        that.download_table(user_selection, options);
+
+                    /* The data is downloaded and passed to the various rendering functions otherwise. */
+                    } else {
+
+                        /* Get data. */
+                        that.get_data(user_selection, options).then(function (data) {
+                            console.debug(data);
+                            that.process_data(event, data, options);
+                        }).fail(function (e) {
+                            console.debug(e);
+                        });
+
+                    }
 
                 }).fail(function (e) {
                     swal({
@@ -180,18 +199,15 @@ define(['jquery',
        /* 4. switch table/pivot */
     };
 
-    DOWNLOAD.prototype.process_data = function (data, options) {
-        console.debug(this.get_event(options));
-        switch (this.get_event(options)) {
+    DOWNLOAD.prototype.process_data = function (event, data, options) {
+        console.debug(event);
+        switch (event) {
         case 'PREVIEW_TABLE':
-            console.debug('preview_table');
             this.preview_table(data, options);
             break;
         case 'PREVIEW_PIVOT':
+            console.debug('preview_pivot');
             this.preview_pivot(data, options);
-            break;
-        case 'DOWNLOAD_TABLE':
-            this.download_table(data, options);
             break;
         case 'DOWNLOAD_PIVOT':
             this.download_pivot(data, options);
@@ -200,6 +216,7 @@ define(['jquery',
     };
 
     DOWNLOAD.prototype.get_event = function (options) {
+        console.debug(options);
         switch (options.output_type) {
         case 'TABLE':
             switch (this.CONFIG.action) {
@@ -297,25 +314,61 @@ define(['jquery',
             //onPageClick: this.preview,
             context: this
         });
+        this.CONFIG.action = null;
     };
 
     DOWNLOAD.prototype.preview_pivot = function (data, options) {
-        var pivot_table = new FAOSTATPivot();
-        pivot_table.init({
-            placeholder_id: this.CONFIG.placeholders.download_output_area,
-            data: data.data,
-            dsd: data.metadata.dsd,
-            show_flags: options.flags_value,
-            show_codes: options.codes_value
+        console.debug('preview');
+        var that = this;
+        try {
+            return Q.fcall(function () {
+                var pivot_table = new FAOSTATPivot();
+                pivot_table.init({
+                    placeholder_id: that.CONFIG.placeholders.download_output_area,
+                    data: data.data,
+                    dsd: data.metadata.dsd,
+                    show_flags: options.flags_value,
+                    show_codes: options.codes_value
+                });
+                console.debug('pivot done?');
+                that.CONFIG.action = null;
+            });
+        } catch (e) {
+            console.debug(e);
+        }
+    };
+
+    DOWNLOAD.prototype.download_table = function (user_selection, options) {
+        var that = this;
+        that.CONFIG.api.data({
+            domain_code: that.CONFIG.code,
+            List1Codes: user_selection.list1Codes || null,
+            List2Codes: user_selection.list2Codes || null,
+            List3Codes: user_selection.list3Codes || null,
+            List4Codes: user_selection.list4Codes || null,
+            List5Codes: user_selection.list5Codes || null,
+            List6Codes: user_selection.list6Codes || null,
+            List7Codes: user_selection.list7Codes || null,
+            lang: that.CONFIG.lang,
+            output_type: 'csv',
+            limit: -1
+        }).then(function () {
+            that.CONFIG.action = null;
+        }).fail(function (e) {
+            var csvString = e.responseText,
+                a = document.createElement('a'),
+                filename = $('#tree').find('.jstree-anchor.jstree-clicked').text().replace(/\s/g, '_') + '_' + (new Date()).getTime() + '.csv';
+            a.href = 'data:text/csv;charset=utf-8;base64,' + window.btoa(unescape(encodeURIComponent(csvString)));
+            a.target = '_blank';
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            that.CONFIG.action = null;
         });
     };
 
-    DOWNLOAD.prototype.download_table = function (data, options) {
-
-    };
-
     DOWNLOAD.prototype.download_pivot = function (data, options) {
-
+        this.CONFIG.action = null;
     };
 
     DOWNLOAD.prototype.validate_user_selection = function (user_selection) {
@@ -339,7 +392,7 @@ define(['jquery',
     DOWNLOAD.prototype.get_options = function () {
         switch (this.CONFIG.action) {
         case 'DOWNLOAD':
-            return this.get_download_options;
+            return this.get_download_options();
         case 'PREVIEW':
             return this.get_preview_options();
         }
@@ -491,6 +544,7 @@ define(['jquery',
         /* Store user's action: download. */
         $('#' + this.CONFIG.placeholders.download_button).off().click(function () {
             that.CONFIG.action = 'DOWNLOAD';
+            that.download();
         });
 
     };
