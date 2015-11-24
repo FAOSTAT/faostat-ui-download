@@ -13,10 +13,11 @@ define(['jquery',
         'sweetAlert',
         'q',
         'faostatapiclient',
+        'FAOSTAT_UI_TABLE',
         'bootstrap',
         'amplify'], function ($, Common, Handlebars, templates, translate, FAOSTATCommons, Tree,
                               DownloadSelectorsManager, OptionsManager, BulkDownloads, MetadataViewer,
-                              swal, Q, FAOSTATAPIClient) {
+                              swal, Q, FAOSTATAPIClient, Table) {
 
     'use strict';
 
@@ -32,8 +33,10 @@ define(['jquery',
             placeholder_id: 'faostat_ui_download',
             pivot: null,
             action: null,
-            limit_pivot: 10,
-            limit_table: 10,
+            limit_pivot: 1000,
+            limit_table: 1000000,
+            page_size: 100,
+            page_number: 1,
             placeholders: {
                 tree: '#tree',
                 interactive_tab: 'a[href="#interactive_download"]',
@@ -145,8 +148,14 @@ define(['jquery',
             that.query_size(user_selection).then(function (query_size) {
 
                 /* Validate query size. */
-                that.validate_query_size(options, query_size).then(function (validation) {
-                   console.debug(validation);
+                that.validate_query_size(options, query_size).then(function () {
+
+                    /* Get data. */
+                    that.get_data(user_selection, options).then(function (data) {
+                        console.debug(data);
+                        that.process_data(data, options);
+                    });
+
                 }).fail(function (e) {
                     swal({
                         type: 'warning',
@@ -170,6 +179,46 @@ define(['jquery',
        /* 4. switch table/pivot */
     };
 
+    DOWNLOAD.prototype.process_data = function (data, options) {
+        console.debug(this.get_event(options));
+        switch (this.get_event(options)) {
+        case 'PREVIEW_TABLE':
+            console.debug('preview_table');
+            this.preview_table(data, options);
+            break;
+        case 'PREVIEW_PIVOT':
+            this.preview_pivot(data, options);
+            break;
+        case 'DOWNLOAD_TABLE':
+            this.download_table(data, options);
+            break;
+        case 'DOWNLOAD_PIVOT':
+            this.download_pivot(data, options);
+            break;
+        }
+    };
+
+    DOWNLOAD.prototype.get_event = function (options) {
+        switch (options.output_type) {
+        case 'TABLE':
+            switch (this.CONFIG.action) {
+            case 'PREVIEW':
+                return 'PREVIEW_TABLE';
+            case 'DOWNLOAD':
+                return 'DOWNLOAD_TABLE';
+            }
+            break;
+        case 'PIVOT':
+            switch (this.CONFIG.action) {
+            case 'PREVIEW':
+                return 'PREVIEW_PIVOT';
+            case 'DOWNLOAD':
+                return 'DOWNLOAD_PIVOT';
+            }
+            break;
+        }
+    };
+
     DOWNLOAD.prototype.validate_query_size = function (options, query_size) {
         var that = this;
         return Q.fcall(function () {
@@ -185,6 +234,27 @@ define(['jquery',
                 }
                 break;
             }
+        });
+    };
+
+    DOWNLOAD.prototype.get_data = function (user_selection, options) {
+        var config = {
+            domain_code: this.CONFIG.code,
+            List1Codes: user_selection.list1Codes || null,
+            List2Codes: user_selection.list2Codes || null,
+            List3Codes: user_selection.list3Codes || null,
+            List4Codes: user_selection.list4Codes || null,
+            List5Codes: user_selection.list5Codes || null,
+            List6Codes: user_selection.list6Codes || null,
+            List7Codes: user_selection.list7Codes || null,
+            lang: this.CONFIG.lang,
+            page_size: this.CONFIG.page_size,
+            page_number: this.CONFIG.page_number,
+            group_by: null,
+            decimal_places: options.decimal_numbers_value
+        };
+        return this.CONFIG.api.data(config).then(function (data) {
+            return data;
         });
     };
 
@@ -210,19 +280,38 @@ define(['jquery',
 
     };
 
-    DOWNLOAD.prototype.preview_table = function () {
+    DOWNLOAD.prototype.preview_table = function (data, options) {
+        var table = new Table();
+        console.debug(table);
+        try {
+            table.init({
+                placeholder_id: this.CONFIG.placeholders.download_output_area,
+                data: data.data,
+                metadata: data.metadata,
+                show_units: options.units_value,
+                show_flags: options.flags_value,
+                show_codes: options.codes_value,
+                decimal_places: options.decimal_numbers_value,
+                decimal_separator: options.decimal_separator_value,
+                thousand_separator: options.thousand_separator_value,
+                page_size: this.CONFIG.page_size,
+                //onPageClick: this.preview,
+                context: this
+            });
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    DOWNLOAD.prototype.preview_pivot = function (data, options) {
 
     };
 
-    DOWNLOAD.prototype.preview_pivot = function () {
+    DOWNLOAD.prototype.download_table = function (data, options) {
 
     };
 
-    DOWNLOAD.prototype.download_table = function () {
-
-    };
-
-    DOWNLOAD.prototype.download_pivot = function () {
+    DOWNLOAD.prototype.download_pivot = function (data, options) {
 
     };
 
