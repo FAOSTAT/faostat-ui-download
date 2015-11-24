@@ -1,4 +1,4 @@
-/*global define, document, window, unescape, encodeURIComponent*/
+/*global define, document, window, unescape, encodeURIComponent, setInterval, clearInterval*/
 define(['jquery',
         'globals/Common',
         'handlebars',
@@ -15,10 +15,11 @@ define(['jquery',
         'faostatapiclient',
         'FAOSTAT_UI_TABLE',
         'FAOSTAT_UI_PIVOT',
+        'pivot_exporter',
         'bootstrap',
         'amplify'], function ($, Common, Handlebars, templates, translate, FAOSTATCommons, Tree,
                               DownloadSelectorsManager, OptionsManager, BulkDownloads, MetadataViewer,
-                              swal, Q, FAOSTATAPIClient, Table, FAOSTATPivot) {
+                              swal, Q, FAOSTATAPIClient, Table, FAOSTATPivot, PivotExporter) {
 
     'use strict';
 
@@ -66,6 +67,14 @@ define(['jquery',
 
         /* Initiate FAOSTAT API's client. */
         this.CONFIG.api = new FAOSTATAPIClient();
+
+        /* Initiate pivot exporter. */
+        this.CONFIG.pivot_exporter = new PivotExporter({
+            placeholder_id: 'downloadOutputArea',
+            filename: 'FAOSTAT',
+            url_csv2excel: 'http://fenixapps2.fao.org/api/v1.0/csv2excel/',
+            url_output: 'http://fenixapps2.fao.org/api/v1.0/excels/'
+        });
 
     }
 
@@ -170,8 +179,6 @@ define(['jquery',
                         that.get_data(user_selection, options).then(function (data) {
                             console.debug(data);
                             that.process_data(event, data, options);
-                        }).fail(function (e) {
-                            console.debug(e);
                         });
 
                     }
@@ -193,10 +200,7 @@ define(['jquery',
                 text: e
             });
         }
-       /* 1. get data size */
-       /* 2. get data */
-       /* 3. switch preview/download */
-       /* 4. switch table/pivot */
+
     };
 
     DOWNLOAD.prototype.process_data = function (event, data, options) {
@@ -318,24 +322,18 @@ define(['jquery',
     };
 
     DOWNLOAD.prototype.preview_pivot = function (data, options) {
-        console.debug('preview');
         var that = this;
-        try {
-            return Q.fcall(function () {
-                var pivot_table = new FAOSTATPivot();
-                pivot_table.init({
-                    placeholder_id: that.CONFIG.placeholders.download_output_area,
-                    data: data.data,
-                    dsd: data.metadata.dsd,
-                    show_flags: options.flags_value,
-                    show_codes: options.codes_value
-                });
-                console.debug('pivot done?');
-                that.CONFIG.action = null;
+        return Q.fcall(function () {
+            var pivot_table = new FAOSTATPivot();
+            pivot_table.init({
+                placeholder_id: that.CONFIG.placeholders.download_output_area,
+                data: data.data,
+                dsd: data.metadata.dsd,
+                show_flags: options.flags_value,
+                show_codes: options.codes_value
             });
-        } catch (e) {
-            console.debug(e);
-        }
+            that.CONFIG.action = null;
+        });
     };
 
     DOWNLOAD.prototype.download_table = function (user_selection, options) {
@@ -368,7 +366,18 @@ define(['jquery',
     };
 
     DOWNLOAD.prototype.download_pivot = function (data, options) {
-        this.CONFIG.action = null;
+        var that = this,
+            timer,
+            test;
+        that.preview_pivot(data, options).then(function () {
+            timer = setInterval(function () {
+                test = $('#' + that.CONFIG.placeholders.download_output_area).html();
+                if (test !== '') {
+                    clearInterval(timer);
+                    that.CONFIG.pivot_exporter.csv();
+                }
+            }, 100);
+        });
     };
 
     DOWNLOAD.prototype.validate_user_selection = function (user_selection) {
