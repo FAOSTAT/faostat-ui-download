@@ -143,13 +143,10 @@ define(['jquery',
 
         /* Get user selection. */
         user_selection = that.get_user_selection();
-        console.debug(user_selection);
 
         /* Get options. */
         options = that.get_options();
-        console.debug(options);
         event = that.get_event(options);
-        console.debug(event);
 
         /* Validate user selection. */
         try {
@@ -159,17 +156,13 @@ define(['jquery',
 
             /* Evaluate query size. */
             that.query_size(user_selection).then(function (query_size) {
-                console.debug(query_size);
 
                 /* Validate query size. */
                 that.validate_query_size(options, query_size).then(function () {
 
-                    console.debug(event);
-
                     /* The DOWNLOAD_TABLE event downloads the data by itself. */
                     if (event === 'DOWNLOAD_TABLE') {
 
-                        console.debug('download_table');
                         that.download_table(user_selection, options);
 
                     /* The data is downloaded and passed to the various rendering functions otherwise. */
@@ -177,7 +170,6 @@ define(['jquery',
 
                         /* Get data. */
                         that.get_data(user_selection, options).then(function (data) {
-                            console.debug(data);
                             that.process_data(event, data, options);
                         });
 
@@ -204,13 +196,11 @@ define(['jquery',
     };
 
     DOWNLOAD.prototype.process_data = function (event, data, options) {
-        console.debug(event);
         switch (event) {
         case 'PREVIEW_TABLE':
             this.preview_table(data, options);
             break;
         case 'PREVIEW_PIVOT':
-            console.debug('preview_pivot');
             this.preview_pivot(data, options);
             break;
         case 'DOWNLOAD_PIVOT':
@@ -220,7 +210,6 @@ define(['jquery',
     };
 
     DOWNLOAD.prototype.get_event = function (options) {
-        console.debug(options);
         switch (options.output_type) {
         case 'TABLE':
             switch (this.CONFIG.action) {
