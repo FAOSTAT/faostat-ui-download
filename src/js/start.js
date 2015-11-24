@@ -14,10 +14,11 @@ define(['jquery',
         'q',
         'faostatapiclient',
         'FAOSTAT_UI_TABLE',
+        'FAOSTAT_UI_PIVOT',
         'bootstrap',
         'amplify'], function ($, Common, Handlebars, templates, translate, FAOSTATCommons, Tree,
                               DownloadSelectorsManager, OptionsManager, BulkDownloads, MetadataViewer,
-                              swal, Q, FAOSTATAPIClient, Table) {
+                              swal, Q, FAOSTATAPIClient, Table, FAOSTATPivot) {
 
     'use strict';
 
@@ -282,29 +283,31 @@ define(['jquery',
 
     DOWNLOAD.prototype.preview_table = function (data, options) {
         var table = new Table();
-        console.debug(table);
-        try {
-            table.init({
-                placeholder_id: this.CONFIG.placeholders.download_output_area,
-                data: data.data,
-                metadata: data.metadata,
-                show_units: options.units_value,
-                show_flags: options.flags_value,
-                show_codes: options.codes_value,
-                decimal_places: options.decimal_numbers_value,
-                decimal_separator: options.decimal_separator_value,
-                thousand_separator: options.thousand_separator_value,
-                page_size: this.CONFIG.page_size,
-                //onPageClick: this.preview,
-                context: this
-            });
-        } catch (e) {
-            console.error(e);
-        }
+        table.init({
+            placeholder_id: this.CONFIG.placeholders.download_output_area,
+            data: data.data,
+            metadata: data.metadata,
+            show_units: options.units_value,
+            show_flags: options.flags_value,
+            show_codes: options.codes_value,
+            decimal_places: options.decimal_numbers_value,
+            decimal_separator: options.decimal_separator_value,
+            thousand_separator: options.thousand_separator_value,
+            page_size: this.CONFIG.page_size,
+            //onPageClick: this.preview,
+            context: this
+        });
     };
 
     DOWNLOAD.prototype.preview_pivot = function (data, options) {
-
+        var pivot_table = new FAOSTATPivot();
+        pivot_table.init({
+            placeholder_id: this.CONFIG.placeholders.download_output_area,
+            data: data.data,
+            dsd: data.metadata.dsd,
+            show_flags: options.flags_value,
+            show_codes: options.codes_value
+        });
     };
 
     DOWNLOAD.prototype.download_table = function (data, options) {
