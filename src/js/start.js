@@ -480,53 +480,55 @@ define(['jquery',
             });
         }
 
-        /* Initiate options manager. */
-        this.CONFIG.options_manager.init({
-            callback: {
-                onOutputTypeChange: function (checked) {
-                    that.CONFIG.action = 'PREVIEW';
-                    $('#' + that.CONFIG.placeholders.download_output_area).empty();
-                    that.download(that);
-                },
-                onCodesChange: function (isChecked) {
-                    if (isChecked) {
-                        $('th[data-type="code"]').css('display', 'table-cell');
-                        $('td[data-type="code"]').css('display', 'table-cell');
-                    } else {
-                        $('th[data-type="code"]').css('display', 'none');
-                        $('td[data-type="code"]').css('display', 'none');
-                    }
-                },
-                onFlagsChange: function (isChecked) {
-                    if (isChecked) {
-                        $('th[data-type="flag"]').css('display', 'table-cell');
-                        $('td[data-type="flag"]').css('display', 'table-cell');
-                        $('th[data-type="flag_label"]').css('display', 'table-cell');
-                        $('td[data-type="flag_label"]').css('display', 'table-cell');
-                    } else {
-                        $('th[data-type="flag"]').css('display', 'none');
-                        $('td[data-type="flag"]').css('display', 'none');
-                        $('th[data-type="flag_label"]').css('display', 'none');
-                        $('td[data-type="flag_label"]').css('display', 'none');
-                    }
-                },
-                onUnitsChange: function (isChecked) {
-                    if (isChecked) {
-                        $('th[data-type="unit"]').css('display', 'table-cell');
-                        $('td[data-type="unit"]').css('display', 'table-cell');
-                    } else {
-                        $('th[data-type="unit"]').css('display', 'none');
-                        $('td[data-type="unit"]').css('display', 'none');
-                    }
-                },
-                onDecimalNumbersChange: function () {
-                    //self.preview_size();
-                },
-                onDecimalSeparatorChange: function () {
-                    //self.preview_size();
-                }
-            }
-        });
+
+
+
+        //this.CONFIG.options_manager.init({
+        //    callback: {
+        //        onOutputTypeChange: function (checked) {
+        //            that.CONFIG.action = 'PREVIEW';
+        //            $('#' + that.CONFIG.placeholders.download_output_area).empty();
+        //            that.download(that);
+        //        },
+        //        onCodesChange: function (isChecked) {
+        //            if (isChecked) {
+        //                $('th[data-type="code"]').css('display', 'table-cell');
+        //                $('td[data-type="code"]').css('display', 'table-cell');
+        //            } else {
+        //                $('th[data-type="code"]').css('display', 'none');
+        //                $('td[data-type="code"]').css('display', 'none');
+        //            }
+        //        },
+        //        onFlagsChange: function (isChecked) {
+        //            if (isChecked) {
+        //                $('th[data-type="flag"]').css('display', 'table-cell');
+        //                $('td[data-type="flag"]').css('display', 'table-cell');
+        //                $('th[data-type="flag_label"]').css('display', 'table-cell');
+        //                $('td[data-type="flag_label"]').css('display', 'table-cell');
+        //            } else {
+        //                $('th[data-type="flag"]').css('display', 'none');
+        //                $('td[data-type="flag"]').css('display', 'none');
+        //                $('th[data-type="flag_label"]').css('display', 'none');
+        //                $('td[data-type="flag_label"]').css('display', 'none');
+        //            }
+        //        },
+        //        onUnitsChange: function (isChecked) {
+        //            if (isChecked) {
+        //                $('th[data-type="unit"]').css('display', 'table-cell');
+        //                $('td[data-type="unit"]').css('display', 'table-cell');
+        //            } else {
+        //                $('th[data-type="unit"]').css('display', 'none');
+        //                $('td[data-type="unit"]').css('display', 'none');
+        //            }
+        //        },
+        //        onDecimalNumbersChange: function () {
+        //            //self.preview_size();
+        //        },
+        //        onDecimalSeparatorChange: function () {
+        //            //self.preview_size();
+        //        }
+        //    }
+        //});
 
         /* Add preview options. */
         this.CONFIG.options_manager.add_options_panel('preview_options', {
@@ -544,6 +546,57 @@ define(['jquery',
             codes_value: true
         });
 
+        /* Preview options callbacks. */
+        that.CONFIG.options_manager.get_options_window('preview_options').CONFIG.callback = {
+            onOutputTypeChange: function () {
+                that.CONFIG.action = 'PREVIEW';
+                $('#' + that.CONFIG.placeholders.download_output_area).empty();
+                that.download(that);
+            },
+            onCodesChange: function (isChecked) {
+                that.CONFIG.action = 'PREVIEW';
+                if (isChecked) {
+                    $('th[data-type="code"]').css('display', 'table-cell');
+                    $('td[data-type="code"]').css('display', 'table-cell');
+                } else {
+                    $('th[data-type="code"]').css('display', 'none');
+                    $('td[data-type="code"]').css('display', 'none');
+                }
+            },
+            onFlagsChange: function (isChecked) {
+                that.CONFIG.action = 'PREVIEW';
+                if (isChecked) {
+                    $('th[data-type="flag"]').css('display', 'table-cell');
+                    $('td[data-type="flag"]').css('display', 'table-cell');
+                    $('th[data-type="flag_label"]').css('display', 'table-cell');
+                    $('td[data-type="flag_label"]').css('display', 'table-cell');
+                } else {
+                    $('th[data-type="flag"]').css('display', 'none');
+                    $('td[data-type="flag"]').css('display', 'none');
+                    $('th[data-type="flag_label"]').css('display', 'none');
+                    $('td[data-type="flag_label"]').css('display', 'none');
+                }
+            },
+            onUnitsChange: function (isChecked) {
+                that.CONFIG.action = 'PREVIEW';
+                if (isChecked) {
+                    $('th[data-type="unit"]').css('display', 'table-cell');
+                    $('td[data-type="unit"]').css('display', 'table-cell');
+                } else {
+                    $('th[data-type="unit"]').css('display', 'none');
+                    $('td[data-type="unit"]').css('display', 'none');
+                }
+            },
+            onDecimalNumbersChange: function () {
+                that.CONFIG.action = 'PREVIEW';
+                that.download(that);
+            },
+            onDecimalSeparatorChange: function () {
+                that.CONFIG.action = 'PREVIEW';
+                that.download(that);
+            }
+        };
+
         /* Add download options. */
         this.CONFIG.options_manager.add_options_window('download_options', {
             pdf_button: false,
@@ -558,6 +611,15 @@ define(['jquery',
             metadata_button: true,
             codes_value: true
         });
+
+        /* Download options callbacks. */
+        that.CONFIG.options_manager.get_options_window('download_options').CONFIG.callback = {
+            onOutputTypeChange: function () {
+                that.CONFIG.action = 'DOWNLOAD';
+                $('#' + that.CONFIG.placeholders.download_output_area).empty();
+                that.download(that);
+            }
+        };
 
         /* Store user's action: download. */
         $('#' + this.CONFIG.placeholders.download_button).off().click(function () {
