@@ -53,7 +53,8 @@ define(['jquery',
                 metadata_container: 'metadata_container',
                 tab: 'a[data-toggle="tab"]',
                 preview_button: 'preview_button',
-                download_button: 'download_options_csv_button'
+                download_button: 'download_options_csv_button',
+                output_type: 'preview_options_output_type'
             }
         };
 
@@ -549,49 +550,66 @@ define(['jquery',
         /* Preview options callbacks. */
         that.CONFIG.options_manager.get_options_window('preview_options').CONFIG.callback = {
             onOutputTypeChange: function () {
-                that.CONFIG.action = 'PREVIEW';
                 $('#' + that.CONFIG.placeholders.download_output_area).empty();
+                that.CONFIG.action = 'PREVIEW';
                 that.download(that);
             },
             onCodesChange: function (isChecked) {
+                var isTable = $('#' + that.CONFIG.placeholders.output_type).is(':checked');
                 that.CONFIG.action = 'PREVIEW';
-                if (isChecked) {
-                    $('th[data-type="code"]').css('display', 'table-cell');
-                    $('td[data-type="code"]').css('display', 'table-cell');
+                if (isTable) {
+                    if (isChecked) {
+                        $('th[data-type="code"]').css('display', 'table-cell');
+                        $('td[data-type="code"]').css('display', 'table-cell');
+                    } else {
+                        $('th[data-type="code"]').css('display', 'none');
+                        $('td[data-type="code"]').css('display', 'none');
+                    }
                 } else {
-                    $('th[data-type="code"]').css('display', 'none');
-                    $('td[data-type="code"]').css('display', 'none');
+                    that.download(that);
                 }
             },
             onFlagsChange: function (isChecked) {
+                var isTable = $('#' + that.CONFIG.placeholders.output_type).is(':checked');
                 that.CONFIG.action = 'PREVIEW';
-                if (isChecked) {
-                    $('th[data-type="flag"]').css('display', 'table-cell');
-                    $('td[data-type="flag"]').css('display', 'table-cell');
-                    $('th[data-type="flag_label"]').css('display', 'table-cell');
-                    $('td[data-type="flag_label"]').css('display', 'table-cell');
+                if (isTable) {
+                    if (isChecked) {
+                        $('th[data-type="flag"]').css('display', 'table-cell');
+                        $('td[data-type="flag"]').css('display', 'table-cell');
+                        $('th[data-type="flag_label"]').css('display', 'table-cell');
+                        $('td[data-type="flag_label"]').css('display', 'table-cell');
+                    } else {
+                        $('th[data-type="flag"]').css('display', 'none');
+                        $('td[data-type="flag"]').css('display', 'none');
+                        $('th[data-type="flag_label"]').css('display', 'none');
+                        $('td[data-type="flag_label"]').css('display', 'none');
+                    }
                 } else {
-                    $('th[data-type="flag"]').css('display', 'none');
-                    $('td[data-type="flag"]').css('display', 'none');
-                    $('th[data-type="flag_label"]').css('display', 'none');
-                    $('td[data-type="flag_label"]').css('display', 'none');
+                    that.download(that);
                 }
             },
             onUnitsChange: function (isChecked) {
+                var isTable = $('#' + that.CONFIG.placeholders.output_type).is(':checked');
                 that.CONFIG.action = 'PREVIEW';
-                if (isChecked) {
-                    $('th[data-type="unit"]').css('display', 'table-cell');
-                    $('td[data-type="unit"]').css('display', 'table-cell');
+                if (isTable) {
+                    if (isChecked) {
+                        $('th[data-type="unit"]').css('display', 'table-cell');
+                        $('td[data-type="unit"]').css('display', 'table-cell');
+                    } else {
+                        $('th[data-type="unit"]').css('display', 'none');
+                        $('td[data-type="unit"]').css('display', 'none');
+                    }
                 } else {
-                    $('th[data-type="unit"]').css('display', 'none');
-                    $('td[data-type="unit"]').css('display', 'none');
+                    that.download(that);
                 }
             },
             onDecimalNumbersChange: function () {
+                $('#' + that.CONFIG.placeholders.download_output_area).empty();
                 that.CONFIG.action = 'PREVIEW';
                 that.download(that);
             },
             onDecimalSeparatorChange: function () {
+                $('#' + that.CONFIG.placeholders.download_output_area).empty();
                 that.CONFIG.action = 'PREVIEW';
                 that.download(that);
             }
