@@ -35,7 +35,7 @@ define(['jquery',
             prefix: 'faostat_ui_download_',
             placeholder_id: 'faostat_ui_download',
             pivot: null,
-            action: null,
+            action: 'PREVIEW',
             limit_pivot: 1000,
             limit_table: 1000000,
             page_size: 100,
@@ -134,20 +134,20 @@ define(['jquery',
 
     };
 
-    DOWNLOAD.prototype.download = function () {
+    DOWNLOAD.prototype.download = function (context) {
 
         /* Variables. */
         var user_selection,
             options,
-            that = this,
+            that = context || this,
             event;
 
         /* Get user selection. */
-        user_selection = that.get_user_selection();
+        user_selection = that.get_user_selection(that);
 
         /* Get options. */
-        options = that.get_options();
-        event = that.get_event(options);
+        options = that.get_options(that);
+        event = that.get_event(options, that);
 
         /* Add loading. */
         amplify.publish(E.WAITING_SHOW, {});
@@ -156,26 +156,26 @@ define(['jquery',
         try {
 
             /* Validate user selection. */
-            that.validate_user_selection(user_selection);
+            that.validate_user_selection(user_selection, that);
 
             /* Evaluate query size. */
-            that.query_size(user_selection).then(function (query_size) {
+            that.query_size(user_selection, that).then(function (query_size) {
 
                 /* Validate query size. */
-                that.validate_query_size(options, query_size).then(function () {
+                that.validate_query_size(options, query_size, that).then(function () {
 
                     /* The DOWNLOAD_TABLE event downloads the data by itself. */
                     if (event === 'DOWNLOAD_TABLE') {
 
                         /* Download data in CSV format. */
-                        that.download_table(user_selection, options);
+                        that.download_table(user_selection, options, that);
 
                     /* The data is downloaded and passed to the various rendering functions otherwise. */
                     } else {
 
                         /* Get data. */
-                        that.get_data(user_selection, options).then(function (data) {
-                            that.process_data(event, data, options);
+                        that.get_data(user_selection, options, that).then(function (data) {
+                            that.process_data(event, data, options, that);
                         });
 
                     }
@@ -186,6 +186,7 @@ define(['jquery',
                         title: 'Warning',
                         text: e
                     });
+                    amplify.publish(E.WAITING_HIDE, {});
                 });
 
             });
@@ -196,28 +197,31 @@ define(['jquery',
                 title: 'Warning',
                 text: e
             });
+            amplify.publish(E.WAITING_HIDE, {});
         }
 
     };
 
-    DOWNLOAD.prototype.process_data = function (event, data, options) {
+    DOWNLOAD.prototype.process_data = function (event, data, options, context) {
+        var that = context || this;
         switch (event) {
         case 'PREVIEW_TABLE':
-            this.preview_table(data, options);
+            this.preview_table(data, options, that);
             break;
         case 'PREVIEW_PIVOT':
-            this.preview_pivot(data, options);
+            this.preview_pivot(data, options, that);
             break;
         case 'DOWNLOAD_PIVOT':
-            this.download_pivot(data, options);
+            this.download_pivot(data, options, that);
             break;
         }
     };
 
-    DOWNLOAD.prototype.get_event = function (options) {
+    DOWNLOAD.prototype.get_event = function (options, context) {
+        var that = context || this;
         switch (options.output_type) {
         case 'TABLE':
-            switch (this.CONFIG.action) {
+            switch (that.CONFIG.action) {
             case 'PREVIEW':
                 return 'PREVIEW_TABLE';
             case 'DOWNLOAD':
@@ -225,7 +229,7 @@ define(['jquery',
             }
             break;
         case 'PIVOT':
-            switch (this.CONFIG.action) {
+            switch (that.CONFIG.action) {
             case 'PREVIEW':
                 return 'PREVIEW_PIVOT';
             case 'DOWNLOAD':
@@ -235,8 +239,8 @@ define(['jquery',
         }
     };
 
-    DOWNLOAD.prototype.validate_query_size = function (options, query_size) {
-        var that = this;
+    DOWNLOAD.prototype.validate_query_size = function (options, query_size, context) {
+        var that = context || this;
         return Q.fcall(function () {
             switch (options.output_type) {
             case 'TABLE':
@@ -253,31 +257,32 @@ define(['jquery',
         });
     };
 
-    DOWNLOAD.prototype.get_data = function (user_selection, options) {
-        var config = {
-            domain_code: this.CONFIG.code,
-            List1Codes: user_selection.list1Codes || null,
-            List2Codes: user_selection.list2Codes || null,
-            List3Codes: user_selection.list3Codes || null,
-            List4Codes: user_selection.list4Codes || null,
-            List5Codes: user_selection.list5Codes || null,
-            List6Codes: user_selection.list6Codes || null,
-            List7Codes: user_selection.list7Codes || null,
-            lang: this.CONFIG.lang,
-            page_size: this.CONFIG.page_size,
-            page_number: this.CONFIG.page_number,
-            group_by: null,
-            decimal_places: options.decimal_numbers_value
-        };
+    DOWNLOAD.prototype.get_data = function (user_selection, options, context) {
+        var that = context || this,
+            config = {
+                domain_code: that.CONFIG.code,
+                List1Codes: user_selection.list1Codes || null,
+                List2Codes: user_selection.list2Codes || null,
+                List3Codes: user_selection.list3Codes || null,
+                List4Codes: user_selection.list4Codes || null,
+                List5Codes: user_selection.list5Codes || null,
+                List6Codes: user_selection.list6Codes || null,
+                List7Codes: user_selection.list7Codes || null,
+                lang: that.CONFIG.lang,
+                page_size: that.CONFIG.page_size,
+                page_number: that.CONFIG.page_number,
+                group_by: null,
+                decimal_places: options.decimal_numbers_value
+            };
         return this.CONFIG.api.data(config).then(function (data) {
             return data;
         });
     };
 
-    DOWNLOAD.prototype.query_size = function (user_selection) {
+    DOWNLOAD.prototype.query_size = function (user_selection, context) {
 
         /* Variables. */
-        var that = this,
+        var that = context || this,
             config = {
                 domain_code: that.CONFIG.code,
                 List1Codes: user_selection.list1Codes || null,
@@ -296,10 +301,11 @@ define(['jquery',
 
     };
 
-    DOWNLOAD.prototype.preview_table = function (data, options) {
-        var table = new Table();
+    DOWNLOAD.prototype.preview_table = function (data, options, context) {
+        var that = context || this,
+            table = new Table();
         table.init({
-            placeholder_id: this.CONFIG.placeholders.download_output_area,
+            placeholder_id: that.CONFIG.placeholders.download_output_area,
             data: data.data,
             metadata: data.metadata,
             show_units: options.units_value,
@@ -308,16 +314,16 @@ define(['jquery',
             decimal_places: options.decimal_numbers_value,
             decimal_separator: options.decimal_separator_value,
             thousand_separator: options.thousand_separator_value,
-            page_size: this.CONFIG.page_size,
+            page_size: that.CONFIG.page_size,
             //onPageClick: this.preview,
-            context: this
+            context: that
         });
-        this.CONFIG.action = null;
+        that.CONFIG.action = null;
         amplify.publish(E.WAITING_HIDE, {});
     };
 
-    DOWNLOAD.prototype.preview_pivot = function (data, options) {
-        var that = this;
+    DOWNLOAD.prototype.preview_pivot = function (data, options, context) {
+        var that = context || this;
         return Q.fcall(function () {
             var pivot_table = new FAOSTATPivot();
             pivot_table.init({
@@ -332,8 +338,8 @@ define(['jquery',
         });
     };
 
-    DOWNLOAD.prototype.download_table = function (user_selection, options) {
-        var that = this;
+    DOWNLOAD.prototype.download_table = function (user_selection, options, context) {
+        var that = context || this;
         that.CONFIG.api.data({
             domain_code: that.CONFIG.code,
             List1Codes: user_selection.list1Codes || null,
@@ -378,13 +384,14 @@ define(['jquery',
         });
     };
 
-    DOWNLOAD.prototype.validate_user_selection = function (user_selection) {
+    DOWNLOAD.prototype.validate_user_selection = function (user_selection, context) {
 
         /* Variables. */
-        var i;
+        var i,
+            that = context || this;
 
         /* Check there's at least one selection for each box. */
-        for (i = 0; i < this.CONFIG.download_selectors_manager.CONFIG.rendered_boxes.length; i += 1) {
+        for (i = 0; i < that.CONFIG.download_selectors_manager.CONFIG.rendered_boxes.length; i += 1) {
             if (user_selection['list' + (i + 1) + 'Codes'].length < 1) {
                 throw 'Please make at least one selection for "' + $('#tab_headers__' + i + ' li:first-child').text().trim() + '".';
             }
@@ -392,16 +399,19 @@ define(['jquery',
 
     };
 
-    DOWNLOAD.prototype.get_user_selection = function () {
-        return this.CONFIG.download_selectors_manager.get_user_selection();
+    DOWNLOAD.prototype.get_user_selection = function (context) {
+        var that = context || this;
+        return that.CONFIG.download_selectors_manager.get_user_selection();
     };
 
-    DOWNLOAD.prototype.get_options = function () {
-        switch (this.CONFIG.action) {
+    DOWNLOAD.prototype.get_options = function (context) {
+        console.debug(context);
+        var that = context || this;
+        switch (that.CONFIG.action) {
         case 'DOWNLOAD':
-            return this.get_download_options();
+            return that.get_download_options(context);
         case 'PREVIEW':
-            return this.get_preview_options();
+            return that.get_preview_options(context);
         }
     };
 
@@ -473,9 +483,10 @@ define(['jquery',
         /* Initiate options manager. */
         this.CONFIG.options_manager.init({
             callback: {
-                onOutputTypeChange: function () {
+                onOutputTypeChange: function (checked) {
+                    that.CONFIG.action = 'PREVIEW';
                     $('#' + that.CONFIG.placeholders.download_output_area).empty();
-                    //self.preview_size();
+                    that.download(that);
                 },
                 onCodesChange: function (isChecked) {
                     if (isChecked) {
