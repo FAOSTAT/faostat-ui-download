@@ -1,6 +1,7 @@
-/*global define, document, window, unescape, encodeURIComponent, setInterval, clearInterval*/
+/*global define, document, window, unescape, encodeURIComponent, setInterval, clearInterval, amplify*/
 define(['jquery',
         'globals/Common',
+        'config/Events',
         'handlebars',
         'text!faostat_ui_download/html/templates.hbs',
         'i18n!faostat_ui_download/nls/translate',
@@ -17,7 +18,7 @@ define(['jquery',
         'FAOSTAT_UI_PIVOT',
         'pivot_exporter',
         'bootstrap',
-        'amplify'], function ($, Common, Handlebars, templates, translate, FAOSTATCommons, Tree,
+        'amplify'], function ($, Common, E, Handlebars, templates, translate, FAOSTATCommons, Tree,
                               DownloadSelectorsManager, OptionsManager, BulkDownloads, MetadataViewer,
                               swal, Q, FAOSTATAPIClient, Table, FAOSTATPivot, PivotExporter) {
 
@@ -148,6 +149,9 @@ define(['jquery',
         options = that.get_options();
         event = that.get_event(options);
 
+        /* Add loading. */
+        amplify.publish(E.WAITING_SHOW, {});
+
         /* Validate user selection. */
         try {
 
@@ -163,6 +167,7 @@ define(['jquery',
                     /* The DOWNLOAD_TABLE event downloads the data by itself. */
                     if (event === 'DOWNLOAD_TABLE') {
 
+                        /* Download data in CSV format. */
                         that.download_table(user_selection, options);
 
                     /* The data is downloaded and passed to the various rendering functions otherwise. */
@@ -308,6 +313,7 @@ define(['jquery',
             context: this
         });
         this.CONFIG.action = null;
+        amplify.publish(E.WAITING_HIDE, {});
     };
 
     DOWNLOAD.prototype.preview_pivot = function (data, options) {
@@ -322,6 +328,7 @@ define(['jquery',
                 show_codes: options.codes_value
             });
             that.CONFIG.action = null;
+            amplify.publish(E.WAITING_HIDE, {});
         });
     };
 
@@ -351,6 +358,7 @@ define(['jquery',
             document.body.appendChild(a);
             a.click();
             that.CONFIG.action = null;
+            amplify.publish(E.WAITING_HIDE, {});
         });
     };
 
@@ -364,6 +372,7 @@ define(['jquery',
                 if (test !== '') {
                     clearInterval(timer);
                     that.CONFIG.pivot_exporter.csv();
+                    amplify.publish(E.WAITING_HIDE, {});
                 }
             }, 100);
         });
