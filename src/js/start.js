@@ -1,5 +1,6 @@
 /*global define, document, window, unescape, encodeURIComponent, setInterval, clearInterval, amplify*/
 define(['jquery',
+        'config/Config',
         'globals/Common',
         'config/Events',
         'handlebars',
@@ -18,7 +19,7 @@ define(['jquery',
         'FAOSTAT_UI_PIVOT',
         'pivot_exporter',
         'bootstrap',
-        'amplify'], function ($, Common, E, Handlebars, templates, translate, FAOSTATCommons, Tree,
+        'amplify'], function ($, Config, Common, E, Handlebars, templates, translate, FAOSTATCommons, Tree,
                               DownloadSelectorsManager, OptionsManager, BulkDownloads, MetadataViewer,
                               swal, Q, FAOSTATAPIClient, Table, FAOSTATPivot, PivotExporter) {
 
@@ -261,6 +262,7 @@ define(['jquery',
     DOWNLOAD.prototype.get_data = function (user_selection, options, context) {
         var that = context || this,
             config = {
+                datasource: Config.DATASOURCE,
                 domain_code: that.CONFIG.code,
                 List1Codes: user_selection.list1Codes || null,
                 List2Codes: user_selection.list2Codes || null,
