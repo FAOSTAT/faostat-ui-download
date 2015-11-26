@@ -610,7 +610,9 @@ define(['jquery',
     };
 
     DOWNLOAD.prototype.dispose = function () {
-        this.CONFIG.tree.dispose();
+        if( this.CONFIG.tree.dispose) {
+            this.CONFIG.tree.dispose();
+        }
         this.CONFIG.metadata.dispose();
         this.CONFIG.bulk_downloads.dispose();
         this.CONFIG.options_manager.dispose();
