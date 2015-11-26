@@ -406,7 +406,6 @@ define(['jquery',
     };
 
     DOWNLOAD.prototype.get_options = function (context) {
-        console.debug(context);
         var that = context || this;
         switch (that.CONFIG.action) {
         case 'DOWNLOAD':
@@ -480,56 +479,6 @@ define(['jquery',
                 }
             });
         }
-
-
-
-
-        //this.CONFIG.options_manager.init({
-        //    callback: {
-        //        onOutputTypeChange: function (checked) {
-        //            that.CONFIG.action = 'PREVIEW';
-        //            $('#' + that.CONFIG.placeholders.download_output_area).empty();
-        //            that.download(that);
-        //        },
-        //        onCodesChange: function (isChecked) {
-        //            if (isChecked) {
-        //                $('th[data-type="code"]').css('display', 'table-cell');
-        //                $('td[data-type="code"]').css('display', 'table-cell');
-        //            } else {
-        //                $('th[data-type="code"]').css('display', 'none');
-        //                $('td[data-type="code"]').css('display', 'none');
-        //            }
-        //        },
-        //        onFlagsChange: function (isChecked) {
-        //            if (isChecked) {
-        //                $('th[data-type="flag"]').css('display', 'table-cell');
-        //                $('td[data-type="flag"]').css('display', 'table-cell');
-        //                $('th[data-type="flag_label"]').css('display', 'table-cell');
-        //                $('td[data-type="flag_label"]').css('display', 'table-cell');
-        //            } else {
-        //                $('th[data-type="flag"]').css('display', 'none');
-        //                $('td[data-type="flag"]').css('display', 'none');
-        //                $('th[data-type="flag_label"]').css('display', 'none');
-        //                $('td[data-type="flag_label"]').css('display', 'none');
-        //            }
-        //        },
-        //        onUnitsChange: function (isChecked) {
-        //            if (isChecked) {
-        //                $('th[data-type="unit"]').css('display', 'table-cell');
-        //                $('td[data-type="unit"]').css('display', 'table-cell');
-        //            } else {
-        //                $('th[data-type="unit"]').css('display', 'none');
-        //                $('td[data-type="unit"]').css('display', 'none');
-        //            }
-        //        },
-        //        onDecimalNumbersChange: function () {
-        //            //self.preview_size();
-        //        },
-        //        onDecimalSeparatorChange: function () {
-        //            //self.preview_size();
-        //        }
-        //    }
-        //});
 
         /* Add preview options. */
         this.CONFIG.options_manager.add_options_panel('preview_options', {
@@ -658,6 +607,14 @@ define(['jquery',
             });
             this.CONFIG.bulk_downloads.create_flat_list();
         }
+    };
+
+    DOWNLOAD.prototype.dispose = function () {
+        this.CONFIG.tree.dispose();
+        this.CONFIG.metadata.dispose();
+        this.CONFIG.bulk_downloads.dispose();
+        this.CONFIG.options_manager.dispose();
+        this.CONFIG.download_selectors_manager.dispose();
     };
 
     return DOWNLOAD;
