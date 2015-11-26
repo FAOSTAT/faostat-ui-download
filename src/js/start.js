@@ -610,13 +610,28 @@ define(['jquery',
     };
 
     DOWNLOAD.prototype.dispose = function () {
-        if( this.CONFIG.tree.dispose) {
-            this.CONFIG.tree.dispose();
+        this.CONFIG.tree.dispose();
+        try {
+            this.CONFIG.metadata.dispose();
+        } catch (ignore) {
+
         }
-        this.CONFIG.metadata.dispose();
-        this.CONFIG.bulk_downloads.dispose();
-        this.CONFIG.options_manager.dispose();
-        this.CONFIG.download_selectors_manager.dispose();
+        try {
+            this.CONFIG.bulk_downloads.dispose();
+        } catch (ignore) {
+
+        }
+        try {
+            this.CONFIG.options_manager.dispose();
+        } catch (ignore) {
+
+        }
+        try {
+            this.CONFIG.download_selectors_manager.dispose();
+        } catch (ignore) {
+
+        }
+        $('#' + this.CONFIG.placeholder_id).empty();
     };
 
     return DOWNLOAD;
