@@ -275,7 +275,8 @@ define(['jquery',
                 page_size: that.CONFIG.page_size,
                 page_number: that.CONFIG.page_number,
                 group_by: null,
-                decimal_places: options.decimal_numbers_value
+                decimal_places: options.decimal_numbers_value,
+                null_values: options.null_values_value
             };
         return this.CONFIG.api.data(config).then(function (data) {
             return data;
@@ -519,6 +520,11 @@ define(['jquery',
                 } else {
                     that.download(that);
                 }
+            },
+            onNullValuesChange: function () {
+                $('#' + that.CONFIG.placeholders.download_output_area).empty();
+                that.CONFIG.action = 'PREVIEW';
+                that.download(that);
             },
             onFlagsChange: function (isChecked) {
                 var isTable = $('#' + that.CONFIG.placeholders.output_type).is(':checked');
