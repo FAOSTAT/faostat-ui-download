@@ -324,7 +324,20 @@ define(['jquery',
             decimal_separator: options.decimal_separator_value,
             thousand_separator: options.thousand_separator_value,
             page_size: that.CONFIG.page_size,
-            //onPageClick: this.preview,
+            current_page: that.CONFIG.page_number,
+            onPageClick: function (config) {
+                if (config.page_number !== that.CONFIG.page_number) {
+                    that.CONFIG.page_number = config.page_number;
+                    that.CONFIG.action = 'PREVIEW';
+                    that.download(that);
+                } else {
+                    swal({
+                        type: 'info',
+                        title: 'Info',
+                        text: 'There are no more pages to browse.'
+                    });
+                }
+            },
             context: that
         });
         that.CONFIG.action = null;
