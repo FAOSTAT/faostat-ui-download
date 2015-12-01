@@ -435,8 +435,11 @@ define(['jquery',
 
         /* Hide tabs for groups. */
         if (this.CONFIG.tree.getCodeType() === 'group') {
-            $('.nav.nav-tabs li:nth-child(1)').remove();
-            $('.nav.nav-tabs li:nth-child(1)').remove();
+            $('.nav.nav-tabs li:nth-child(1)').css('display', 'none');
+            $('.nav.nav-tabs li:nth-child(2)').css('display', 'none');
+        } else {
+            $('.nav.nav-tabs li:nth-child(1)').css('display', 'block');
+            $('.nav.nav-tabs li:nth-child(2)').css('display', 'block');
         }
 
         /* Render section. */
