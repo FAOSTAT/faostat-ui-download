@@ -432,17 +432,36 @@ define(['jquery',
     };
 
     DOWNLOAD.prototype.render_section = function () {
+
+        /* Hide tabs for groups. */
+        if (this.CONFIG.tree.getCodeType() === 'group') {
+            $('.nav.nav-tabs li:nth-child(1)').remove();
+            $('.nav.nav-tabs li:nth-child(1)').remove();
+        }
+
+        /* Render section. */
         switch (this.CONFIG.section) {
         case 'metadata':
             this.render_metadata();
             break;
         case 'interactive':
-            this.render_interactive();
+            if (this.CONFIG.tree.getCodeType() === 'group') {
+                this.CONFIG.section = 'metadata';
+                Common.changeURL(this.CONFIG.section, [this.CONFIG.code], true);
+            } else {
+                this.render_interactive();
+            }
             break;
         case 'bulk':
-            this.render_bulk_downloads();
+            if (this.CONFIG.tree.getCodeType() === 'group') {
+                this.CONFIG.section = 'metadata';
+                Common.changeURL(this.CONFIG.section, [this.CONFIG.code], true);
+            } else {
+                this.render_bulk_downloads();
+            }
             break;
         }
+
     };
 
     DOWNLOAD.prototype.render_metadata = function () {
