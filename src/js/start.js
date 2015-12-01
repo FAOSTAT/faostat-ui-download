@@ -37,8 +37,8 @@ define(['jquery',
             placeholder_id: 'faostat_ui_download',
             pivot: null,
             action: 'PREVIEW',
-            limit_pivot: 1000,
-            limit_table: 1000000,
+            limit_pivot: 500,
+            limit_table: 10000,
             page_size: 100,
             page_number: 1,
             placeholders: {
@@ -278,6 +278,11 @@ define(['jquery',
                 decimal_places: options.decimal_numbers_value,
                 null_values: options.null_values_value
             };
+        if (options.output_type === 'PIVOT') {
+            config.page_size = null;
+            config.page_number = null;
+            config.limit = -1;
+        }
         return this.CONFIG.api.data(config).then(function (data) {
             return data;
         });
