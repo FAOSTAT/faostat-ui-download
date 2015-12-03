@@ -165,7 +165,7 @@ define(['jquery',
             that.validate_user_selection(user_selection, that);
 
             /* Evaluate query size. */
-            that.query_size(user_selection, that).then(function (query_size) {
+            that.query_size(user_selection, options, that).then(function (query_size) {
 
                 /* Validate query size. */
                 that.validate_query_size(options, query_size, that).then(function () {
@@ -307,7 +307,7 @@ define(['jquery',
         });
     };
 
-    DOWNLOAD.prototype.query_size = function (user_selection, context) {
+    DOWNLOAD.prototype.query_size = function (user_selection, options, context) {
 
         /* Variables. */
         var that = context || this,
@@ -320,7 +320,8 @@ define(['jquery',
                 List5Codes: user_selection.list5Codes || null,
                 List6Codes: user_selection.list6Codes || null,
                 List7Codes: user_selection.list7Codes || null,
-                lang: that.CONFIG.lang
+                lang: that.CONFIG.lang,
+                null_values: options.null_values_value
             };
 
         return that.CONFIG.api.datasize(config).then(function (query_size) {
