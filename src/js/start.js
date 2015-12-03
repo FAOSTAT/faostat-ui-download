@@ -18,10 +18,11 @@ define(['jquery',
         'FAOSTAT_UI_TABLE',
         'FAOSTAT_UI_PIVOT',
         'pivot_exporter',
+        'FAOSTAT_UI_WELCOME_PAGE',
         'bootstrap',
         'amplify'], function ($, Config, Common, E, Handlebars, templates, translate, FAOSTATCommons, Tree,
                               DownloadSelectorsManager, OptionsManager, BulkDownloads, MetadataViewer,
-                              swal, Q, FAOSTATAPIClient, Table, FAOSTATPivot, PivotExporter) {
+                              swal, Q, FAOSTATAPIClient, Table, FAOSTATPivot, PivotExporter, WelcomePage) {
 
     'use strict';
 
@@ -45,6 +46,7 @@ define(['jquery',
                 tree: '#tree',
                 interactive_tab: 'a[href="#interactive_download"]',
                 metadata_tab: 'a[href="#metadata"]',
+                welcome_tab: 'a[href="#welcome_page"]',
                 bulk_tab: 'a[href="#bulk_downloads"]',
                 interactive_download_selectors: 'interactive_download_selectors',
                 download_output_area: 'downloadOutputArea',
@@ -52,6 +54,7 @@ define(['jquery',
                 download_options_placeholder: 'download_options_placeholder',
                 bulk_downloads: 'bulk_downloads',
                 metadata_container: 'metadata_container',
+                welcome_container: 'welcome_container',
                 tab: 'a[data-toggle="tab"]',
                 preview_button: 'preview_button',
                 download_button: 'download_options_csv_button',
@@ -94,7 +97,8 @@ define(['jquery',
             interactive_download_label: translate.interactive_download_label,
             bulk_downloads_label: translate.bulk_downloads_label,
             metadata_label: translate.metadata_label,
-            preview_label: translate.preview_label
+            preview_label: translate.preview_label,
+            welcome_page_label: translate.welcome_page_label
         };
         html = template(dynamic_data);
         $('#' + this.CONFIG.placeholder_id).html(html);
@@ -457,6 +461,9 @@ define(['jquery',
 
         /* Render section. */
         switch (this.CONFIG.section) {
+        case 'welcome':
+            this.render_welcome_page();
+            break;
         case 'metadata':
             this.render_metadata();
             break;
@@ -478,6 +485,18 @@ define(['jquery',
             break;
         }
 
+    };
+
+    DOWNLOAD.prototype.render_welcome_page = function () {
+        var that = this;
+        $(this.CONFIG.placeholders.welcome_tab).tab('show');
+        this.CONFIG.welcome = new WelcomePage();
+        if (this.CONFIG.welcome.isNotRendered()) {
+            this.CONFIG.welcome.init({
+                placeholder_id: that.CONFIG.placeholders.welcome_container,
+                domain: that.CONFIG.code
+            });
+        }
     };
 
     DOWNLOAD.prototype.render_metadata = function () {

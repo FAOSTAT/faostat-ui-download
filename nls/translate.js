@@ -8,7 +8,8 @@ define({
         preview_label: 'Preview',
         metadata_label: 'Metadata',
         bulk_downloads_label: 'Bulk Downloads',
-        interactive_download_label: 'Interactive Download'
+        interactive_download_label: 'Interactive Download',
+        welcome_page_label: 'About'
     },
     fr : true,
     es : true

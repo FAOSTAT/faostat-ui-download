@@ -14,6 +14,12 @@
             <div>
                 <ul class='nav nav-tabs' role='tablist'>
                     <li role='presentation'>
+                        <a href='#welcome_page' data-section='welcome' role='tab' data-toggle='tab'
+                           aria-controls='welcome_page'>
+                            <i class='fa fa-home'></i> {{welcome_page_label}}
+                        </a>
+                    </li>
+                    <li role='presentation'>
                         <a href='#interactive_download' data-section='interactive' role='tab' data-toggle='tab'
                            aria-controls='interactive_download'>
                             <i class='fa fa-download'></i> {{interactive_download_label}}
@@ -33,8 +39,14 @@
                     </li>
                 </ul>
 
-                <!-- Interactive Download -->
                 <div class='tab-content'>
+
+                    <!-- Welcome Page -->
+                    <div role='tabpanel' class='tab-pane' id='welcome_page'>
+                        <div id='welcome_container'></div>
+                    </div>
+
+                    <!-- Interactive Download -->
                     <div role='tabpanel' class='tab-pane' id='interactive_download'>
                         <div class='row'>
                             <div class='col-lg-12'>
