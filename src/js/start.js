@@ -142,89 +142,83 @@ define(['jquery',
 
     DOWNLOAD.prototype.download = function (context) {
 
+        /* Variables. */
+        var user_selection,
+            options,
+            that = context || this,
+            event;
+
+        /* Get user selection. */
+        user_selection = that.get_user_selection(that);
+
+        /* Get options. */
+        options = that.get_options(that);
+        event = that.get_event(options, that);
+
+        /* Add loading. */
+        amplify.publish(E.WAITING_SHOW, {});
+
+        /* Validate user selection. */
         try {
 
-            /* Variables. */
-            var user_selection,
-                options,
-                that = context || this,
-                event;
-
-            /* Get user selection. */
-            user_selection = that.get_user_selection(that);
-
-            /* Get options. */
-            options = that.get_options(that);
-            event = that.get_event(options, that);
-
-            /* Add loading. */
-            amplify.publish(E.WAITING_SHOW, {});
-
             /* Validate user selection. */
-            try {
+            that.validate_user_selection(user_selection, that);
 
-                /* Validate user selection. */
-                that.validate_user_selection(user_selection, that);
+            /* Evaluate query size. */
+            that.query_size(user_selection, that).then(function (query_size) {
 
-                /* Evaluate query size. */
-                that.query_size(user_selection, that).then(function (query_size) {
+                /* Validate query size. */
+                that.validate_query_size(options, query_size, that).then(function () {
 
-                    /* Validate query size. */
-                    that.validate_query_size(options, query_size, that).then(function () {
+                    /* The DOWNLOAD_TABLE event downloads the data by itself. */
+                    if (event === 'DOWNLOAD_TABLE') {
 
-                        /* The DOWNLOAD_TABLE event downloads the data by itself. */
-                        if (event === 'DOWNLOAD_TABLE') {
+                        /* Download data in CSV format. */
+                        that.download_table(user_selection, options, that);
 
-                            /* Download data in CSV format. */
-                            that.download_table(user_selection, options, that);
+                        /* The data is downloaded and passed to the various rendering functions otherwise. */
+                    } else {
 
-                            /* The data is downloaded and passed to the various rendering functions otherwise. */
-                        } else {
-
-                            /* Get data. */
-                            that.get_data(user_selection, options, that).then(function (data) {
-                                that.process_data(event, data, options, that);
-                                /* For some reason, when the user switches from "table" to "pivot", this listener is erased. Restore it. */
-                                $('#' + that.CONFIG.placeholders.download_button).off().click(function () {
-                                    that.CONFIG.action = 'DOWNLOAD';
-                                    that.download();
-                                });
+                        /* Get data. */
+                        that.get_data(user_selection, options, that).then(function (data) {
+                            that.process_data(event, data, options, that);
+                            /* For some reason, when the user switches from "table" to "pivot", this listener is erased. Restore it. */
+                            $('#' + that.CONFIG.placeholders.download_button).off().click(function () {
+                                that.CONFIG.action = 'DOWNLOAD';
+                                that.download();
                             });
-
-                        }
-
-                    }).fail(function (e) {
-                        swal({
-                            type: 'warning',
-                            title: 'Warning',
-                            text: e
                         });
-                        amplify.publish(E.WAITING_HIDE, {});
-                        /* For some reason, when the user switches from "table" to "pivot", this listener is erased. Restore it. */
-                        $('#' + that.CONFIG.placeholders.download_button).off().click(function () {
-                            that.CONFIG.action = 'DOWNLOAD';
-                            that.download();
-                        });
+
+                    }
+
+                }).fail(function (e) {
+                    swal({
+                        type: 'warning',
+                        title: 'Warning',
+                        text: e
                     });
-
+                    amplify.publish(E.WAITING_HIDE, {});
+                    /* For some reason, when the user switches from "table" to "pivot", this listener is erased. Restore it. */
+                    $('#' + that.CONFIG.placeholders.download_button).off().click(function () {
+                        that.CONFIG.action = 'DOWNLOAD';
+                        that.download();
+                    });
                 });
 
-            } catch (e) {
-                swal({
-                    type: 'warning',
-                    title: 'Warning',
-                    text: e
-                });
-                amplify.publish(E.WAITING_HIDE, {});
-                /* For some reason, when the user switches from "table" to "pivot", this listener is erased. Restore it. */
-                $('#' + this.CONFIG.placeholders.download_button).off().click(function () {
-                    that.CONFIG.action = 'DOWNLOAD';
-                    that.download();
-                });
-            }
+            });
 
         } catch (e) {
-            console.debug(e);
+            swal({
+                type: 'warning',
+                title: 'Warning',
+                text: e
+            });
+            amplify.publish(E.WAITING_HIDE, {});
+            /* For some reason, when the user switches from "table" to "pivot", this listener is erased. Restore it. */
+            $('#' + this.CONFIG.placeholders.download_button).off().click(function () {
+                that.CONFIG.action = 'DOWNLOAD';
+                that.download();
+            });
         }
 
     };
@@ -680,7 +674,7 @@ define(['jquery',
             },
             onCodesChange: function (isChecked) {
                 var isTable = $('#' + that.CONFIG.placeholders.output_type).is(':checked');
-                that.CONFIG.action = 'PREVIEW';
+                that.CONFIG.action = 'DOWNLOAD';
                 if (isTable) {
                     if (isChecked) {
                         $('th[data-type="code"]').css('display', 'table-cell');
@@ -695,12 +689,12 @@ define(['jquery',
             },
             onNullValuesChange: function () {
                 $('#' + that.CONFIG.placeholders.download_output_area).empty();
-                that.CONFIG.action = 'PREVIEW';
+                that.CONFIG.action = 'DOWNLOAD';
                 that.download(that);
             },
             onFlagsChange: function (isChecked) {
                 var isTable = $('#' + that.CONFIG.placeholders.output_type).is(':checked');
-                that.CONFIG.action = 'PREVIEW';
+                that.CONFIG.action = 'DOWNLOAD';
                 if (isTable) {
                     if (isChecked) {
                         $('th[data-type="flag"]').css('display', 'table-cell');
@@ -719,7 +713,7 @@ define(['jquery',
             },
             onUnitsChange: function (isChecked) {
                 var isTable = $('#' + that.CONFIG.placeholders.output_type).is(':checked');
-                that.CONFIG.action = 'PREVIEW';
+                that.CONFIG.action = 'DOWNLOAD';
                 if (isTable) {
                     if (isChecked) {
                         $('th[data-type="unit"]').css('display', 'table-cell');
@@ -734,12 +728,12 @@ define(['jquery',
             },
             onDecimalNumbersChange: function () {
                 $('#' + that.CONFIG.placeholders.download_output_area).empty();
-                that.CONFIG.action = 'PREVIEW';
+                that.CONFIG.action = 'DOWNLOAD';
                 that.download(that);
             },
             onDecimalSeparatorChange: function () {
                 $('#' + that.CONFIG.placeholders.download_output_area).empty();
-                that.CONFIG.action = 'PREVIEW';
+                that.CONFIG.action = 'DOWNLOAD';
                 that.download(that);
             }
         };
