@@ -267,7 +267,7 @@ define(['jquery',
         var that = context || this,
             config = {
                 datasource: Config.DATASOURCE,
-                domain_code: that.CONFIG.code,
+                domain_codes: [that.CONFIG.code],
                 List1Codes: user_selection.list1Codes || null,
                 List2Codes: user_selection.list2Codes || null,
                 List3Codes: user_selection.list3Codes || null,
@@ -297,7 +297,7 @@ define(['jquery',
         /* Variables. */
         var that = context || this,
             config = {
-                domain_code: that.CONFIG.code,
+                domain_codes: [that.CONFIG.code],
                 List1Codes: user_selection.list1Codes || null,
                 List2Codes: user_selection.list2Codes || null,
                 List3Codes: user_selection.list3Codes || null,
@@ -367,7 +367,7 @@ define(['jquery',
     DOWNLOAD.prototype.download_table = function (user_selection, options, context) {
         var that = context || this;
         that.CONFIG.api.data({
-            domain_code: that.CONFIG.code,
+            domain_codes: [that.CONFIG.code],
             List1Codes: user_selection.list1Codes || null,
             List2Codes: user_selection.list2Codes || null,
             List3Codes: user_selection.list3Codes || null,
@@ -452,11 +452,13 @@ define(['jquery',
 
         /* Hide tabs for groups. */
         if (this.CONFIG.tree.getCodeType() === 'group') {
-            $('.nav.nav-tabs li:nth-child(1)').css('display', 'none');
             $('.nav.nav-tabs li:nth-child(2)').css('display', 'none');
+            $('.nav.nav-tabs li:nth-child(3)').css('display', 'none');
+            $('.nav.nav-tabs li:nth-child(4)').css('display', 'none');
         } else {
-            $('.nav.nav-tabs li:nth-child(1)').css('display', 'block');
             $('.nav.nav-tabs li:nth-child(2)').css('display', 'block');
+            $('.nav.nav-tabs li:nth-child(3)').css('display', 'block');
+            $('.nav.nav-tabs li:nth-child(4)').css('display', 'block');
         }
 
         /* Render section. */
@@ -494,7 +496,8 @@ define(['jquery',
         if (this.CONFIG.welcome.isNotRendered()) {
             this.CONFIG.welcome.init({
                 placeholder_id: that.CONFIG.placeholders.welcome_container,
-                domain: that.CONFIG.code
+                domain: that.CONFIG.code,
+                domain_name: $('.node-selected').text()
             });
         }
     };
