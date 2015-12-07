@@ -6,7 +6,6 @@ define(['jquery',
         'handlebars',
         'text!faostat_ui_download/html/templates.hbs',
         'i18n!faostat_ui_download/nls/translate',
-        'faostat_commons',
         'FAOSTAT_UI_TREE',
         'FAOSTAT_UI_DOWNLOAD_SELECTORS_MANAGER',
         'FAOSTAT_UI_OPTIONS_MANAGER',
@@ -20,7 +19,7 @@ define(['jquery',
         'pivot_exporter',
         'FAOSTAT_UI_WELCOME_PAGE',
         'bootstrap',
-        'amplify'], function ($, Config, Common, E, Handlebars, templates, translate, FAOSTATCommons, Tree,
+        'amplify'], function ($, Config, Common, E, Handlebars, templates, translate, Tree,
                               DownloadSelectorsManager, OptionsManager, BulkDownloads, MetadataViewer,
                               swal, Q, FAOSTATAPIClient, Table, FAOSTATPivot, PivotExporter, WelcomePage) {
 
@@ -68,9 +67,6 @@ define(['jquery',
         /* Fix the language, if needed. */
         this.CONFIG.lang = this.CONFIG.lang !== null ? this.CONFIG.lang : 'en';
 
-        /* Store FAOSTAT language. */
-        this.CONFIG.lang_faostat = FAOSTATCommons.iso2faostat(this.CONFIG.lang);
-
         /* Initiate FAOSTAT API's client. */
         this.CONFIG.api = new FAOSTATAPIClient();
 
@@ -106,7 +102,7 @@ define(['jquery',
         /* Build tree. */
         this.CONFIG.tree = new Tree();
         this.CONFIG.tree.init({
-            lang: this.CONFIG.lang,
+            lang: Common.getLocale(),
             placeholder_id: this.CONFIG.placeholders.tree,
             code: this.CONFIG.code,
             callback: {
@@ -290,7 +286,7 @@ define(['jquery',
                 List5Codes: user_selection.list5Codes || null,
                 List6Codes: user_selection.list6Codes || null,
                 List7Codes: user_selection.list7Codes || null,
-                lang: that.CONFIG.lang,
+                lang: Common.getLocale(),
                 page_size: that.CONFIG.page_size,
                 page_number: that.CONFIG.page_number,
                 group_by: null,
@@ -320,7 +316,7 @@ define(['jquery',
                 List5Codes: user_selection.list5Codes || null,
                 List6Codes: user_selection.list6Codes || null,
                 List7Codes: user_selection.list7Codes || null,
-                lang: that.CONFIG.lang,
+                lang: Common.getLocale(),
                 null_values: options.null_values_value
             };
 
@@ -391,7 +387,7 @@ define(['jquery',
             List5Codes: user_selection.list5Codes || null,
             List6Codes: user_selection.list6Codes || null,
             List7Codes: user_selection.list7Codes || null,
-            lang: that.CONFIG.lang,
+            lang: Common.getLocale(),
             output_type: 'csv',
             limit: -1
         }).then(function () {
@@ -551,7 +547,7 @@ define(['jquery',
         /* Initiate selectors. */
         if (this.CONFIG.download_selectors_manager.isNotRendered()) {
             this.CONFIG.download_selectors_manager.init({
-                lang: this.CONFIG.lang,
+                lang: Common.getLocale(),
                 placeholder_id: this.CONFIG.placeholders.interactive_download_selectors,
                 domain: this.CONFIG.code,
                 callback: {
@@ -568,7 +564,7 @@ define(['jquery',
             pdf_button: false,
             excel_button: false,
             csv_button: false,
-            lang: that.CONFIG.lang,
+            lang: Common.getLocale(),
             button_label: translate.preview_options_label,
             header_label: translate.preview_options_label,
             placeholder_id: that.CONFIG.placeholders.preview_options_placeholder,
@@ -654,7 +650,7 @@ define(['jquery',
         /* Add download options. */
         this.CONFIG.options_manager.add_options_window('download_options', {
             pdf_button: false,
-            lang: that.CONFIG.lang,
+            lang: Common.getLocale(),
             button_label: translate.download_as_label,
             header_label: translate.download_as_label,
             placeholder_id: that.CONFIG.placeholders.download_options_placeholder,
