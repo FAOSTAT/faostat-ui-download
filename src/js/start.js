@@ -38,7 +38,7 @@ define(['jquery',
             pivot: null,
             action: 'PREVIEW',
             limit_pivot: 500,
-            limit_table: 10000,
+            limit_table: 20000,
             page_size: 100,
             page_number: 1,
             placeholders: {
@@ -389,7 +389,9 @@ define(['jquery',
             List7Codes: user_selection.list7Codes || null,
             lang: Common.getLocale(),
             output_type: 'csv',
-            limit: -1
+            limit: -1,
+            page_size: null,
+            page_number: null
         }).then(function () {
             that.CONFIG.action = null;
         }).fail(function (e) {
