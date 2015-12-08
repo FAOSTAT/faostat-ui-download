@@ -57,7 +57,9 @@ define(['jquery',
                 tab: 'a[data-toggle="tab"]',
                 preview_button: 'preview_button',
                 download_button: 'download_options_csv_button',
-                output_type: 'preview_options_output_type'
+                output_type: 'preview_options_output_type',
+                group_label: '#group_label',
+                domain_label: '#domain_label'
             }
         };
 
@@ -99,6 +101,11 @@ define(['jquery',
         html = template(dynamic_data);
         $('#' + this.CONFIG.placeholder_id).html(html);
 
+        // caching group label
+        this.$GROUP_LABEL = $('#' + this.CONFIG.placeholder_id).find(this.CONFIG.placeholders.group_label);
+
+
+
         /* Build tree. */
         this.CONFIG.tree = new Tree();
         this.CONFIG.tree.init({
@@ -108,10 +115,12 @@ define(['jquery',
             callback: {
                 onTreeRendered: function (callback) {
                     that.CONFIG.code = callback.id;
+                    that.CONFIG.label = callback.label;
                     that.render_section();
                 },
                 onClick: function (callback) {
                     that.CONFIG.code = callback.id;
+                    that.CONFIG.label = callback.label;
                     Common.changeURL(that.CONFIG.section, [that.CONFIG.code], false);
                     that.render_section();
                 }
@@ -124,6 +133,7 @@ define(['jquery',
                 that.CONFIG.section = $(e.target).data('section');
                 Common.changeURL(that.CONFIG.section, [that.CONFIG.code], false);
                 that.render_section();
+
             }
         });
 
@@ -474,6 +484,10 @@ define(['jquery',
             $('.nav.nav-tabs li:nth-child(3)').css('display', 'block');
             $('.nav.nav-tabs li:nth-child(4)').css('display', 'block');
         }
+
+
+        // rendering current group/domain
+        this.$GROUP_LABEL.html(this.CONFIG.label);
 
         /* Render section. */
         switch (this.CONFIG.section) {
