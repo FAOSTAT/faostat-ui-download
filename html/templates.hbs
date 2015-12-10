@@ -69,46 +69,7 @@
 
             <!-- Interactive Download -->
             <div role='tabpanel' class='tab-pane' id='interactive_download'>
-                <div class='row'>
-                    <div class='col-lg-12'>
-                        <p>
-                            <!--TODO multilingual -->
-                            Use this section to create a custom query to extract data from the current domain.
-                            Please use the selectors below to filter the data according to your needs.
-                            Press the <var>Preview</var> button to have an overview
-                            of your selection. Use the <var>Preview Options</var> button to customize the final
-                            output. Click on <var>Download As...</var> to get the data in the Excel or CSV
-                            format.
-                            Please consider to visit the <var>Bulk Downloads</var> sections if you need all the
-                            data
-                            contained in this domain.
-                        </p>
-                    </div>
-                </div>
-
-
-                <div id='interactive_download_selectors'></div>
-
-                <!--<hr class='preview_options_hr'>-->
-                <div class='row'>
-                    <div class='col-lg-8'>
-                                <span id='preview_options_placeholder' class='preview_options_placeholder pull-left'>
-
-                                </span>
-                    </div>
-                    <!--<div class='col-lg-8'>-->
-                    <!--&nbsp;-->
-                    <!--</div>-->
-                    <div class='col-lg-4'>
-                                <span id='download_options_placeholder' class='pull-right'>
-
-                                </span>
-                        <button class='btn btn-primary pull-right' id='preview_button'>
-                            <i class='fa fa-search'></i> {{preview_label}}
-                        </button>
-                    </div>
-                </div>
-                <!--<hr style='margin-top: 0;'>-->
+                <div id='interactive_download_container'></div>
             </div>
 
             <!-- Bulk Downloads -->
@@ -145,6 +106,32 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</script>
+
+<script type='text/x-handlebars-template' id='interactive_download_structure'>
+    <div class='row'>
+        <div class='col-lg-12'>
+            <p>
+                {{{interactive_download_welcome_text}}}
+            </p>
+        </div>
+    </div>
+    <div id='interactive_download_selectors'></div>
+    <div class='row'>
+        <div class='col-lg-8'>
+            <span id='preview_options_placeholder' class='preview_options_placeholder pull-left'>
+
+            </span>
+        </div>
+        <div class='col-lg-4'>
+            <span id='download_options_placeholder' class='pull-right'>
+
+            </span>
+            <button class='btn btn-primary pull-right' id='preview_button'>
+                <i class='fa fa-search'></i> {{preview_label}}
+            </button>
         </div>
     </div>
 </script>

@@ -59,7 +59,8 @@ define(['jquery',
                 download_button: 'download_options_csv_button',
                 output_type: 'preview_options_output_type',
                 group_label: '#group_label',
-                domain_label: '#domain_label'
+                domain_label: '#domain_label',
+                interactive_download_container: 'interactive_download_container'
             }
         };
 
@@ -534,7 +535,7 @@ define(['jquery',
         switch (this.CONFIG.tree.getCodeType()) {
         case 'group':
             $(this.CONFIG.placeholders.interactive_tab).tab('show');
-            this.show_domains_list('interactive_download', this.CONFIG.code);
+            this.show_domains_list(this.CONFIG.placeholders.interactive_download_container, this.CONFIG.code);
             break;
         case 'domain':
             this.render_interactive_domain();
@@ -545,7 +546,21 @@ define(['jquery',
     DOWNLOAD.prototype.render_interactive_domain = function () {
 
         /* Variables. */
-        var that = this;
+        var that = this,
+            source,
+            template,
+            dynamic_data,
+            html;
+
+        /* Load template. */
+        /* Render template. */
+        source = $(templates).filter('#interactive_download_structure').html();
+        template = Handlebars.compile(source);
+        dynamic_data = {
+            interactive_download_welcome_text: translate.interactive_download_welcome_text
+        };
+        html = template(dynamic_data);
+        $('#' + this.CONFIG.placeholders.interactive_download_container).html(html);
 
         /* Show the tab. */
         $(this.CONFIG.placeholders.interactive_tab).tab('show');
