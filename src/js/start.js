@@ -104,8 +104,6 @@ define(['jquery',
         // caching group label
         this.$GROUP_LABEL = $('#' + this.CONFIG.placeholder_id).find(this.CONFIG.placeholders.group_label);
 
-
-
         /* Build tree. */
         this.CONFIG.tree = new Tree();
         this.CONFIG.tree.init({
@@ -133,7 +131,6 @@ define(['jquery',
                 that.CONFIG.section = $(e.target).data('section');
                 Common.changeURL(that.CONFIG.section, [that.CONFIG.code], false);
                 that.render_section();
-
             }
         });
 
@@ -142,7 +139,6 @@ define(['jquery',
             that.CONFIG.action = 'PREVIEW';
             that.download();
         });
-
 
     };
 
@@ -474,19 +470,7 @@ define(['jquery',
 
     DOWNLOAD.prototype.render_section = function () {
 
-        /* Hide tabs for groups. */
-        if (this.CONFIG.tree.getCodeType() === 'group') {
-            $('.nav.nav-tabs li:nth-child(2)').css('display', 'none');
-            $('.nav.nav-tabs li:nth-child(3)').css('display', 'none');
-            $('.nav.nav-tabs li:nth-child(4)').css('display', 'none');
-        } else {
-            $('.nav.nav-tabs li:nth-child(2)').css('display', 'block');
-            $('.nav.nav-tabs li:nth-child(3)').css('display', 'block');
-            $('.nav.nav-tabs li:nth-child(4)').css('display', 'block');
-        }
-
-
-        // rendering current group/domain
+        /* rendering current group/domain */
         this.$GROUP_LABEL.html(this.CONFIG.label);
 
         /* Render section. */
@@ -498,20 +482,10 @@ define(['jquery',
             this.render_metadata();
             break;
         case 'interactive':
-            if (this.CONFIG.tree.getCodeType() === 'group') {
-                this.CONFIG.section = 'metadata';
-                Common.changeURL(this.CONFIG.section, [this.CONFIG.code], true);
-            } else {
-                this.render_interactive();
-            }
+            this.render_interactive();
             break;
         case 'bulk':
-            if (this.CONFIG.tree.getCodeType() === 'group') {
-                this.CONFIG.section = 'metadata';
-                Common.changeURL(this.CONFIG.section, [this.CONFIG.code], true);
-            } else {
-                this.render_bulk_downloads();
-            }
+            this.render_bulk_downloads();
             break;
         }
 
@@ -534,21 +508,41 @@ define(['jquery',
     DOWNLOAD.prototype.render_metadata = function () {
         var that = this;
         $(this.CONFIG.placeholders.metadata_tab).tab('show');
-        this.CONFIG.metadata = new MetadataViewer();
-        if (this.CONFIG.metadata.isNotRendered()) {
-            this.CONFIG.metadata.init({
-                placeholder_id: that.CONFIG.placeholders.metadata_container,
-                domain: that.CONFIG.code,
-                callback: {
-                    onMetadataRendered: function () {
-                        $('#metadata_loading').css('display', 'none');
+        switch (this.CONFIG.tree.getCodeType()) {
+        case 'group':
+            $('#metadata_loading').empty();
+            this.show_domains_list(that.CONFIG.placeholders.metadata_container, this.CONFIG.code);
+            break;
+        case 'domain':
+            this.CONFIG.metadata = new MetadataViewer();
+            if (this.CONFIG.metadata.isNotRendered()) {
+                this.CONFIG.metadata.init({
+                    placeholder_id: that.CONFIG.placeholders.metadata_container,
+                    domain: that.CONFIG.code,
+                    callback: {
+                        onMetadataRendered: function () {
+                            $('#metadata_loading').css('display', 'none');
+                        }
                     }
-                }
-            });
+                });
+            }
+            break;
         }
     };
 
     DOWNLOAD.prototype.render_interactive = function () {
+        switch (this.CONFIG.tree.getCodeType()) {
+        case 'group':
+            $(this.CONFIG.placeholders.interactive_tab).tab('show');
+            this.show_domains_list('interactive_download', this.CONFIG.code);
+            break;
+        case 'domain':
+            this.render_interactive_domain();
+            break;
+        }
+    };
+
+    DOWNLOAD.prototype.render_interactive_domain = function () {
 
         /* Variables. */
         var that = this;
@@ -762,14 +756,60 @@ define(['jquery',
     DOWNLOAD.prototype.render_bulk_downloads = function () {
         var that = this;
         $(this.CONFIG.placeholders.bulk_tab).tab('show');
-        this.CONFIG.bulk_downloads = new BulkDownloads();
-        if (this.CONFIG.bulk_downloads.isNotRendered()) {
-            this.CONFIG.bulk_downloads.init({
-                placeholder_id: that.CONFIG.placeholders.bulk_downloads,
-                domain: that.CONFIG.code
-            });
-            this.CONFIG.bulk_downloads.create_flat_list();
+        switch (this.CONFIG.tree.getCodeType()) {
+        case 'domain':
+            this.CONFIG.bulk_downloads = new BulkDownloads();
+            if (this.CONFIG.bulk_downloads.isNotRendered()) {
+                this.CONFIG.bulk_downloads.init({
+                    placeholder_id: that.CONFIG.placeholders.bulk_downloads,
+                    domain: that.CONFIG.code
+                });
+                this.CONFIG.bulk_downloads.create_flat_list();
+            }
+            break;
+        case 'group':
+            this.show_domains_list(that.CONFIG.placeholders.bulk_downloads, that.CONFIG.code);
+            break;
         }
+    };
+
+    DOWNLOAD.prototype.show_domains_list = function (placeholder_id, group_code) {
+
+        /* Variables. */
+        var source,
+            template,
+            dynamic_data,
+            html,
+            domains = [],
+            i,
+            that = this;
+
+        /* Fetch domains by group code. */
+        this.CONFIG.api.domains({
+            datasource: Config.DATASOURCE,
+            lang: Common.getLocale(),
+            group_code: group_code
+        }).then(function (response) {
+
+            /* Iterate over domains. */
+            for (i = 0; i < response.data.length; i += 1) {
+                domains.push({
+                    label: response.data[i].label,
+                    link: Common.getLocale() + '/download/' + that.CONFIG.section + '/' + response.data[i].code
+                });
+            }
+
+            /* Render template. */
+            source = $(templates).filter('#domains_list_structure').html();
+            template = Handlebars.compile(source);
+            dynamic_data = {
+                domains: domains
+            };
+            html = template(dynamic_data);
+            $('#' + placeholder_id).html(html);
+
+        });
+
     };
 
     DOWNLOAD.prototype.dispose = function () {
