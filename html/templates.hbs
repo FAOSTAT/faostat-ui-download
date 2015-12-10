@@ -82,11 +82,26 @@
 
             </div>
 
+
+
+            <div id='download-wrapper' class='fx-olap-holder'>
+                <div class='row'>
+                    <div class='col-lg-12'>
+                        <div id='downloadOutputArea' class='fx-olap-holder'>
+                            <!--<p>-->
+                                <!--Preview will be shown here.-->
+                            <!--</p>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        <br><br><br><br>
+
     </div>
-    <div class='row'>
+<!--    <div class='row'>
         <div class='col-xs-12'>
+            <br><br>
             <h1>
                 {{preview_label}}
             </h1>
@@ -95,15 +110,15 @@
                 <div class='row'>
                     <div class='col-lg-12'>
                         <div id='downloadOutputArea' class='fx-olap-holder'>
-                            <h2>
+                            <p>
                                 Preview will be shown here.
-                            </h2>
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
 </script>
 
 <script type='text/x-handlebars-template' id='interactive_download_structure'>
@@ -117,19 +132,17 @@
     <div id='interactive_download_selectors'></div>
     <div class='row'>
         <div class='col-lg-8'>
-            <span id='preview_options_placeholder' class='preview_options_placeholder pull-left'>
-
-            </span>
+            <span id='preview_options_placeholder'></span>
         </div>
-        <div class='col-lg-4'>
-            <span id='download_options_placeholder' class='pull-right'>
 
-            </span>
+        <div class='col-lg-4'>
+            <span id='download_options_placeholder' class='pull-right'></span>
             <button class='btn btn-primary pull-right' id='preview_button'>
                 <i class='fa fa-search'></i> {{preview_label}}
             </button>
         </div>
     </div>
+
 </script>
 
 <!-- Template for domains list. -->
