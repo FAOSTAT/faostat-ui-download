@@ -38,56 +38,52 @@
 
     <div class='row'>
 
-
-
-
-        <div class='col-md-3'>
-
-
+        <div class='col-md-3 fs-tree-holder'>
             <!--<h1>{{tree_title}}</h1>-->
+            <input class='form-control' placeholder='{{filter_domain_tree}}' id='fs-download-tree-search'>
+            <br>
+            <span class="label label-default">Faostat Domains</span>
+            <div id='tree'></div>
+        </div>
+
+        <div class='col-md-9'>
 
 
-        <div id='tree'></div>
-        <br>
-    </div>
-    <div class='col-md-9'>
+            <h1>
+                <span id='group_label'></span> <span id='domain_label'></span>
+            </h1>
+
+            <br>
 
 
-        <h1>
-            <span id='group_label'></span> <span id='domain_label'></span>
-        </h1>
+            <div class='tab-content'>
 
-        <br>
+                <!-- Welcome Page -->
+                <div role='tabpanel' class='tab-pane' id='welcome_page'>
+                    <div id='welcome_container'></div>
+                </div>
 
+                <!-- Interactive Download -->
+                <div role='tabpanel' class='tab-pane' id='interactive_download'>
+                    <div id='interactive_download_container'></div>
+                </div>
 
-        <div class='tab-content'>
+                <!-- Bulk Downloads -->
+                <div role='tabpanel' class='tab-pane active' id='bulk_downloads'></div>
 
-            <!-- Welcome Page -->
-            <div role='tabpanel' class='tab-pane' id='welcome_page'>
-                <div id='welcome_container'></div>
-            </div>
+                <!-- Metadata -->
+                <div role='tabpanel' class='tab-pane' id='metadata'>
+                    <h1 class='text-center' id='metadata_loading'>
+                        <i class='fa fa-refresh fa-spin fa-5x'></i>
+                    </h1>
 
-            <!-- Interactive Download -->
-            <div role='tabpanel' class='tab-pane' id='interactive_download'>
-                <div id='interactive_download_container'></div>
-            </div>
+                    <div id='metadata_container'></div>
+                </div>
 
-            <!-- Bulk Downloads -->
-            <div role='tabpanel' class='tab-pane active' id='bulk_downloads'></div>
-
-            <!-- Metadata -->
-            <div role='tabpanel' class='tab-pane' id='metadata'>
-                <h1 class='text-center' id='metadata_loading'>
-                    <i class='fa fa-refresh fa-spin fa-5x'></i>
-                </h1>
-
-                <div id='metadata_container'></div>
             </div>
 
         </div>
-
-    </div>
-    <br><br><br><br>
+        <br><br><br><br>
     </div>
     <div class='row'>
         <div class='col-xs-12'>

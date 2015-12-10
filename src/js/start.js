@@ -6,6 +6,7 @@ define(['jquery',
         'handlebars',
         'text!faostat_ui_download/html/templates.hbs',
         'i18n!faostat_ui_download/nls/translate',
+        'i18n!nls/download',
         'FAOSTAT_UI_TREE',
         'FAOSTAT_UI_DOWNLOAD_SELECTORS_MANAGER',
         'FAOSTAT_UI_OPTIONS_MANAGER',
@@ -19,7 +20,10 @@ define(['jquery',
         'pivot_exporter',
         'FAOSTAT_UI_WELCOME_PAGE',
         'bootstrap',
-        'amplify'], function ($, Config, Common, E, Handlebars, templates, translate, Tree,
+        'amplify'], function ($, Config, Common, E, Handlebars, templates,
+                              translate,
+                              i18nLabels,
+                              Tree,
                               DownloadSelectorsManager, OptionsManager, BulkDownloads, MetadataViewer,
                               swal, Q, FAOSTATAPIClient, Table, FAOSTATPivot, PivotExporter, WelcomePage) {
 
@@ -43,6 +47,7 @@ define(['jquery',
             page_number: 1,
             placeholders: {
                 tree: '#tree',
+                search_tree: 'fs-download-tree-search',
                 interactive_tab: 'a[href="#interactive_download"]',
                 metadata_tab: 'a[href="#metadata"]',
                 welcome_tab: 'a[href="#welcome_page"]',
@@ -66,6 +71,9 @@ define(['jquery',
 
         /* Extend default configuration. */
         this.CONFIG = $.extend(true, {}, this.CONFIG, config);
+
+        /* Merging global labels with local */
+        translate = $.extend(true, {}, translate, i18nLabels);
 
         /* Fix the language, if needed. */
         this.CONFIG.lang = this.CONFIG.lang !== null ? this.CONFIG.lang : 'en';
@@ -91,15 +99,7 @@ define(['jquery',
         /* Load main structure. */
         source = $(templates).filter('#faostat_ui_download_structure').html();
         template = Handlebars.compile(source);
-        dynamic_data = {
-            tree_title: translate.tree_title,
-            interactive_download_label: translate.interactive_download_label,
-            bulk_downloads_label: translate.bulk_downloads_label,
-            metadata_label: translate.metadata_label,
-            preview_label: translate.preview_label,
-            welcome_page_label: translate.welcome_page_label
-        };
-        html = template(dynamic_data);
+        html = template(translate);
         $('#' + this.CONFIG.placeholder_id).html(html);
 
         // caching group label
@@ -110,6 +110,7 @@ define(['jquery',
         this.CONFIG.tree.init({
             lang: Common.getLocale(),
             placeholder_id: this.CONFIG.placeholders.tree,
+            placeholder_search: this.CONFIG.placeholders.search_tree,
             code: this.CONFIG.code,
             callback: {
                 onTreeRendered: function (callback) {
@@ -556,10 +557,7 @@ define(['jquery',
         /* Render template. */
         source = $(templates).filter('#interactive_download_structure').html();
         template = Handlebars.compile(source);
-        dynamic_data = {
-            interactive_download_welcome_text: translate.interactive_download_welcome_text
-        };
-        html = template(dynamic_data);
+        html = template(translate);
         $('#' + this.CONFIG.placeholders.interactive_download_container).html(html);
 
         /* Show the tab. */
