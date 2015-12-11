@@ -513,7 +513,7 @@ define(['jquery',
         switch (this.CONFIG.tree.getCodeType()) {
         case 'group':
             $('#metadata_loading').empty();
-            this.show_domains_list(that.CONFIG.placeholders.metadata_container, this.CONFIG.code);
+            this.show_domains_list(that.CONFIG.placeholders.metadata_container, this.CONFIG.code, translate.metadata_description);
             break;
         case 'domain':
             this.CONFIG.metadata = new MetadataViewer();
@@ -536,7 +536,7 @@ define(['jquery',
         switch (this.CONFIG.tree.getCodeType()) {
         case 'group':
             $(this.CONFIG.placeholders.interactive_tab).tab('show');
-            this.show_domains_list(this.CONFIG.placeholders.interactive_download_container, this.CONFIG.code);
+            this.show_domains_list(this.CONFIG.placeholders.interactive_download_container, this.CONFIG.code, translate.interactive_description);
             break;
         case 'domain':
             this.render_interactive_domain();
@@ -781,12 +781,12 @@ define(['jquery',
             }
             break;
         case 'group':
-            this.show_domains_list(that.CONFIG.placeholders.bulk_downloads, that.CONFIG.code);
+            this.show_domains_list(that.CONFIG.placeholders.bulk_downloads, that.CONFIG.code, translate.bulk_description);
             break;
         }
     };
 
-    DOWNLOAD.prototype.show_domains_list = function (placeholder_id, group_code) {
+    DOWNLOAD.prototype.show_domains_list = function (placeholder_id, group_code, description) {
 
         /* Variables. */
         var source,
@@ -816,7 +816,8 @@ define(['jquery',
             source = $(templates).filter('#domains_list_structure').html();
             template = Handlebars.compile(source);
             dynamic_data = {
-                domains: domains
+                domains: domains,
+                section_description: description
             };
             html = template(dynamic_data);
             $('#' + placeholder_id).html(html);

@@ -55,7 +55,6 @@
 
             <br>
 
-
             <div class='tab-content'>
 
                 <!-- Welcome Page -->
@@ -73,16 +72,19 @@
 
                 <!-- Metadata -->
                 <div role='tabpanel' class='tab-pane' id='metadata'>
-                    <h1 class='text-center' id='metadata_loading'>
+<!--                    <h1 class='text-center' id='metadata_loading'>
                         <i class='fa fa-refresh fa-spin fa-5x'></i>
-                    </h1>
+                    </h1>-->
 
-                    <div id='metadata_container'></div>
+                    <div id='metadata_container'>
+                        <!-- TODO: fix rendering issue of the loading -->
+                        <h1 class='text-center' id='metadata_loading'>
+                            <i class='fa fa-refresh fa-spin fa-5x'></i>
+                        </h1>
+                    </div>
                 </div>
 
             </div>
-
-
 
             <div id='download-wrapper' class='fx-olap-holder'>
                 <div class='row'>
@@ -147,6 +149,8 @@
 
 <!-- Template for domains list. -->
 <script type='text/x-handlebars-template' id='domains_list_structure'>
+    <h5>{{section_description}}</h5>
+    <br>
     {{#each domains}}
         <div class='row'>
             <div class='col-lg-12'>
