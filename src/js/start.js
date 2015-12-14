@@ -471,6 +471,9 @@ define(['jquery',
         /* rendering current group/domain */
         this.$GROUP_LABEL.html(this.CONFIG.label);
 
+        /* Empty download area. */
+        $('#' + this.CONFIG.placeholders.download_output_area).empty();
+
         /* Render section. */
         switch (this.CONFIG.section) {
         case 'welcome':
@@ -831,6 +834,7 @@ define(['jquery',
     };
 
     DOWNLOAD.prototype.dispose = function () {
+        $('#' + this.CONFIG.placeholders.download_output_area).empty();
         this.CONFIG.tree.dispose();
         try {
             this.CONFIG.metadata.dispose();
