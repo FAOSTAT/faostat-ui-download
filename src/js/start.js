@@ -99,7 +99,8 @@ define(['jquery',
         /* Load main structure. */
         source = $(templates).filter('#faostat_ui_download_structure').html();
         template = Handlebars.compile(source);
-        html = template(translate);
+        dynamic_data = {};
+        html = template(dynamic_data);
         $('#' + this.CONFIG.placeholder_id).html(html);
 
         // caching group label
@@ -134,12 +135,6 @@ define(['jquery',
                 Common.changeURL(that.CONFIG.section, [that.CONFIG.code], false);
                 that.render_section();
             }
-        });
-
-        /* Store user's action: preview. */
-        $('#' + this.CONFIG.placeholders.preview_button).off().click(function () {
-            that.CONFIG.action = 'PREVIEW';
-            that.download();
         });
 
     };
@@ -550,15 +545,23 @@ define(['jquery',
         var that = this,
             source,
             template,
-            dynamic_data,
+            dynamic_data = {
+                preview_label: translate.preview_label
+            },
             html;
 
         /* Load template. */
         /* Render template. */
         source = $(templates).filter('#interactive_download_structure').html();
         template = Handlebars.compile(source);
-        html = template(translate);
+        html = template(dynamic_data);
         $('#' + this.CONFIG.placeholders.interactive_download_container).html(html);
+
+        /* Store user's action: preview. */
+        document.getElementById(this.CONFIG.placeholders.preview_button).addEventListener('click', function () {
+            that.CONFIG.action = 'PREVIEW';
+            that.download();
+        });
 
         /* Show the tab. */
         $(this.CONFIG.placeholders.interactive_tab).tab('show');
