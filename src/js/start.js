@@ -99,7 +99,12 @@ define(['jquery',
         /* Load main structure. */
         source = $(templates).filter('#faostat_ui_download_structure').html();
         template = Handlebars.compile(source);
-        dynamic_data = {};
+        dynamic_data = {
+            welcome_page_label: translate.welcome_page_label,
+            interactive_download_label: translate.interactive_download_label,
+            bulk_downloads_label: translate.bulk_downloads_label,
+            metadata_label: translate.metadata_label
+        };
         html = template(dynamic_data);
         $('#' + this.CONFIG.placeholder_id).html(html);
 
