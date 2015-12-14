@@ -120,6 +120,7 @@ define(['jquery',
                     that.render_section();
                 },
                 onClick: function (callback) {
+                    $('#' + that.CONFIG.placeholders.download_output_area).empty();
                     that.CONFIG.code = callback.id;
                     that.CONFIG.label = callback.label;
                     Common.changeURL(that.CONFIG.section, [that.CONFIG.code], false);
