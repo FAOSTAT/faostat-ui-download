@@ -103,7 +103,8 @@ define(['jquery',
             welcome_page_label: translate.welcome_page_label,
             interactive_download_label: translate.interactive_download_label,
             bulk_downloads_label: translate.bulk_downloads_label,
-            metadata_label: translate.metadata_label
+            metadata_label: translate.metadata_label,
+            filter_domain_tree: translate.filter_domain_tree
         };
         html = template(dynamic_data);
         $('#' + this.CONFIG.placeholder_id).html(html);
