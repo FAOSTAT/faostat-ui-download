@@ -506,7 +506,7 @@ define(['jquery',
             this.CONFIG.welcome.init({
                 placeholder_id: that.CONFIG.placeholders.welcome_container,
                 domain: that.CONFIG.code,
-                domain_name: $('.node-selected').text(),
+                domain_name: $('.jstree-clicked').text(),
                 domain_code: that.CONFIG.code
             });
         }
