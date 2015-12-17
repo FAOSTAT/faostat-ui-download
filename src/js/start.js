@@ -301,8 +301,16 @@ define(['jquery',
                 page_number: that.CONFIG.page_number,
                 group_by: null,
                 decimal_places: options.decimal_numbers_value,
-                null_values: options.null_values_value
+                null_values: options.null_values_value,
+                List1AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(0) || null,
+                List2AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(1) || null,
+                List3AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(2) || null,
+                List4AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(3) || null,
+                List5AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(4) || null,
+                List6AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(5) || null,
+                List7AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(6) || null
             };
+        console.log(config);
         if (options.output_type === 'PIVOT') {
             config.page_size = null;
             config.page_number = null;
