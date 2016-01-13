@@ -185,6 +185,8 @@ define(['jquery',
                         /* The data is downloaded and passed to the various rendering functions otherwise. */
                     } else {
 
+                        /* preview table preview-download pivot*/
+
                         /* Get data. */
                         that.get_data(user_selection, options, that).then(function (data) {
                             that.process_data(event, data, options, that);
@@ -244,6 +246,8 @@ define(['jquery',
         }
     };
 
+
+    /** Get Event is the selection (State) of table/pivot radio button and preview/download button*/
     DOWNLOAD.prototype.get_event = function (options, context) {
         var that = context || this;
         switch (options.output_type) {
@@ -393,6 +397,7 @@ define(['jquery',
         });
     };
 
+    /** TODO: move to Global Export **/
     DOWNLOAD.prototype.download_table = function (user_selection, options, context) {
         var that = context || this;
         that.CONFIG.api.data({
