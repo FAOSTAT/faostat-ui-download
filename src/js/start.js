@@ -1,5 +1,6 @@
 /*global define, document, window, unescape, encodeURIComponent, setInterval, clearInterval, amplify*/
 define(['jquery',
+        'loglevel',
         'config/Config',
         'globals/Common',
         'config/Events',
@@ -20,7 +21,7 @@ define(['jquery',
         'pivot_exporter',
         'FAOSTAT_UI_WELCOME_PAGE',
         'bootstrap',
-        'amplify'], function ($, Config, Common, E, Handlebars, templates,
+        'amplify'], function ($, log, Config, Common, E, Handlebars, templates,
                               translate,
                               i18nLabels,
                               Tree,
@@ -540,7 +541,8 @@ define(['jquery',
                     domain: that.CONFIG.code,
                     callback: {
                         onMetadataRendered: function () {
-                            $('#metadata_loading').css('display', 'none');
+                            //amplify.publish(E.LOADING_HIDE, that.CONFIG.placeholders.metadata_container);
+                            //$('#metadata_loading').css('display', 'none');
                         }
                     }
                 });
