@@ -822,18 +822,19 @@ define(['jquery',
 
     DOWNLOAD.prototype.render_report_section = function () {
 
-        // TODO: handle the missing tab logic
+        var that = this;
 
+        // TODO: handle the missing tab logic
         if ( this.CONFIG.code === 'FBS') {
-            var that = this;
+            // TODO: check the logic to don't render twice the tab content
             $(this.CONFIG.placeholders.report_tab).tab('show');
             this.CONFIG.report = new Report();
-            if (this.CONFIG.report.isNotRendered()) {
-                this.CONFIG.report.init({
-                    container: that.CONFIG.placeholders.report_container,
-                    domain: that.CONFIG.code
-                });
-            }
+            this.CONFIG.report.init({
+                container: that.CONFIG.placeholders.report_container,
+                domain: that.CONFIG.code
+            });
+        }else {
+           this.render_welcome_page();
         }
 
     };
