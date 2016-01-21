@@ -13,6 +13,7 @@ define(['jquery',
         'FAOSTAT_UI_OPTIONS_MANAGER',
         'FAOSTAT_UI_BULK_DOWNLOADS',
         'FENIX_UI_METADATA_VIEWER',
+        'fs-r-p/start',
         'sweetAlert',
         'q',
         'faostatapiclient',
@@ -25,7 +26,7 @@ define(['jquery',
                               translate,
                               i18nLabels,
                               Tree,
-                              DownloadSelectorsManager, OptionsManager, BulkDownloads, MetadataViewer,
+                              DownloadSelectorsManager, OptionsManager, BulkDownloads, MetadataViewer, Report,
                               swal, Q, FAOSTATAPIClient, Table, FAOSTATPivot, PivotExporter, WelcomePage) {
 
     'use strict';
@@ -36,8 +37,6 @@ define(['jquery',
             lang: 'en',
             group: null,
             domain: null,
-            lang_faostat: 'E',
-            datasource: 'faostatdb',
             prefix: 'faostat_ui_download_',
             placeholder_id: 'faostat_ui_download',
             pivot: null,
@@ -53,6 +52,7 @@ define(['jquery',
                 metadata_tab: 'a[href="#metadata"]',
                 welcome_tab: 'a[href="#welcome_page"]',
                 bulk_tab: 'a[href="#bulk_downloads"]',
+                report_tab: 'a[href="#report"]',
                 interactive_download_selectors: 'interactive_download_selectors',
                 download_output_area: 'downloadOutputArea',
                 preview_options_placeholder: 'preview_options_placeholder',
@@ -60,6 +60,7 @@ define(['jquery',
                 bulk_downloads: 'bulk_downloads',
                 metadata_container: 'metadata_container',
                 welcome_container: 'welcome_container',
+                report_container: '#report_container',
                 tab: 'a[data-toggle="tab"]',
                 preview_button: 'preview_button',
                 download_button: 'download_options_csv_button',
@@ -105,6 +106,8 @@ define(['jquery',
             interactive_download_label: translate.interactive_download_label,
             bulk_downloads_label: translate.bulk_downloads_label,
             metadata_label: translate.metadata_label,
+            report_label: translate.report_label,
+            faostat_domains: translate.faostat_domains,
             filter_domain_tree: translate.filter_domain_tree
         };
         html = template(dynamic_data);
@@ -507,6 +510,9 @@ define(['jquery',
         case 'bulk':
             this.render_bulk_downloads();
             break;
+        case 'report':
+            this.render_report_section();
+            break;
         }
 
     };
@@ -811,6 +817,25 @@ define(['jquery',
             this.show_domains_list(that.CONFIG.placeholders.bulk_downloads, that.CONFIG.code, translate.bulk_description);
             break;
         }
+    };
+
+
+    DOWNLOAD.prototype.render_report_section = function () {
+
+        // TODO: handle the missing tab logic
+
+        if ( this.CONFIG.code === 'FBS') {
+            var that = this;
+            $(this.CONFIG.placeholders.report_tab).tab('show');
+            this.CONFIG.report = new Report();
+            if (this.CONFIG.report.isNotRendered()) {
+                this.CONFIG.report.init({
+                    container: that.CONFIG.placeholders.report_container,
+                    domain: that.CONFIG.code
+                });
+            }
+        }
+
     };
 
     DOWNLOAD.prototype.show_domains_list = function (placeholder_id, group_code, description) {

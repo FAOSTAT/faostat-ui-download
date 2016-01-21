@@ -18,6 +18,13 @@
                     </a>
                 </li>
                 <li role='presentation'>
+                    <a href='#report' data-section='report' role='tab' data-toggle='tab'
+                       aria-controls='report'>
+                        <!--<i class='fa fa-download'></i> -->
+                        {{report_label}}
+                    </a>
+                </li>
+                <li role='presentation'>
                     <a href='#bulk_downloads' data-section='bulk' role='tab' data-toggle='tab'
                        aria-controls='bulk_downloads'>
                         <!--<i class='fa fa-archive'></i> -->
@@ -41,7 +48,7 @@
             <!--<h1>{{tree_title}}</h1>-->
             <input class='form-control' placeholder='{{filter_domain_tree}}' id='fs-download-tree-search'>
             <br>
-            <span class="label label-default">Faostat Domains</span>
+            <span class="label label-default">{{faostat_domains}}</span>
             <div id='tree'></div>
         </div>
 
@@ -81,6 +88,11 @@
                             <i class='fa fa-refresh fa-spin fa-5x'></i>
                         </h1>-->
                     </div>
+                </div>
+
+                <!-- Report -->
+                <div role='tabpanel' class='tab-pane' id='report'>
+                    <div id='report_container'></div>
                 </div>
 
             </div>
@@ -139,7 +151,7 @@
         <div class='col-lg-4'>
             <span id='download_options_placeholder' class='pull-right'></span>
             <button class='btn btn-primary pull-right' id='preview_button'>
-                <i class='fa fa-search'></i> {{preview_label}}
+                <i class='fa fa-search'></i>{{preview_label}}
             </button>
         </div>
     </div>
