@@ -831,7 +831,7 @@ define(['jquery',
             this.CONFIG.report = new Report();
             this.CONFIG.report.init({
                 container: that.CONFIG.placeholders.report_container,
-                domain: that.CONFIG.code
+                code: that.CONFIG.code
             });
         }else {
            this.render_welcome_page();
