@@ -493,6 +493,9 @@ define(['jquery',
         /* rendering current group/domain */
         this.$GROUP_LABEL.html(this.CONFIG.label);
 
+       /* Forcing the dispose */
+       this.switchTabDispose();
+
         /* Empty download area. */
         $('#' + this.CONFIG.placeholders.download_output_area).empty();
 
@@ -879,7 +882,38 @@ define(['jquery',
 
     };
 
+    DOWNLOAD.prototype.switchTabDispose = function () {
+
+        log.info('DOWNLOAD.switchTabDispose');
+
+        $('#' + this.CONFIG.placeholders.download_output_area).empty();
+        try {
+            this.CONFIG.metadata.dispose();
+        } catch (ignore) {
+
+        }
+        try {
+            this.CONFIG.bulk_downloads.dispose();
+        } catch (ignore) {
+
+        }
+        try {
+            this.CONFIG.options_manager.dispose();
+        } catch (ignore) {
+
+        }
+        try {
+            this.CONFIG.download_selectors_manager.dispose();
+        } catch (ignore) {
+
+        }
+    };
+
+
     DOWNLOAD.prototype.dispose = function () {
+
+        log.info('DOWNLOAD.dispose');
+
         $('#' + this.CONFIG.placeholders.download_output_area).empty();
         this.CONFIG.tree.dispose();
         try {
