@@ -86,6 +86,8 @@ define(['jquery',
         this.CONFIG.pivot_exporter = new PivotExporter({
             placeholder_id: 'downloadOutputArea',
             filename: 'FAOSTAT',
+
+            // TODO: check if the urls are used and in case move to a configuration section/file
             url_csv2excel: 'http://fenixapps2.fao.org/api/v1.0/csv2excel/',
             url_output: 'http://fenixapps2.fao.org/api/v1.0/excels/'
         });
@@ -431,7 +433,51 @@ define(['jquery',
 
     /** TODO: move to Global Export **/
     DOWNLOAD.prototype.download_table = function (user_selection, options, context) {
-        var that = context || this;
+
+        log.info(user_selection, options, context)
+        //log.info(that.CONFIG.download_selectors_manager.get_selected_coding_system(0) || '');
+
+        // create a Common request with the preview section
+        var that = context || this,
+            request = $.extend(true,
+                {},
+                // TODO: align options name with the on the request's payload
+                {
+                    show_codes: options.codes_value? 1: 0,
+                    show_flags: options.flags_value? 1: 0,
+                    decimal_places: options.decimal_numbers_value || 2,
+                    show_unit: options.units_value? 1: 0,
+                    null_values: options.null_values_value || true
+                },
+                {
+                    domain_codes: [that.CONFIG.code],
+                    List1Codes: user_selection.list1Codes || null,
+                    List2Codes: user_selection.list2Codes || null,
+                    List3Codes: user_selection.list3Codes || null,
+                    List4Codes: user_selection.list4Codes || null,
+                    List5Codes: user_selection.list5Codes || null,
+                    List6Codes: user_selection.list6Codes || null,
+                    List7Codes: user_selection.list7Codes || null,
+                    lang: Common.getLocale(),
+                    output_type: 'csv',
+                    limit: -1,
+                    page_size: null,
+                    page_number: null,
+                    List1AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(0) || '',
+                    List2AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(1) || '',
+                    List3AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(2) || '',
+                    List4AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(3) || '',
+                    List5AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(4) || '',
+                    List6AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(5) || '',
+                    List7AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(6) || ''
+            });
+
+        log.info(request)
+        // TODO: should be checked the size?
+        amplify.publish(E.EXPORT_DATA, request);
+
+        /*
+
         that.CONFIG.api.data({
             domain_codes: [that.CONFIG.code],
             List1Codes: user_selection.list1Codes || null,
@@ -445,7 +491,14 @@ define(['jquery',
             output_type: 'csv',
             limit: -1,
             page_size: null,
-            page_number: null
+            page_number: null,
+            List1AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(0) || '',
+            List2AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(1) || '',
+            List3AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(2) || '',
+            List4AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(3) || '',
+            List5AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(4) || '',
+            List6AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(5) || '',
+            List7AltCodes: that.CONFIG.download_selectors_manager.get_selected_coding_system(6) || ''
         }).then(function () {
             that.CONFIG.action = null;
         }).fail(function (e) {
@@ -463,7 +516,7 @@ define(['jquery',
             a.click();
             that.CONFIG.action = null;
             amplify.publish(E.WAITING_HIDE, {});
-        });
+        });*/
     };
 
     DOWNLOAD.prototype.download_pivot = function (data, options) {
