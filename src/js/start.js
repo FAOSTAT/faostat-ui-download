@@ -14,7 +14,6 @@ define(['jquery',
         'FAOSTAT_UI_BULK_DOWNLOADS',
         'FENIX_UI_METADATA_VIEWER',
         'fs-r-p/start',
-        'sweetAlert',
         'q',
         'faostatapiclient',
         'FAOSTAT_UI_TABLE',
@@ -27,7 +26,7 @@ define(['jquery',
                               i18nLabels,
                               Tree,
                               DownloadSelectorsManager, OptionsManager, BulkDownloads, MetadataViewer, Report,
-                              swal, Q, FAOSTATAPIClient, Table, FAOSTATPivot, PivotExporter, WelcomePage) {
+                              Q, FAOSTATAPIClient, Table, FAOSTATPivot, PivotExporter, WelcomePage) {
 
     'use strict';
 
@@ -153,13 +152,18 @@ define(['jquery',
     DOWNLOAD.prototype.download = function (context) {
 
         /* Variables. */
-        var user_selection,
+        var user_selection_obj,
+            user_selection,
             options,
             that = context || this,
             event;
 
         /* Get user selection. */
+        //user_selectionobj = that.get_user_selection(that);
         user_selection = that.get_user_selection(that);
+
+        log.info(user_selection);
+
 
         /* Get options. */
         options = that.get_options(that);
@@ -193,6 +197,7 @@ define(['jquery',
 
                         /* Get data. */
                         that.get_data(user_selection, options, that).then(function (data) {
+
                             that.process_data(event, data, options, that);
                             /* For some reason, when the user switches from "table" to "pivot", this listener is erased. Restore it. */
                             $('#' + that.CONFIG.placeholders.download_button).off().click(function () {
@@ -204,11 +209,12 @@ define(['jquery',
                     }
 
                 }).fail(function (e) {
-                    swal({
-                        type: 'warning',
+
+                    amplify.publish(E.NOTIFICATION_WARNING, {
                         title: 'Warning',
                         text: e
                     });
+
                     amplify.publish(E.WAITING_HIDE, {});
                     /* For some reason, when the user switches from "table" to "pivot", this listener is erased. Restore it. */
                     $('#' + that.CONFIG.placeholders.download_button).off().click(function () {
@@ -220,8 +226,7 @@ define(['jquery',
             });
 
         } catch (e) {
-            swal({
-                type: 'warning',
+            amplify.publish(E.NOTIFICATION_WARNING, {
                 title: 'Warning',
                 text: e
             });
@@ -293,6 +298,10 @@ define(['jquery',
     };
 
     DOWNLOAD.prototype.get_data = function (user_selection, options, context) {
+
+        log.info("DOWNLOAD.get_data; user_selection:", user_selection )
+        log.info(this.CONFIG.download_selectors_manager)
+
         var that = context || this,
             config = {
                 datasource: Config.DATASOURCE,
@@ -323,6 +332,8 @@ define(['jquery',
             config.page_number = null;
             config.limit = -1;
         }
+
+        log.info(config)
         return this.CONFIG.api.data(config).then(function (data) {
             return data;
         });
@@ -351,37 +362,54 @@ define(['jquery',
 
     };
 
-    DOWNLOAD.prototype.preview_table = function (data, options, context) {
+    DOWNLOAD.prototype.preview_table = function (d, options, context) {
+
         var that = context || this,
             table = new Table();
-        table.init({
-            placeholder_id: that.CONFIG.placeholders.download_output_area,
-            data: data.data,
-            metadata: data.metadata,
-            show_units: options.units_value,
-            show_flags: options.flags_value,
-            show_codes: options.codes_value,
-            decimal_places: options.decimal_numbers_value,
-            decimal_separator: options.decimal_separator_value,
-            thousand_separator: options.thousand_separator_value,
-            page_size: that.CONFIG.page_size,
-            current_page: that.CONFIG.page_number,
-            onPageClick: function (config) {
-                if (config.page_number !== that.CONFIG.page_number) {
-                    that.CONFIG.page_number = config.page_number;
-                    that.CONFIG.action = 'PREVIEW';
-                    that.download(that);
-                } else {
-                    swal({
-                        type: 'info',
-                        title: 'Info',
-                        text: 'There are no more pages to browse.'
-                    });
-                }
-            },
-            context: that
-        });
-        that.CONFIG.action = null;
+
+
+        if (d.data.length > 0){
+                table.init({
+                    placeholder_id: that.CONFIG.placeholders.download_output_area,
+                    data: d.data,
+                    metadata: d.metadata,
+                    show_units: options.units_value,
+                    show_flags: options.flags_value,
+                    show_codes: options.codes_value,
+                    decimal_places: options.decimal_numbers_value,
+                    decimal_separator: options.decimal_separator_value,
+                    thousand_separator: options.thousand_separator_value,
+                    page_size: that.CONFIG.page_size,
+                    current_page: that.CONFIG.page_number,
+                    onPageClick: function (config) {
+                        if (config.page_number !== that.CONFIG.page_number) {
+                            that.CONFIG.page_number = config.page_number;
+                            that.CONFIG.action = 'PREVIEW';
+                            that.download(that);
+                        } else {
+
+                            /*                amplify.publish(E.NOTIFICATION_INFO, {
+                             title: 'Info',
+                             text: 'There are no more pages to browse.'
+                             });*/
+                        }
+                    },
+                    context: that
+                });
+            that.CONFIG.action = null;
+        }
+        else {
+
+            // TODO: fix the layout for no data available
+            $('#' + that.CONFIG.placeholders.download_output_area).empty();
+            $('#' + that.CONFIG.placeholders.download_output_area).html(
+                //translate.no_data_available
+                '<h1>No data available for the current selection</h1>'
+            );
+
+        }
+
+
         amplify.publish(E.WAITING_HIDE, {});
     };
 
@@ -421,6 +449,10 @@ define(['jquery',
         }).then(function () {
             that.CONFIG.action = null;
         }).fail(function (e) {
+
+            // TODO: handle export with Global one
+
+
             var csvString = e.responseText,
                 a = document.createElement('a'),
                 filename = $('#tree').find('.jstree-anchor.jstree-clicked').text().replace(/\s/g, '_') + '_' + (new Date()).getTime() + '.csv';
@@ -446,11 +478,15 @@ define(['jquery',
                     that.CONFIG.pivot_exporter.csv();
                     amplify.publish(E.WAITING_HIDE, {});
                 }
+                // TODO: check hardcoded 100
             }, 100);
         });
     };
 
     DOWNLOAD.prototype.validate_user_selection = function (user_selection, context) {
+
+
+        // TODO: this should be checked with the real values instead of tabs
 
         /* Variables. */
         var i,
