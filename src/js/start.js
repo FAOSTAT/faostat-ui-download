@@ -42,7 +42,7 @@ define(['jquery',
             action: 'PREVIEW',
             limit_pivot: 500,
             limit_table: 20000,
-            page_size: 100,
+            page_size: 25,
             page_number: 1,
             placeholders: {
                 tree: '#tree',
@@ -86,7 +86,6 @@ define(['jquery',
         this.CONFIG.pivot_exporter = new PivotExporter({
             placeholder_id: 'downloadOutputArea',
             filename: 'FAOSTAT',
-
             // TODO: check if the urls are used and in case move to a configuration section/file
             url_csv2excel: 'http://fenixapps2.fao.org/api/v1.0/csv2excel/',
             url_output: 'http://fenixapps2.fao.org/api/v1.0/excels/'
@@ -163,9 +162,7 @@ define(['jquery',
         /* Get user selection. */
         //user_selectionobj = that.get_user_selection(that);
         user_selection = that.get_user_selection(that);
-
         log.info(user_selection);
-
 
         /* Get options. */
         options = that.get_options(that);
@@ -384,6 +381,7 @@ define(['jquery',
                     page_size: that.CONFIG.page_size,
                     current_page: that.CONFIG.page_number,
                     onPageClick: function (config) {
+                        log.info("DOWNLOAD.preview_table;", config);
                         if (config.page_number !== that.CONFIG.page_number) {
                             that.CONFIG.page_number = config.page_number;
                             that.CONFIG.action = 'PREVIEW';
@@ -434,14 +432,13 @@ define(['jquery',
     /** TODO: move to Global Export **/
     DOWNLOAD.prototype.download_table = function (user_selection, options, context) {
 
-        log.info(user_selection, options, context)
-        //log.info(that.CONFIG.download_selectors_manager.get_selected_coding_system(0) || '');
+        log.info(user_selection, options, context);
 
         // create a Common request with the preview section
         var that = context || this,
             request = $.extend(true,
                 {},
-                // TODO: align options name with the on the request's payload
+                // TODO: align options names with the ones in the request payload
                 {
                     show_codes: options.codes_value? 1: 0,
                     show_flags: options.flags_value? 1: 0,
@@ -523,17 +520,27 @@ define(['jquery',
         var that = this,
             timer,
             test;
-        that.preview_pivot(data, options).then(function () {
-            timer = setInterval(function () {
-                test = $('#' + that.CONFIG.placeholders.download_output_area).html();
-                if (test !== '') {
-                    clearInterval(timer);
-                    that.CONFIG.pivot_exporter.csv();
-                    amplify.publish(E.WAITING_HIDE, {});
-                }
-                // TODO: check hardcoded 100
-            }, 100);
-        });
+
+        log.info('DOWNLOAD.download_pivot; Pivot rendered:', $('#' + that.CONFIG.placeholders.download_output_area).find('#pivot_placeholder').length > 0);
+
+        // TODO: fox the hardcoded pivot_placeholder
+        if ($('#' + that.CONFIG.placeholders.download_output_area).find('#pivot_placeholder').length > 0) {
+            that.CONFIG.pivot_exporter.csv();
+            amplify.publish(E.WAITING_HIDE, {});
+        }
+        else {
+            that.preview_pivot(data, options).then(function () {
+                timer = setInterval(function () {
+                    test = $('#' + that.CONFIG.placeholders.download_output_area).html();
+                    if (test !== '') {
+                        clearInterval(timer);
+                        that.CONFIG.pivot_exporter.csv();
+                        amplify.publish(E.WAITING_HIDE, {});
+                    }
+                    // TODO: check hardcoded 100
+                }, 100);
+            });
+        }
     };
 
     DOWNLOAD.prototype.validate_user_selection = function (user_selection, context) {
@@ -639,6 +646,7 @@ define(['jquery',
                     domain: that.CONFIG.code,
                     callback: {
                         onMetadataRendered: function () {
+                            log.warn("DOWNLOAD.render_metadata; onMetadataRendered. Should this been removed?");
                             //amplify.publish(E.LOADING_HIDE, that.CONFIG.placeholders.metadata_container);
                             //$('#metadata_loading').css('display', 'none');
                         }
@@ -812,6 +820,9 @@ define(['jquery',
         });
 
         /* Download options callbacks. */
+        // this is the Modal window callback.
+        // TODO: check if each action is consistent. If the user switch between the options a csv is downloaded
+        // TODO: is it useful the Download Modal? Or could be better just a download button?
         that.CONFIG.options_manager.get_options_window('download_options').CONFIG.callback = {
             onOutputTypeChange: function () {
                 that.CONFIG.action = 'DOWNLOAD';
