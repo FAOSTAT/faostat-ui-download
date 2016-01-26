@@ -723,6 +723,7 @@ define(['jquery',
         });
 
         /* Preview options callbacks. */
+        // TODO: this should be handled by the TABLE
         that.CONFIG.options_manager.get_options_window('preview_options').CONFIG.callback = {
             onOutputTypeChange: function () {
                 $('#' + that.CONFIG.placeholders.download_output_area).empty();
