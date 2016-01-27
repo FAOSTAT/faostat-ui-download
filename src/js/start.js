@@ -300,7 +300,7 @@ define(['jquery',
     DOWNLOAD.prototype.get_data = function (user_selection, options, context) {
 
         log.info("DOWNLOAD.get_data; user_selection:", user_selection )
-        log.info(this.CONFIG.download_selectors_manager)
+        log.info(this.CONFIG.download_selectors_manager);
 
         var that = context || this,
             config = {
@@ -315,7 +315,7 @@ define(['jquery',
                 List7Codes: user_selection.list7Codes || null,
                 lang: Common.getLocale(),
                 page_size: that.CONFIG.page_size,
-                page_number: that.CONFIG.page_number,
+                page_number: that.CONFIG.page_number, // this should be reset at each selection/preview
                 group_by: null,
                 decimal_places: options.decimal_numbers_value,
                 null_values: options.null_values_value,
@@ -333,7 +333,7 @@ define(['jquery',
             config.limit = -1;
         }
 
-        log.info(config)
+        log.info("DOWNLOAD.get_data; config:", config);
         return this.CONFIG.api.data(config).then(function (data) {
             return data;
         });
@@ -711,7 +711,10 @@ define(['jquery',
                 domain: this.CONFIG.code,
                 callback: {
                     onSelectionChange: function () {
-                        $('#' + that.CONFIG.placeholders.download_output_area).empty();
+
+                        // on box selection change.
+                        that.on_selection_change_reset();
+
                     }
                 }
             });
@@ -903,6 +906,17 @@ define(['jquery',
             that.CONFIG.action = 'DOWNLOAD';
             that.download();
         });
+
+    };
+
+    /* Method called to reset the interface on each selection */
+    DOWNLOAD.prototype.on_selection_change_reset = function () {
+
+        // clean html selection
+        $('#' + this.CONFIG.placeholders.download_output_area).empty();
+
+        // reset page number
+        this.CONFIG.page_number = 1;
 
     };
 
