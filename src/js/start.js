@@ -2,6 +2,7 @@
 define(['jquery',
         'loglevel',
         'config/Config',
+        'config/download/Config',
         'globals/Common',
         'config/Events',
         'handlebars',
@@ -21,7 +22,7 @@ define(['jquery',
         'pivot_exporter',
         'FAOSTAT_UI_WELCOME_PAGE',
         'bootstrap',
-        'amplify'], function ($, log, Config, Common, E, Handlebars, templates,
+        'amplify'], function ($, log, C, CM, Common, E, Handlebars, templates,
                               translate,
                               i18nLabels,
                               Tree,
@@ -40,8 +41,8 @@ define(['jquery',
             placeholder_id: 'faostat_ui_download',
             pivot: null,
             action: 'PREVIEW',
-            limit_pivot: 500,
-            limit_table: 20000,
+            limit_pivot: 1000,
+            limit_table: 250000, // 250000 ~40/50MB
             page_size: 25,
             page_number: 1,
             placeholders: {
@@ -303,7 +304,7 @@ define(['jquery',
 
         var that = context || this,
             config = {
-                datasource: Config.DATASOURCE,
+                datasource: C.DATASOURCE,
                 domain_codes: [that.CONFIG.code],
                 List1Codes: user_selection.list1Codes || null,
                 List2Codes: user_selection.list2Codes || null,
@@ -434,6 +435,8 @@ define(['jquery',
 
         log.info(user_selection, options, context);
 
+        log.info(options, options.null_values_value)
+
         // create a Common request with the preview section
         var that = context || this,
             request = $.extend(true,
@@ -444,7 +447,7 @@ define(['jquery',
                     show_flags: options.flags_value? 1: 0,
                     decimal_places: options.decimal_numbers_value || 2,
                     show_unit: options.units_value? 1: 0,
-                    null_values: options.null_values_value || true
+                    null_values: options.null_values || false
                 },
                 {
                     domain_codes: [that.CONFIG.code],
@@ -956,7 +959,7 @@ define(['jquery',
 
         /* Fetch domains by group code. */
         this.CONFIG.api.domains({
-            datasource: Config.DATASOURCE,
+            datasource: C.DATASOURCE,
             lang: Common.getLocale(),
             group_code: group_code
         }).then(function (response) {
