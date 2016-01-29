@@ -152,6 +152,7 @@ define([
             amplify.publish(E.WAITING_SHOW);
 
             log.info("InteractiveDownload.preview; ", type, options);
+            log.info("InteractiveDownload.preview; requestObj", requestObj);
 
             try {
                 // get query size
@@ -195,6 +196,8 @@ define([
                 self = this,
                 // Override of the Request with Fixed parameters
                 r = $.extend(true, {}, requestObj, {}); //this.o.PIVOT.REQUEST_FIXED_PARAMETERS);
+
+            log.info("InteractiveDownload.previewTable; requestObj", requestObj)
 
             // check if data size is right
             if(rowsNumber <= this.o.TABLE.MAX_ROWS) {
@@ -381,7 +384,6 @@ define([
             // get options and selections
 
             // get selections
-            log.info(this.selectorsManager);
             var selections = this.selectorsManager.getSelections(),
                 options = this.downloadOptions.getSelections(),
                 domain_codes = [this.o.code],
@@ -396,7 +398,7 @@ define([
             log.info('InteractiveDownload.preview; selections', selections);
             log.info('InteractiveDownload.preview; options', options);
 
-            return $.extend(true, this.o.DEFAULT_REQUEST, {domain_codes: domain_codes}, selectionRequest, options.request);
+            return $.extend(true, {}, this.o.DEFAULT_REQUEST, {domain_codes: domain_codes}, selectionRequest, options.request);
 
         };
 
