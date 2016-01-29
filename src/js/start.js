@@ -17,7 +17,9 @@ define([
         'underscore',
         'amplify'
     ],
-    function ($, log, C, E, Common, template, i18nLabels, SelectorManager, DownloadOptions, Table, FAOSTATPivot, PivotExporter, FAOSTATAPI, Handlebars, _) {
+    function ($, log, C, E, Common, template, i18nLabels,
+              SelectorManager, DownloadOptions, Table, FAOSTATPivot, PivotExporter,
+              FAOSTATAPI, Handlebars, _) {
 
         'use strict';
 
@@ -155,24 +157,28 @@ define([
                 // get query size
                 this.api.datasize(requestObj).then(function (d) {
 
-                    switch (type) {
-                        case "table":
-                            self.previewTable(d, requestObj);
-                            break;
-                        case "pivot":
-                            self.previewPivot(d, requestObj);
-                            break;
+                    if(self.checkDataSize(d)) {
+
+                        switch (type) {
+                            case "table":
+                                self.previewTable(d, requestObj);
+                                break;
+                            case "pivot":
+                                self.previewPivot(d, requestObj);
+                                break;
+                        }
+
                     }
 
                 }).fail(function (e) {
-                    log.error("InteractiveDownload.export; ", e);
+                    log.error("InteractiveDownload.preview; ", e);
                     amplify.publish(E.WAITING_HIDE);
                    // amplify.publish(E.NOTIFICATION_WARNING, {title: e});
 
                 });
 
             }catch(e) {
-                log.error("InteractiveDownload.export; ", e);
+                log.error("InteractiveDownload.preview; ", e);
                 amplify.publish(E.WAITING_HIDE);
             }
 
@@ -272,6 +278,7 @@ define([
                         }, 100);
                     }
 
+
                     amplify.publish(E.WAITING_HIDE, {});
 
                 });
@@ -296,13 +303,17 @@ define([
                 // get query size
                 this.api.datasize(requestObj).then(function (d) {
 
-                    switch (type) {
-                        case "table":
-                            self.exportTable(d, requestObj);
-                            break;
-                        case "pivot":
-                            self.exportPivot(d, requestObj);
-                            break;
+                    if (self.checkDataSize(d)) {
+
+                        switch (type) {
+                            case "table":
+                                self.exportTable(d, requestObj);
+                                break;
+                            case "pivot":
+                                self.exportPivot(d, requestObj);
+                                break;
+                        }
+
                     }
 
                 }).fail(function (e) {
@@ -403,6 +414,32 @@ define([
 
         };
 
+        InteractiveDownload.prototype.selectionChange = function () {
+
+            log.info('InteractiveDownload.selectionChange');
+
+            this.$OUTPUT_AREA.empty();
+
+        };
+
+        InteractiveDownload.prototype.checkDataSize = function (d) {
+
+            if(d.data[0].NoRecords <= 0) {
+                amplify.publish(E.WAITING_HIDE);
+                amplify.publish(E.NOTIFICATION_INFO, { title: i18nLabels.noDataAvailableForThisSelection});
+                return false;
+            }
+
+            return true;
+
+        };
+
+        InteractiveDownload.prototype.noDataAvailablePreview = function () {
+
+            this.$OUTPUT_AREA.html('<h2>'+ i18nLabels.noDataAvailableForThisSelection +'</h2>');
+
+        };
+
         InteractiveDownload.prototype.bindEventListeners = function () {
 
             var self = this;
@@ -414,11 +451,15 @@ define([
                 self.export();
             });
 
+            amplify.subscribe(E.DOWNLOAD_SELECTION_CHANGE, this, this.selectionChange);
+
         };
 
         InteractiveDownload.prototype.unbindEventListeners = function () {
             //this.$PREVIEW_BUTTON.off();
             //this.$EXPORT_BUTTON.off();
+
+            amplify.unsubscribe(E.DOWNLOAD_SELECTION_CHANGE, this.selectionChange);
         };
 
         InteractiveDownload.prototype.destroy = function () {
