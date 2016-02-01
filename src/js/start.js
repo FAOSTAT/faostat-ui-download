@@ -236,7 +236,8 @@ define([
             var rowsNumber = d.data[0].NoRecords,
                 show_flags = (requestObj.show_flags === 1)? true : false,
                 show_codes = (requestObj.show_codes === 1)? true : false,
-                render = (exportPivot !== undefined && exportPivot === true)? false : true,
+                show_units = (requestObj.show_unit === 1)? true : false,
+                render = (exportPivot !== undefined || exportPivot === true)? false : true,
                 self = this,
 
                 // Override of the Request with Fixed parameters
@@ -261,6 +262,7 @@ define([
                         dsd: d.metadata.dsd,
                         show_flags: show_flags,
                         show_codes: show_codes,
+                        show_units: show_units,
                         render: render
                     });
 
