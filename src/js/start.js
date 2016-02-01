@@ -47,7 +47,7 @@ define([
                 },
 
                 PIVOT: {
-                    MAX_ROWS: 1000,
+                    MAX_ROWS: 5000,
 
                     // this is due of how the pivot is rendered
                     // it requires all the fields
@@ -162,10 +162,10 @@ define([
 
                         switch (type) {
                             case "table":
-                                self.previewTable(d, requestObj);
+                                self.previewTable(d, requestObj, options);
                                 break;
                             case "pivot":
-                                self.previewPivot(d, requestObj);
+                                self.previewPivot(d, requestObj, options);
                                 break;
                         }
 
@@ -185,7 +185,7 @@ define([
 
         };
 
-        InteractiveDownload.prototype.previewTable = function (d, requestObj) {
+        InteractiveDownload.prototype.previewTable = function (d, requestObj, options) {
 
             log.info(" InteractiveDownload.previewTable size:", d);
 
@@ -193,11 +193,15 @@ define([
                 show_codes = requestObj.show_codes,
                 show_flags = requestObj.show_flags,
                 show_units = requestObj.show_units,
-                self = this,
+                thousand_separator = options.options.thousand_separator,
+                decimal_separator = options.options.decimal_separator,
                 // Override of the Request with Fixed parameters
                 r = $.extend(true, {}, requestObj, {}); //this.o.PIVOT.REQUEST_FIXED_PARAMETERS);
 
-            log.info("InteractiveDownload.previewTable; requestObj", requestObj)
+            log.info(options)
+
+
+            log.info("InteractiveDownload.previewTable; requestObj", requestObj, options);
 
             // check if data size is right
             if(rowsNumber <= this.o.TABLE.MAX_ROWS) {
@@ -211,8 +215,8 @@ define([
                     show_flags: show_flags,
                     // TODO: get options
                     decimal_places: 2,
-                    decimal_separator: '.',
-                    thousand_separator: ',',
+                    decimal_separator: decimal_separator,
+                    thousand_separator: thousand_separator,
                     //show_units: options.units_value,
                     //show_flags: options.flags_value,
                     //show_codes: options.codes_value,
@@ -231,13 +235,14 @@ define([
 
         };
 
-        InteractiveDownload.prototype.previewPivot = function (d, requestObj, exportPivot) {
+        InteractiveDownload.prototype.previewPivot = function (d, requestObj, options, exportPivot) {
 
             var rowsNumber = d.data[0].NoRecords,
                 show_flags = (requestObj.show_flags === 1)? true : false,
                 show_codes = (requestObj.show_codes === 1)? true : false,
                 show_units = (requestObj.show_unit === 1)? true : false,
                 render = (exportPivot !== undefined || exportPivot === true)? false : true,
+                thousand_separator = options.options.thousand_separator,
                 self = this,
 
                 // Override of the Request with Fixed parameters
@@ -263,7 +268,8 @@ define([
                         show_flags: show_flags,
                         show_codes: show_codes,
                         show_units: show_units,
-                        render: render
+                        render: render,
+                        thousand_separator: thousand_separator
                     });
 
                     // export hidden table
@@ -312,10 +318,10 @@ define([
 
                         switch (type) {
                             case "table":
-                                self.exportTable(d, requestObj);
+                                self.exportTable(d, requestObj, options);
                                 break;
                             case "pivot":
-                                self.exportPivot(d, requestObj);
+                                self.exportPivot(d, requestObj, options);
                                 break;
                         }
 
@@ -354,7 +360,7 @@ define([
 
         };
 
-        InteractiveDownload.prototype.exportPivot = function (d, requestObj) {
+        InteractiveDownload.prototype.exportPivot = function (d, requestObj, options) {
 
             amplify.publish(E.WAITING_HIDE);
             var self = this;
@@ -369,7 +375,7 @@ define([
 
                 pivotExporter.csv();
             }else{
-                this.previewPivot(d, requestObj, true);
+                this.previewPivot(d, requestObj, options, true);
             }
 
         };
