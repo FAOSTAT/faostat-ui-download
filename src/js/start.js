@@ -10,6 +10,7 @@ define([
         'fs-s-m/start',
         'fs-d-o/start',
         'FAOSTAT_UI_TABLE',
+        'lib/table/table',
         'FAOSTAT_UI_PIVOT',
         'pivot_exporter',
         'faostatapiclient',
@@ -18,7 +19,10 @@ define([
         'amplify'
     ],
     function ($, log, C, E, Common, template, i18nLabels,
-              SelectorManager, DownloadOptions, Table, FAOSTATPivot, PivotExporter,
+              SelectorManager, DownloadOptions,
+              FAOSTATTable,
+              Table,
+              FAOSTATPivot, PivotExporter,
               FAOSTATAPI, Handlebars, _) {
 
         'use strict';
@@ -190,13 +194,18 @@ define([
             log.info(" InteractiveDownload.previewTable size:", d);
 
             var rowsNumber = d.data[0].NoRecords,
-                show_codes = requestObj.show_codes,
-                show_flags = requestObj.show_flags,
-                show_units = requestObj.show_units,
+                show_flags = (requestObj.show_flags === 1)? true : false,
+                show_codes = (requestObj.show_codes === 1)? true : false,
+                show_units = (requestObj.show_unit === 1)? true : false,
                 thousand_separator = options.options.thousand_separator,
                 decimal_separator = options.options.decimal_separator,
+                self = this,
                 // Override of the Request with Fixed parameters
                 r = $.extend(true, {}, requestObj, {}); //this.o.PIVOT.REQUEST_FIXED_PARAMETERS);
+
+                // initilizing request
+                r.page_number = this.o.TABLE.PAGE_NUMBER;
+                r.page_size = this.o.TABLE.PAGE_SIZE;
 
             log.info(options)
 
@@ -206,7 +215,7 @@ define([
             // check if data size is right
             if(rowsNumber <= this.o.TABLE.MAX_ROWS) {
 
-                var table = new Table();
+/*                var table = new FAOSTATTable();
                 table.init({
                     request: r,
                     container: this.$OUTPUT_AREA,
@@ -217,15 +226,106 @@ define([
                     decimal_places: 2,
                     decimal_separator: decimal_separator,
                     thousand_separator: thousand_separator,
-                    //show_units: options.units_value,
-                    //show_flags: options.flags_value,
-                    //show_codes: options.codes_value,
-                    //decimal_places: options.decimal_numbers_value,
-                    //decimal_separator: options.decimal_separator_value,
-                    //thousand_separator: options.thousand_separator_value,
                     page_size: this.o.TABLE.PAGE_SIZE,
                     current_page: this.o.TABLE.PAGE_NUMBER,
                     total_rows: rowsNumber
+                });*/
+
+
+                /** Table */
+
+                console.log(show_codes);
+
+                self.api.data(r).then(function(d) {
+
+                    log.info('HERE.formatData;', d);
+
+                    //amplify.publish(E.WAITING_HIDE, {});
+
+                    // TODO: requires a refactoring!
+                    var table = new Table();
+                    table.render({
+                        model: d,
+                        request: r,
+                        container: self.$OUTPUT_AREA,
+                        adapter: {
+                            columns: [],
+                            show_flags: show_flags,
+                            show_codes: show_codes,
+                            show_unit: show_units,
+                            thousand_separator: thousand_separator,
+                            decimal_separator: decimal_separator
+                        },
+                        template: {
+                            height: '650',
+                            tableOptions: {
+                                'data-pagination': true,
+                                'data-sortable': false,
+                                'data-page-size': self.o.TABLE.PAGE_SIZE,
+                                'data-side-pagination': 'server'
+                                //'data-ajax': 'ajaxRequest'
+                            },
+                            sortable: false,
+                            addPanel: false,
+                            ajax: function(request) {
+                                $.ajax({
+                                    url: "",
+                                    method: "",
+                                    dataType: "",
+                                    success: function () {
+                                    },
+                                    error: function(data) {
+                                        console.log(JSON.stringify(data));
+                                    },
+                                    complete: function (){
+
+                                        amplify.publish(E.WAITING_SHOW, {});
+
+                                        var limit = request.data.limit,
+                                            offset = request.data.offset,
+                                            pageNumber = (offset / limit) + 1,
+                                            pageSize = limit;
+
+                                        // alter base request
+                                        r.page_number = pageNumber;
+                                        r.page_size = pageSize;
+
+                                        log.info("InteractiveDownload.previewTable; limit, offset: ", limit, offset);
+                                        log.info("InteractiveDownload.previewTable; page_size, page_number: ", pageSize, pageNumber);
+                                        log.info("InteractiveDownload.previewTable; New request: ", (( pageSize !== self.o.TABLE.PAGE_SIZE && pageNumber === 1) || pageNumber !== 1));
+
+                                        // if is it not the cached model
+                                        if (( pageSize !== self.o.TABLE.PAGE_SIZE && pageNumber === 1) || pageNumber !== 1) {
+                                            self.api.data(r).then(function (v) {
+
+                                                amplify.publish(E.WAITING_HIDE, {});
+
+                                                request.success({
+                                                    total: rowsNumber,
+                                                    rows: table.formatData(v)
+                                                });
+                                                request.complete();
+                                            });
+                                        }else {
+
+                                            log.info("InteractiveDownload.previewTable; cached model");
+
+                                            amplify.publish(E.WAITING_HIDE, {});
+
+                                            // cached page 1
+                                            request.success({
+                                                total: rowsNumber,
+                                                rows: table.formatData(d)
+                                            });
+                                            request.complete();
+
+                                        }
+
+                                    }
+                                });
+                            }
+                        }
+                    });
                 });
 
             }
@@ -234,6 +334,11 @@ define([
             }
 
         };
+
+        InteractiveDownload.prototype.ajax = function (d) {
+            log.info('DAJE', d)
+        };
+
 
         InteractiveDownload.prototype.previewPivot = function (d, requestObj, options, exportPivot) {
 
@@ -406,7 +511,16 @@ define([
             log.info('InteractiveDownload.preview; selections', selections);
             log.info('InteractiveDownload.preview; options', options);
 
-            return $.extend(true, {}, this.o.DEFAULT_REQUEST, {domain_codes: domain_codes}, selectionRequest, options.request);
+            return $.extend(true, {},
+                this.o.DEFAULT_REQUEST,
+                {
+                    datasource: C.DATASOURCE,
+                    lang: Common.getLocale(),
+                    domain_codes: domain_codes
+                },
+                selectionRequest,
+                options.request
+            );
 
         };
 
