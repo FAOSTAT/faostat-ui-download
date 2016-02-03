@@ -6,7 +6,8 @@ define([
         'config/Events',
         'globals/Common',
         'text!fs-i-d/html/templates.hbs',
-        'i18n!fs-i-d/nls/translate',
+        //'i18n!fs-i-d/nls/translate',
+        'i18n!nls/download',
         'fs-s-m/start',
         'fs-d-o/start',
         'FAOSTAT_UI_TABLE',
@@ -551,7 +552,7 @@ define([
 
             if(d.data[0].NoRecords <= 0) {
                 amplify.publish(E.WAITING_HIDE);
-                amplify.publish(E.NOTIFICATION_INFO, { title: i18nLabels.noDataAvailableForThisSelection});
+                amplify.publish(E.NOTIFICATION_INFO, { title: i18nLabels.no_data_available_for_current_selection});
                 return false;
             }
 
@@ -561,7 +562,7 @@ define([
 
         InteractiveDownload.prototype.noDataAvailablePreview = function () {
 
-            this.$OUTPUT_AREA.html('<h2>'+ i18nLabels.noDataAvailableForThisSelection +'</h2>');
+            this.$OUTPUT_AREA.html('<h2>'+ i18nLabels.no_data_available_for_current_selection +'</h2>');
 
         };
 
