@@ -174,7 +174,6 @@ define([
                                 self.previewPivot(d, requestObj, options);
                                 break;
                         }
-
                     }
 
                 }).fail(function (e) {
@@ -205,11 +204,9 @@ define([
                 // Override of the Request with Fixed parameters
                 r = $.extend(true, {}, requestObj, {}); //this.o.PIVOT.REQUEST_FIXED_PARAMETERS);
 
-                // initilizing request
+                // initializing request
                 r.page_number = this.o.TABLE.PAGE_NUMBER;
                 r.page_size = this.o.TABLE.PAGE_SIZE;
-
-            log.info(options)
 
 
             log.info("InteractiveDownload.previewTable; requestObj", requestObj, options);
@@ -234,9 +231,7 @@ define([
                 });*/
 
 
-                /** Table */
-
-                console.log(show_codes);
+                // Table
 
                 self.api.data(r).then(function(d) {
 
@@ -244,7 +239,8 @@ define([
 
                     //amplify.publish(E.WAITING_HIDE, {});
 
-                    // TODO: requires a refactoring!
+                    // TODO: the Table requires to be simplified and a refactoring!
+                    // TODO: config should be moved to a configuration file
                     var table = new Table();
                     table.render({
                         model: d,
@@ -322,7 +318,6 @@ define([
                                             request.complete();
 
                                         }
-
                                     }
                                 });
                             }
