@@ -529,14 +529,18 @@ define([
         InteractiveDownload.prototype.suggestBulkDownloads = function () {
 
             amplify.publish(E.WAITING_HIDE, {});
-            amplify.publish(E.NOTIFICATION_INFO, {title: 'suggestBulkDownloads'});
+            amplify.publish(E.NOTIFICATION_INFO, {
+                title: i18nLabels.suggest_bulk_downloads
+            });
 
         };
 
         InteractiveDownload.prototype.suggestBulkDownloadsOrTable = function () {
 
             amplify.publish(E.WAITING_HIDE, {});
-            amplify.publish(E.NOTIFICATION_INFO, {title: 'suggestBulkDownloadsOrTable'});
+            amplify.publish(E.NOTIFICATION_INFO, {
+                title: i18nLabels.suggest_bulk_downloads_or_table
+            });
 
         };
 
