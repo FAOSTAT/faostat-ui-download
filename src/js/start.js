@@ -361,36 +361,41 @@ define([
                     log.info('InteractiveDownload.previewPivot; data:', d);
                     log.info('InteractiveDownload.previewPivot; render:', render);
 
-                    // preview pivot
-                    var pivotTable = new FAOSTATPivot();
-                    pivotTable.init({
-                        container: self.$OUTPUT_AREA,
-                        data: d.data,
-                        dsd: d.metadata.dsd,
-                        show_flags: show_flags,
-                        show_codes: show_codes,
-                        show_units: show_units,
-                        render: render,
-                        thousand_separator: thousand_separator
-                    });
+                    try {
+                        // preview pivot
+                        var pivotTable = new FAOSTATPivot();
+                        pivotTable.init({
+                            container: self.$OUTPUT_AREA,
+                            data: d.data,
+                            dsd: d.metadata.dsd,
+                            show_flags: show_flags,
+                            show_codes: show_codes,
+                            show_units: show_units,
+                            render: render,
+                            thousand_separator: thousand_separator
+                        });
 
-                    // export hidden table
-                    if (render === false) {
-                        var timer = setInterval(function () {
-                            if (self.checkIfPivotRendered()) {
-                                clearInterval(timer);
-                                var pivotExporter = new PivotExporter({
-                                    container: self.$OUTPUT_AREA,
-                                    // TODO: consistent filename
-                                    filename: 'FAOSTAT'
-                                });
+                        // export hidden table
+                        if (render === false) {
+                            var timer = setInterval(function () {
+                                if (self.checkIfPivotRendered()) {
+                                    clearInterval(timer);
+                                    var pivotExporter = new PivotExporter({
+                                        container: self.$OUTPUT_AREA,
+                                        // TODO: consistent filename
+                                        filename: 'FAOSTAT'
+                                    });
 
-                                pivotExporter.csv();
+                                    pivotExporter.csv();
 
-                            }
-                        }, 100);
+                                }
+                            }, 100);
+                        }
+                    }catch(e) {
+                        // TODO: show an error message?
+                        amplify.publish(E.WAITING_HIDE, {});
+                        log.error('InteractiveDownload.previewPivot; error:', e);
                     }
-
 
                     amplify.publish(E.WAITING_HIDE, {});
 
