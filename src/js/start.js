@@ -306,7 +306,7 @@ define([
                                             });
                                         }else {
 
-                                            log.info("InteractiveDownload.previewTable; cached model");
+                                            log.info("InteractiveDownload.previewTable; cached model", d);
 
                                             amplify.publish(E.WAITING_HIDE, {});
 
