@@ -349,6 +349,7 @@ define([
                 show_units = (requestObj.show_unit === 1)? true : false,
                 render = (exportPivot !== undefined || exportPivot === true)? false : true,
                 thousand_separator = options.options.thousand_separator,
+                decimal_separator = options.options.decimal_separator,
                 self = this,
 
                 // Override of the Request with Fixed parameters
@@ -376,7 +377,8 @@ define([
                             show_codes: show_codes,
                             show_units: show_units,
                             render: render,
-                            thousand_separator: thousand_separator
+                            thousand_separator: thousand_separator,
+                            decimal_separator: decimal_separator
                         });
 
                         // export hidden table
