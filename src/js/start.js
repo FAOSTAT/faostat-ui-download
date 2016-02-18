@@ -31,13 +31,16 @@ define([
 
         var s = {
 
-                SELECTORS: '[data-role=selectors]',
-                OPTIONS: '[data-role=options]',
-                EXPORT_BUTTON: '[data-role=export]',
-                PREVIEW_BUTTON: '[data-role=preview]',
+                SELECTORS: '[data-role="selectors"]',
+                OPTIONS: '[data-role="options"]',
+                EXPORT_BUTTON: '[data-role="export"]',
+                PREVIEW_BUTTON: '[data-role="preview"]',
+
+                DATE_UPDATE: '[data-role="date-update"]',
+                METADATA_BUTTON: '[data-role="metadata"]',
 
                 // this could be customized if configured in config.
-                OUTPUT_AREA: '[data-role=output-area]',
+                OUTPUT_AREA: '[data-role="output-area"]',
 
                 // this is used to check if the pivot table is rendered or not
                 PIVOT_TABLE: '[data-role="pivot"]'
@@ -116,6 +119,8 @@ define([
             this.$PREVIEW_BUTTON = this.$CONTAINER.find(s.PREVIEW_BUTTON);
             this.$OPTIONS = this.$CONTAINER.find(s.OPTIONS);
             this.$OUTPUT_AREA = this.$CONTAINER.find(s.OUTPUT_AREA);
+            this.$METADATA_BUTTON = this.$CONTAINER.find(s.METADATA_BUTTON);
+            this.$DATE_UPDATE = this.$CONTAINER.find(s.DATE_UPDATE);
 
             // if this.o.output_are
             if (this.o.hasOwnProperty('output_area')) {
@@ -128,8 +133,9 @@ define([
 
             var code = this.o.code;
 
-            // Init Selector Manager
+            this.$DATE_UPDATE.html(this.o.dateUpdate);
 
+            // Init Selector Manager
             this.selectorsManager = new SelectorManager();
             this.selectorsManager.init({
                 container: this.$SELECTORS,
@@ -562,6 +568,7 @@ define([
 
         InteractiveDownload.prototype.noDataAvailablePreview = function () {
 
+            // TODO: a common no data available?
             this.$OUTPUT_AREA.html('<h2>'+ i18nLabels.no_data_available_for_current_selection +'</h2>');
 
         };
@@ -573,8 +580,15 @@ define([
             this.$PREVIEW_BUTTON.on('click', function () {
                 self.preview();
             });
+
             this.$EXPORT_BUTTON.on('click', function () {
                 self.export();
+            });
+
+            this.$METADATA_BUTTON.on('click', function () {
+                amplify.publish(E.METADATA_SHOW, {
+                    code: self.o.code
+                });
             });
 
             amplify.subscribe(E.DOWNLOAD_SELECTION_CHANGE, this, this.selectionChange);

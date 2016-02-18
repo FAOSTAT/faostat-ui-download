@@ -1,9 +1,37 @@
 
+<h5>{{last_update}}Updated on: <span data-role="date-update"></span></h5>
+
 <br>
 
 <p>{{{interactive_download_welcome}}}</p>
 
+<!--<div class="row">
+    <div class="col-xs-12">
+        <div data-role="note">
+            <h4>{{please_note}}Notes</h4>
+            <h5>{{date_update}}Updated on: <span data-role="date-update"></span></h5>
+&lt;!&ndash;            <h5>
+                <li>Aggregates are the sum of available data.
+                <li>For some item aggregates, conversion factors are applied to values when calculating totals. Please see item Metadata for the factors.
+            </h5>&ndash;&gt;
+        </div>
+    </div>
+</div>-->
+
 <br>
+
+<div class="row">
+    <div class="col-xs-10">
+        <div data-role="note">
+            <h4>{{filter_data}}</h4>
+        </div>
+    </div>
+    <div class="col-xs-2">
+        <button class="btn btn-primary pull-right" data-role="metadata">
+            <i class="fa fa-info-circle"></i> {{metadata}}
+        </button>
+    </div>
+</div>
 
 <div data-role="selectors"></div>
 
