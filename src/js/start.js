@@ -48,8 +48,10 @@ define([
                 // TODO: move to config/Download
                 TABLE: {
                     MAX_ROWS: 250000, // 250000 ~40/50MB
-                    PAGE_SIZE: 25,
-                    PAGE_NUMBER: 1
+                    //MAX_ROWS: 350000, // export: 300000 ~50/60MB (13sec query). query page: 9sec.
+                    PAGE_SIZE: 50,
+                    PAGE_NUMBER: 1,
+                    PAGE_LIST: "[25, 50, 100, 250]"
                 },
 
                 PIVOT: {
@@ -233,7 +235,7 @@ define([
 
                 // Table
 
-                self.api.data(r).then(function(d) {
+                self.api.databean(r).then(function(d) {
 
                     log.info('HERE.formatData;', d);
 
@@ -260,6 +262,7 @@ define([
                                 'data-pagination': true,
                                 'data-sortable': false,
                                 'data-page-size': self.o.TABLE.PAGE_SIZE,
+                                'data-page-list':  self.o.TABLE.PAGE_LIST,
                                 'data-side-pagination': 'server'
                                 //'data-ajax': 'ajaxRequest'
                             },
@@ -273,7 +276,7 @@ define([
                                     success: function () {
                                     },
                                     error: function(data) {
-                                        console.log(JSON.stringify(data));
+                                        log.rrror(JSON.stringify(data));
                                     },
                                     complete: function (){
 
@@ -294,7 +297,7 @@ define([
 
                                         // if is it not the cached model
                                         if (( pageSize !== self.o.TABLE.PAGE_SIZE && pageNumber === 1) || pageNumber !== 1) {
-                                            self.api.data(r).then(function (v) {
+                                            self.api.databean(r).then(function (v) {
 
                                                 amplify.publish(E.WAITING_HIDE, {});
 
@@ -332,11 +335,6 @@ define([
 
         };
 
-        InteractiveDownload.prototype.ajax = function (d) {
-            log.info('DAJE', d)
-        };
-
-
         InteractiveDownload.prototype.previewPivot = function (d, requestObj, options, exportPivot) {
 
             var rowsNumber = d.data[0].NoRecords,
@@ -356,7 +354,7 @@ define([
             // check if data size is right
             if(rowsNumber <= this.o.PIVOT.MAX_ROWS) {
 
-                this.api.data(r).then(function(d) {
+                this.api.databean(r).then(function(d) {
 
                     log.info('InteractiveDownload.previewPivot; data:', d);
                     log.info('InteractiveDownload.previewPivot; render:', render);
@@ -470,7 +468,6 @@ define([
         InteractiveDownload.prototype.exportPivot = function (d, requestObj, options) {
 
             amplify.publish(E.WAITING_HIDE);
-            var self = this;
 
             if (this.checkIfPivotRendered()) {
                 // TODO: check if PivotAlready rendered and export the pivot
@@ -489,7 +486,7 @@ define([
 
         InteractiveDownload.prototype.checkIfPivotRendered = function() {
 
-            log.info(this.$OUTPUT_AREA.find(s.PIVOT_TABLE).length, this.$OUTPUT_AREA.find(s.PIVOT_TABLE))
+            log.info(this.$OUTPUT_AREA.find(s.PIVOT_TABLE).length, this.$OUTPUT_AREA.find(s.PIVOT_TABLE));
 
             return (this.$OUTPUT_AREA.find(s.PIVOT_TABLE).length > 0)? true : false;
         };
@@ -502,8 +499,7 @@ define([
             var selections = this.selectorsManager.getSelections(),
                 options = this.downloadOptions.getSelections(),
                 domain_codes = [this.o.code],
-                selectionRequest = {},
-                r = {};
+                selectionRequest = {};
 
             // get request for each selection
             _.each(selections, function(s) {
