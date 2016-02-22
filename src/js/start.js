@@ -59,6 +59,7 @@ define([
 
                 PIVOT: {
                     MAX_ROWS: 5000,
+                    //MAX_ROWS: 25000,
 
                     // this is due of how the pivot is rendered
                     // it requires all the fields
@@ -598,8 +599,10 @@ define([
         };
 
         InteractiveDownload.prototype.unbindEventListeners = function () {
-            //this.$PREVIEW_BUTTON.off();
-            //this.$EXPORT_BUTTON.off();
+
+            this.$PREVIEW_BUTTON.off('click');
+            this.$EXPORT_BUTTON.off('click');
+            this.$METADATA_BUTTON.off('click');
 
             amplify.unsubscribe(E.DOWNLOAD_SELECTION_CHANGE, this.selectionChange);
         };
