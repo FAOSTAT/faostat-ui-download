@@ -134,7 +134,7 @@ define([
 
             var code = this.o.code;
 
-            this.$DATE_UPDATE.html(this.o.dateUpdate);
+            this.$DATE_UPDATE.html(this.o.date_update);
 
             // Init Selector Manager
             this.selectorsManager = new SelectorManager();
