@@ -559,9 +559,11 @@ define([
 
         InteractiveDownload.prototype.checkDataSize = function (d) {
 
-            if(d.data[0].NoRecords <= 0) {
+            log.info("InteractiveDownload.checkDataSize; ", d);
+
+            if (d.data.length === 0 || d.data[0].NoRecords === undefined || d.data[0].NoRecords <= 0) {
                 amplify.publish(E.WAITING_HIDE);
-                amplify.publish(E.NOTIFICATION_INFO, { title: i18nLabels.no_data_available_for_current_selection});
+                amplify.publish(E.NOTIFICATION_INFO, {title: i18nLabels.no_data_available_for_current_selection});
                 return false;
             }
 
