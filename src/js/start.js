@@ -127,7 +127,6 @@ define([
             if (this.o.hasOwnProperty('output_area')) {
                 this.$OUTPUT_AREA = $(this.o.output_area);
             }
-
         };
 
         InteractiveDownload.prototype.initComponents = function () {
