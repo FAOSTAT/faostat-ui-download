@@ -218,6 +218,7 @@ define([
 
 
             log.info("InteractiveDownload.previewTable; requestObj", requestObj, options);
+            //log.info(JSON.stringify(requestObj));
 
             // check if data size is right
             if(rowsNumber <= this.o.TABLE.MAX_ROWS) {
@@ -282,7 +283,7 @@ define([
                                     success: function () {
                                     },
                                     error: function(data) {
-                                        log.rrror(JSON.stringify(data));
+                                        log.error(JSON.stringify(data));
                                     },
                                     complete: function (){
 
