@@ -247,6 +247,7 @@ define([
                     log.info('HERE.formatData;', d);
 
                     //amplify.publish(E.WAITING_HIDE, {});
+                    amplify.publish(E.SCROLL_TO_SELECTOR, {container: self.$OUTPUT_AREA});
 
                     // TODO: the Table requires to be simplified and a refactoring!
                     // TODO: config should be moved to a configuration file
@@ -363,6 +364,8 @@ define([
             if(rowsNumber <= this.o.PIVOT.MAX_ROWS) {
 
                 this.api.databean(r).then(function(d) {
+
+                    amplify.publish(E.SCROLL_TO_SELECTOR, {container: self.$OUTPUT_AREA});
 
                     log.info('InteractiveDownload.previewPivot; data:', d);
                     log.info('InteractiveDownload.previewPivot; render:', render);
