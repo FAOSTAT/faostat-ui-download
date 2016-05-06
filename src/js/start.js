@@ -4,6 +4,7 @@ define([
         'loglevel',
         'config/Config',
         'config/Events',
+        'config/Analytics',
         'globals/Common',
         'text!fs-i-d/html/templates.hbs',
         //'i18n!fs-i-d/nls/translate',
@@ -20,7 +21,9 @@ define([
         'underscore',
         'amplify'
     ],
-    function ($, log, C, E, Common, template, i18nLabels,
+    function ($, log,
+              C, E, A,
+              Common, template, i18nLabels,
               SelectorManager, DownloadOptions,
               FAOSTATTable,
               Table,
@@ -208,6 +211,7 @@ define([
                 show_units = (requestObj.show_unit === 1)? true : false,
                 thousand_separator = options.options.thousand_separator,
                 decimal_separator = options.options.decimal_separator,
+                querySizeCheck = rowsNumber <= this.o.TABLE.MAX_ROWS,
                 self = this,
                 // Override of the Request with Fixed parameters
                 r = $.extend(true, {}, requestObj, {}); //this.o.PIVOT.REQUEST_FIXED_PARAMETERS);
@@ -218,10 +222,15 @@ define([
 
 
             log.info("InteractiveDownload.previewTable; requestObj", requestObj, options);
-            //log.info(JSON.stringify(requestObj));
+
+            // analytics
+            this.analyticsTablePreview({
+                querySizeCheck: querySizeCheck,
+                querySize: rowsNumber
+            });
 
             // check if data size is right
-            if(rowsNumber <= this.o.TABLE.MAX_ROWS) {
+            if(querySizeCheck) {
 
 /*                var table = new FAOSTATTable();
                 table.init({
@@ -352,6 +361,7 @@ define([
                 render = (exportPivot !== undefined || exportPivot === true)? false : true,
                 thousand_separator = options.options.thousand_separator,
                 decimal_separator = options.options.decimal_separator,
+                querySizeCheck = rowsNumber <= this.o.PIVOT.MAX_ROWS,
                 self = this,
 
                 // Override of the Request with Fixed parameters
@@ -360,8 +370,22 @@ define([
 
             log.info(' InteractiveDownload.previewPivot; request:', r);
 
+            // analytics (preview or download depending if the table will be rendered)
+            //TODO: this should be fixed with a proper pivot table.
+            if (render === true) {
+                this.analyticsPivotPreview({
+                    querySizeCheck: querySizeCheck,
+                    querySize: rowsNumber
+                });
+            }else {
+                this.analyticsPivotDownload({
+                    querySizeCheck: querySizeCheck,
+                    querySize: rowsNumber
+                });
+            }
+
             // check if data size is right
-            if(rowsNumber <= this.o.PIVOT.MAX_ROWS) {
+            if(querySizeCheck) {
 
                 this.api.databean(r).then(function(d) {
 
@@ -387,6 +411,7 @@ define([
 
                         // export hidden table
                         if (render === false) {
+
                             var timer = setInterval(function () {
                                 if (self.checkIfPivotRendered()) {
                                     clearInterval(timer);
@@ -461,10 +486,17 @@ define([
 
             log.info(" InteractiveDownload.exportTable size:", d);
 
-            var rowsNumber = d.data[0].NoRecords;
+            var rowsNumber = d.data[0].NoRecords,
+                querySizeCheck = rowsNumber <= this.o.TABLE.MAX_ROWS;
+
+            // analytics
+            this.analyticsTableDownload({
+                querySizeCheck: querySizeCheck,
+                querySize: rowsNumber
+            });
 
             // check if data size is right
-            if(rowsNumber <= this.o.TABLE.MAX_ROWS) {
+            if(querySizeCheck) {
 
                 log.info('InteractiveDownload.exportTable; ', requestObj);
 
@@ -474,6 +506,7 @@ define([
             else {
                 this.suggestBulkDownloadsOrTable();
             }
+
 
         };
 
@@ -490,6 +523,16 @@ define([
                 });
 
                 pivotExporter.csv();
+
+                if(this.checkDataSize(d)) {
+                    this.analyticsPivotDownload({
+                        querySizeCheck: true,
+                        querySize: d.data[0].NoRecords
+                    });
+                }else{
+                    log.warn("InteractiveDownload.exportPivot; Data didn't pass the checkDataSize for analytics:", d);
+                }
+
             }else{
                 this.previewPivot(d, requestObj, options, true);
             }
@@ -578,6 +621,97 @@ define([
 
             // TODO: a common no data available?
             this.$OUTPUT_AREA.html('<h2>'+ i18nLabels.no_data_available_for_current_selection +'</h2>');
+
+        };
+
+        /* Analytics */
+        InteractiveDownload.prototype.getAnalyticsLabel = function (obj, addSize) {
+
+            var o = {},
+                obj = obj || {};
+            
+            o.querySizeCheck = obj.hasOwnProperty("querySizeCheck")? obj.querySizeCheck : true;
+            o.code = this.o.code;
+
+            if (addSize === true && obj.hasOwnProperty("querySize")) {
+               o.querySize = obj.querySize;
+            }
+
+            return o;
+
+        };
+        
+        InteractiveDownload.prototype.analyticsTableQuerySize = function (obj) {
+
+            amplify.publish(E.GOOGLE_ANALYTICS_EVENT,
+                $.extend({}, true,
+                    A.interactive_download.table_query_size,
+                    this.getAnalyticsLabel(obj, true)
+                )
+            );
+
+        };
+
+        InteractiveDownload.prototype.analyticsPivotQuerySize = function (obj) {
+
+            amplify.publish(E.GOOGLE_ANALYTICS_EVENT,
+                $.extend({}, true,
+                    A.interactive_download.pivot_query_size,
+                    this.getAnalyticsLabel(obj, true)
+                )
+            );
+
+        };
+
+        InteractiveDownload.prototype.analyticsTablePreview = function (obj) {
+
+            amplify.publish(E.GOOGLE_ANALYTICS_EVENT,
+                $.extend({}, true,
+                    A.interactive_download.table_preview,
+                    this.getAnalyticsLabel(obj)
+                )
+            );
+
+            this.analyticsTableQuerySize(obj);
+
+        };
+
+        InteractiveDownload.prototype.analyticsTableDownload = function (obj) {
+
+            amplify.publish(E.GOOGLE_ANALYTICS_EVENT,
+                $.extend({}, true,
+                    A.interactive_download.table_download_csv,
+                    this.getAnalyticsLabel(obj)
+                )
+            );
+
+            this.analyticsTableQuerySize(obj);
+
+        };
+
+        InteractiveDownload.prototype.analyticsPivotPreview = function (obj) {
+
+            amplify.publish(E.GOOGLE_ANALYTICS_EVENT,
+                $.extend({}, true,
+                    A.interactive_download.pivot_preview,
+                    this.getAnalyticsLabel(obj)
+                )
+            );
+
+            this.analyticsPivotQuerySize(obj);
+
+        };
+
+        InteractiveDownload.prototype.analyticsPivotDownload = function (obj) {
+
+            amplify.publish(E.GOOGLE_ANALYTICS_EVENT,
+                $.extend({}, true,
+                    A.interactive_download.pivot_download,
+                    this.getAnalyticsLabel(obj)
+                )
+            );
+
+            this.analyticsPivotQuerySize(obj);
 
         };
 
