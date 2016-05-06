@@ -612,11 +612,21 @@ define([
             amplify.unsubscribe(E.DOWNLOAD_SELECTION_CHANGE, this.selectionChange);
         };
 
+        InteractiveDownload.prototype.destroySelectorManager = function () {
+
+            if (this.selectorsManager && _.isFunction(this.selectorsManager.destroy)) {
+                this.selectorsManager.destroy();
+            }
+
+        };
+
         InteractiveDownload.prototype.destroy = function () {
 
             log.info('InteractiveDownload.destroy;');
 
             this.unbindEventListeners();
+
+            this.destroySelectorManager();
 
             this.$CONTAINER.empty();
 
