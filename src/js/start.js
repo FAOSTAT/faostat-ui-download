@@ -61,7 +61,8 @@ define([
                 },
 
                 PIVOT: {
-                    MAX_ROWS: 1500,
+                    //MAX_ROWS: 1500,
+                    MAX_ROWS: 15000,
                     //MAX_ROWS: 25000,
 
                     // this is due of how the pivot is rendered
