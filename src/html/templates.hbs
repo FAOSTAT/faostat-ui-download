@@ -20,37 +20,48 @@
 
 <div style="min-height:300px;" data-role="selectors"></div>
 
-<div class="row">
 
-    <div class="col-lg-7">
-        <div data-role="options"></div>
-    </div>
+<div class="panel panel-default fs-download-options">
 
-    <div class="col-lg-5">
+
+    <div class="panel-body">
         <div class="row">
-            <div class="col-lg-12">
-                <button class="btn btn-primary pull-right" data-role="export">
-                    <i class="material-icons left">file_download</i>{{download_csv}}
-                </button>
-                <button class="btn btn-info pull-right" data-role="preview" style="margin-right:5px;">
-                    <i class="material-icons left">search</i>{{preview}}
+
+            <div class="col-xs-12">
+                <div data-role="options"></div>
+            </div>
+
+        </div>
+
+        <div class="row fs-download-options-buttons">
+
+            <div class="hidden-xs col-sm-4">
+                <!--<a class="btn btn-link btn-block" target="_blank" href="https://en.wikipedia.org/wiki/Comma-separated_values"><i class="material-icons">info_outline</i>{{what_is_a_csv}}</a>-->
+            </div>
+
+            <div class="col-xs-6 col-sm-4">
+                <button class="btn btn-link btn-block" data-role="preview">
+                    <i class="material-icons left hidden-xs">search</i>{{show_data}}Show Data
                 </button>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <p class="pull-right">
-                    <a target="_blank" href="https://en.wikipedia.org/wiki/Comma-separated_values">
-                        <i class="material-icons">info_outline</i>{{what_is_a_csv}}</a>
-                </p>
+
+
+            <div class="col-xs-6 col-sm-4">
+
+                <button class="btn btn-primary btn-block" data-role="export">
+                    <i class="material-icons left hidden-xs">file_download</i>{{download_data}}
+                </button>
             </div>
+
         </div>
+
     </div>
+
 </div>
 
-<div class="row">
-    <div class="col-lg-4 pull-right">
-    </div>
-</div>
 
-<div data-role="output-area"></div>
+
+
+
+
+<!--<div data-role="output-area"></div>-->
