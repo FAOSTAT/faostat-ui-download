@@ -43,7 +43,15 @@ define([
                 METADATA_BUTTON: '[data-role="metadata"]',
 
                 // this could be customized if configured in config.
-                OUTPUT_AREA: '[data-role="output-area"]',
+                OUTPUT: {
+                    //CONTAINER: '[data-role="output-area"]',
+                    // table/pivot
+                    CONTENT: '[data-role="content"]',
+                    MESSAGE: '[data-role="message"]',
+
+                    // this could also not been needed
+                    EXPORT: '[data-role="export"]'
+                },
 
                 // this is used to check if the pivot table is rendered or not
                 PIVOT_TABLE: '[data-role="pivot"]'
@@ -123,14 +131,33 @@ define([
             this.$EXPORT_BUTTON = this.$CONTAINER.find(s.EXPORT_BUTTON);
             this.$PREVIEW_BUTTON = this.$CONTAINER.find(s.PREVIEW_BUTTON);
             this.$OPTIONS = this.$CONTAINER.find(s.OPTIONS);
-            this.$OUTPUT_AREA = this.$CONTAINER.find(s.OUTPUT_AREA);
             this.$METADATA_BUTTON = this.$CONTAINER.find(s.METADATA_BUTTON);
             this.$DATE_UPDATE = this.$CONTAINER.find(s.DATE_UPDATE);
 
-            // if this.o.output_are
-            if (this.o.hasOwnProperty('output_area')) {
-                this.$OUTPUT_AREA = $(this.o.output_area);
+            // output_area
+            // this.$OUTPUT_AREA = this.$CONTAINER.find(s.OUTPUT_AREA);
+
+            this.$OUTPUT_CONTAINER = $(this.o.output_container);
+
+            // if this.o.output_area
+            if (this.o.hasOwnProperty('output_container')) {
+
+
+                log.info(this.o.output_container.length)
+
+                this.$OUTPUT_CONTAINER = $(this.o.output_container);
+
+                log.info(this.$OUTPUT_CONTAINER.length)
+                    
+                // show the container
+                this.$OUTPUT_CONTAINER.show();
+
+                this.$OUTPUT_CONTENT = this.$OUTPUT_CONTAINER.find(s.OUTPUT.CONTENT);
+                this.$OUTPUT_MESSAGE = this.$OUTPUT_CONTAINER.find(s.OUTPUT.MESSAGE);
+                this.$OUTPUT_EXPORT = this.$OUTPUT_CONTAINER.find(s.OUTPUT.EXPORT);
+
             }
+
         };
 
         InteractiveDownload.prototype.initComponents = function () {
@@ -233,31 +260,14 @@ define([
             // check if data size is right
             if(querySizeCheck) {
 
-/*                var table = new FAOSTATTable();
-                table.init({
-                    request: r,
-                    container: this.$OUTPUT_AREA,
-                    show_codes: show_codes,
-                    show_units: show_units,
-                    show_flags: show_flags,
-                    // TODO: get options
-                    decimal_places: 2,
-                    decimal_separator: decimal_separator,
-                    thousand_separator: thousand_separator,
-                    page_size: this.o.TABLE.PAGE_SIZE,
-                    current_page: this.o.TABLE.PAGE_NUMBER,
-                    total_rows: rowsNumber
-                });*/
-
-
                 // Table
-
                 self.api.databean(r).then(function(d) {
 
-                    log.info('HERE.formatData;', d);
+                    // change output state
+                    self.stateOutputInPreview();
 
                     //amplify.publish(E.WAITING_HIDE, {});
-                    amplify.publish(E.SCROLL_TO_SELECTOR, {container: self.$OUTPUT_AREA});
+                    amplify.publish(E.SCROLL_TO_SELECTOR, {container: self.$OUTPUT_CONTENT});
 
                     // TODO: the Table requires to be simplified and a refactoring!
                     // TODO: config should be moved to a configuration file
@@ -265,7 +275,7 @@ define([
                     table.render({
                         model: d,
                         request: r,
-                        container: self.$OUTPUT_AREA,
+                        container: self.$OUTPUT_CONTENT,
                         adapter: {
                             columns: [],
                             show_flags: show_flags,
@@ -390,7 +400,7 @@ define([
 
                 this.api.databean(r).then(function(d) {
 
-                    amplify.publish(E.SCROLL_TO_SELECTOR, {container: self.$OUTPUT_AREA});
+                    amplify.publish(E.SCROLL_TO_SELECTOR, {container: self.$OUTPUT_CONTENT});
 
                     log.info('InteractiveDownload.previewPivot; data:', d);
                     log.info('InteractiveDownload.previewPivot; render:', render);
@@ -399,7 +409,7 @@ define([
                         // preview pivot
                         var pivotTable = new FAOSTATPivot();
                         pivotTable.init({
-                            container: self.$OUTPUT_AREA,
+                            container: self.$OUTPUT_CONTENT,
                             data: d.data,
                             dsd: d.metadata.dsd,
                             show_flags: show_flags,
@@ -417,7 +427,7 @@ define([
                                 if (self.checkIfPivotRendered()) {
                                     clearInterval(timer);
                                     var pivotExporter = new PivotExporter({
-                                        container: self.$OUTPUT_AREA,
+                                        container: self.$OUTPUT_CONTENT,
                                         // TODO: consistent filename
                                         filename: 'FAOSTAT'
                                     });
@@ -426,7 +436,14 @@ define([
 
                                 }
                             }, 100);
+                        } else {
+
+                            // change output state
+                            self.stateOutputInPreview();
+
                         }
+
+
                     }catch(e) {
                         // TODO: show an error message?
                         amplify.publish(E.WAITING_HIDE, {});
@@ -518,7 +535,7 @@ define([
             if (this.checkIfPivotRendered()) {
                 // TODO: check if PivotAlready rendered and export the pivot
                 var pivotExporter = new PivotExporter({
-                    container: this.$OUTPUT_AREA,
+                    container: this.$OUTPUT_CONTENT,
                     // TODO: consistent filename
                     filename: 'FAOSTAT'
                 });
@@ -542,9 +559,9 @@ define([
 
         InteractiveDownload.prototype.checkIfPivotRendered = function() {
 
-            log.info(this.$OUTPUT_AREA.find(s.PIVOT_TABLE).length, this.$OUTPUT_AREA.find(s.PIVOT_TABLE));
+            log.info(this.$OUTPUT_CONTENT.find(s.PIVOT_TABLE).length, this.$OUTPUT_CONTENT.find(s.PIVOT_TABLE));
 
-            return (this.$OUTPUT_AREA.find(s.PIVOT_TABLE).length > 0)? true : false;
+            return (this.$OUTPUT_CONTENT.find(s.PIVOT_TABLE).length > 0)? true : false;
         };
 
         InteractiveDownload.prototype.getRequestObject = function () {
@@ -585,6 +602,10 @@ define([
                 title: i18nLabels.suggest_bulk_downloads
             });
 
+            // TODO: focus on bulk downloads
+
+            this.stateOutputInSelection();
+
         };
 
         InteractiveDownload.prototype.suggestBulkDownloadsOrTable = function () {
@@ -594,15 +615,27 @@ define([
                 title: i18nLabels.suggest_bulk_downloads_or_table
             });
 
+            // TODO: focus on bulk downloads
+            this.stateOutputInSelection();
+
         };
 
         InteractiveDownload.prototype.selectionChange = function () {
 
             log.info('InteractiveDownload.selectionChange');
 
-            this.$OUTPUT_AREA.empty();
+
+            // this should be
+/*            this.$OUTPUT_CONTENT.empty();
+
+            // show message
+            this.$OUTPUT_MESSAGE.show();*/
+
+            this.stateOutputInSelection();
 
         };
+
+
 
         InteractiveDownload.prototype.checkDataSize = function (d) {
 
@@ -621,7 +654,7 @@ define([
         InteractiveDownload.prototype.noDataAvailablePreview = function () {
 
             // TODO: a common no data available?
-            this.$OUTPUT_AREA.html('<h2>'+ i18nLabels.no_data_available_for_current_selection +'</h2>');
+            this.$OUTPUT_CONTENT.html('<h2>'+ i18nLabels.no_data_available_for_current_selection +'</h2>');
 
         };
 
@@ -728,6 +761,15 @@ define([
                 self.export();
             });
 
+            this.$OUTPUT_EXPORT.on('click', function () {
+
+                // TODO: check if there is a better way to check if the button is disabled
+                if(!$(this).hasClass('disabled')) {
+                    self.export();
+                }
+
+            });
+
             this.$METADATA_BUTTON.on('click', function () {
                 amplify.publish(E.METADATA_SHOW, {
                     code: self.o.code
@@ -743,6 +785,7 @@ define([
             this.$PREVIEW_BUTTON.off('click');
             this.$EXPORT_BUTTON.off('click');
             this.$METADATA_BUTTON.off('click');
+            this.$OUTPUT_EXPORT.off('click');
 
             amplify.unsubscribe(E.DOWNLOAD_SELECTION_CHANGE, this.selectionChange);
         };
@@ -752,6 +795,32 @@ define([
             if (this.selectorsManager && _.isFunction(this.selectorsManager.destroy)) {
                 this.selectorsManager.destroy();
             }
+
+        };
+
+        InteractiveDownload.prototype.stateOutputInPreview = function () {
+
+            // TODO: check if it works in all situations
+            this.$OUTPUT_MESSAGE.hide();
+
+            // this.$OUTPUT_EXPORT.enable();
+            // TODO: find a nicer way to enable/disable the export button
+            this.$OUTPUT_EXPORT.removeClass('disabled');
+            this.$OUTPUT_EXPORT.addClass('enabled');
+
+        };
+
+        InteractiveDownload.prototype.stateOutputInSelection = function () {
+
+            // TODO: check if it works in all situations
+            this.$OUTPUT_CONTENT.empty();
+
+            this.$OUTPUT_MESSAGE.show();
+
+            // this.$OUTPUT_EXPORT.enable();
+            // TODO: find a nicer way to enable/disable the export button
+            this.$OUTPUT_EXPORT.removeClass('enabled');
+            this.$OUTPUT_EXPORT.addClass('disabled');
 
         };
 
