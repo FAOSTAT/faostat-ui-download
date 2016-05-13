@@ -263,12 +263,18 @@ define([
                 // Table
                 self.api.databean(r).then(function(d) {
 
+                    amplify.publish(E.SCROLL_TO_SELECTOR, {
+                        container: self.$OUTPUT_CONTAINER,
+                        paddingTop: 0,
+                        force: true, 
+                        forceInvisible: true
+                    });
+
                     // change output state
                     self.stateOutputInPreview();
 
                     //amplify.publish(E.WAITING_HIDE, {});
-                    amplify.publish(E.SCROLL_TO_SELECTOR, {container: self.$OUTPUT_CONTENT});
-
+                    
                     // TODO: the Table requires to be simplified and a refactoring!
                     // TODO: config should be moved to a configuration file
                     var table = new Table();
