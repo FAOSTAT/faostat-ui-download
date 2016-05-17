@@ -759,10 +759,12 @@ define([
 
             var self = this;
 
+            this.$PREVIEW_BUTTON.off('click');
             this.$PREVIEW_BUTTON.on('click', function () {
                 self.preview();
             });
 
+            this.$EXPORT_BUTTON.off('click');
             this.$EXPORT_BUTTON.on('click', function () {
                 self.export();
             });
