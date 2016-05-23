@@ -474,7 +474,7 @@ define([
                 type = options.type,
                 self = this;
 
-            amplify.publish(E.WAITING_SHOW);
+            amplify.publish(E.WAITING_SHOW,  { text: 'Please wait<br> The download could require some time'});
 
             try {
                 // get query size
@@ -524,7 +524,10 @@ define([
 
                 log.info('InteractiveDownload.exportTable; ', requestObj);
 
-                amplify.publish(E.EXPORT_DATA, requestObj);
+                amplify.publish(E.EXPORT_DATA,
+                    requestObj,
+                    { waitingText: 'Please wait<br> The download could require some time'}
+                );
 
             }
             else {
