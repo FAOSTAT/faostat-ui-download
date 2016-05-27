@@ -405,8 +405,14 @@ define([
             if(querySizeCheck) {
 
                 this.api.databean(r).then(function(d) {
+       
+                    amplify.publish(E.SCROLL_TO_SELECTOR, {
+                        container: self.$OUTPUT_CONTAINER,
+                        paddingTop: 0,
+                        force: true,
+                        forceInvisible: true
+                    });
 
-                    amplify.publish(E.SCROLL_TO_SELECTOR, {container: self.$OUTPUT_CONTENT});
 
                     log.info('InteractiveDownload.previewPivot; data:', d);
                     log.info('InteractiveDownload.previewPivot; render:', render);
