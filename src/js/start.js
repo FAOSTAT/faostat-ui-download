@@ -63,7 +63,7 @@ define([
                 TABLE: {
                     MAX_ROWS: 250000, // 250000 ~40/50MB
                     //MAX_ROWS: 350000, // export: 300000 ~50/60MB (13sec query). query page: 9sec.
-                    PAGE_SIZE: 50,
+                    PAGE_SIZE: 100,
                     PAGE_NUMBER: 1,
                     PAGE_LIST: "[25, 50, 100, 250]"
                 },
