@@ -61,7 +61,8 @@ define([
 
                 // TODO: move to config/Download
                 TABLE: {
-                    MAX_ROWS: 250000, // 250000 ~40/50MB
+                    //MAX_ROWS: 250000, // 250000 ~40/50MB?
+                    MAX_ROWS: 500000, // 500000 ~60/80MB
                     //MAX_ROWS: 350000, // export: 300000 ~50/60MB (13sec query). query page: 9sec.
                     PAGE_SIZE: 100,
                     PAGE_NUMBER: 1,
