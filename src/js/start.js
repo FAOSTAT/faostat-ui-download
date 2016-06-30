@@ -110,7 +110,6 @@ define([
             this.o = $.extend(true, {}, defaultOptions, config);
             this.api = new FAOSTATAPI();
 
-
             log.info("InteractiveDownload.init; o:", this.o);
 
             this.initVariables();
@@ -219,8 +218,7 @@ define([
                 }).fail(function (e) {
                     log.error("InteractiveDownload.preview; ", e);
                     amplify.publish(E.WAITING_HIDE);
-                   // amplify.publish(E.NOTIFICATION_WARNING, {title: e});
-
+                    amplify.publish(E.NOTIFICATION_WARNING, {title: i18nLabels.error_preview});
                 });
 
             }catch(e) {
@@ -341,7 +339,10 @@ define([
                                                     rows: table.formatData(v)
                                                 });
                                                 request.complete();
-                                            });
+                                            }).fail(function (e) {
+                                                log.error("InteractiveDownload.previewTable; ", e);
+                                                amplify.publish(E.WAITING_HIDE);
+                                                amplify.publish(E.NOTIFICATION_WARNING, {title: i18nLabels.error_preview});                                            });
                                         }else {
 
                                             log.info("InteractiveDownload.previewTable; cached model", d);
@@ -361,8 +362,11 @@ define([
                             }
                         }
                     });
+                }).fail(function (e) {
+                    log.error("InteractiveDownload.previewTable; ", e);
+                    amplify.publish(E.WAITING_HIDE);
+                    amplify.publish(E.NOTIFICATION_WARNING, {title: i18nLabels.error_preview});
                 });
-
             }
             else {
                 this.suggestBulkDownloads();
@@ -450,12 +454,9 @@ define([
                                 }
                             }, 100);
                         } else {
-
                             // change output state
                             self.stateOutputInPreview();
-
                         }
-
 
                     }catch(e) {
                         // TODO: show an error message?
@@ -465,6 +466,10 @@ define([
 
                     amplify.publish(E.WAITING_HIDE, {});
 
+                }).fail(function (e) {
+                    log.error("InteractiveDownload.previewPivot; ", e);
+                    amplify.publish(E.WAITING_HIDE);
+                    amplify.publish(E.NOTIFICATION_WARNING, {title: i18nLabels.error_preview});
                 });
 
             }
@@ -481,7 +486,7 @@ define([
                 type = options.type,
                 self = this;
 
-            amplify.publish(E.WAITING_SHOW,  { text: 'Please wait<br> The download could require some time'});
+            amplify.publish(E.WAITING_SHOW);
 
             try {
                 // get query size
@@ -503,7 +508,7 @@ define([
                 }).fail(function (e) {
                     log.error("InteractiveDownload.export; ", e);
                     amplify.publish(E.WAITING_HIDE);
-                    //amplify.publish(E.NOTIFICATION_WARNING, {title: e});
+                    amplify.publish(E.NOTIFICATION_WARNING, {title: i18nLabels.error_export});
                 });
 
             }catch(e) {
@@ -614,11 +619,22 @@ define([
         InteractiveDownload.prototype.suggestBulkDownloads = function () {
 
             amplify.publish(E.WAITING_HIDE, {});
-            amplify.publish(E.NOTIFICATION_INFO, {
-                title: i18nLabels.suggest_bulk_downloads
+            amplify.publish(E.NOTIFICATION_WARNING, {
+                title: i18nLabels.selection_too_large,
+                text: i18nLabels.suggest_bulk_downloads,
             });
 
+          /*  var self = this;
             // TODO: focus on bulk downloads
+            if (this.o.hasOwnProperty('$BULK_DOWNLOADS_PANEL')) {
+                amplify.publish(E.SCROLL_TO_SELECTOR, {
+                    container: this.o.$BULK_DOWNLOADS_PANEL,
+                    paddingTop: 150
+                });
+                /!*setTimeout(function() {
+                    self.o.$BULK_DOWNLOADS_PANEL.removeClass('bounce animated').addClass('bounce animated');
+                }, 2000);*!/
+            }*/
 
             this.stateOutputInSelection();
 
@@ -627,8 +643,9 @@ define([
         InteractiveDownload.prototype.suggestBulkDownloadsOrTable = function () {
 
             amplify.publish(E.WAITING_HIDE, {});
-            amplify.publish(E.NOTIFICATION_INFO, {
-                title: i18nLabels.suggest_bulk_downloads_or_table
+            amplify.publish(E.NOTIFICATION_WARNING, {
+                title: i18nLabels.selection_too_large,
+                text: i18nLabels.suggest_bulk_downloads_or_table,
             });
 
             // TODO: focus on bulk downloads
@@ -659,7 +676,9 @@ define([
 
             if (d.data.length === 0 || d.data[0].NoRecords === undefined || d.data[0].NoRecords <= 0) {
                 amplify.publish(E.WAITING_HIDE);
-                amplify.publish(E.NOTIFICATION_INFO, {title: i18nLabels.no_data_available_for_current_selection});
+                amplify.publish(E.NOTIFICATION_WARNING,
+                    {title: i18nLabels.no_data_available_for_current_selection}
+                );
                 return false;
             }
 
