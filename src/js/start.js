@@ -469,7 +469,9 @@ define([
                 }).fail(function (e) {
                     log.error("InteractiveDownload.previewPivot; ", e);
                     amplify.publish(E.WAITING_HIDE);
-                    amplify.publish(E.NOTIFICATION_WARNING, {title: i18nLabels.error_preview});
+                    amplify.publish(E.NOTIFICATION_WARNING, {
+                        title: i18nLabels.error_preview
+                    });
                 });
 
             }
@@ -677,7 +679,10 @@ define([
             if (d.data.length === 0 || d.data[0].NoRecords === undefined || d.data[0].NoRecords <= 0) {
                 amplify.publish(E.WAITING_HIDE);
                 amplify.publish(E.NOTIFICATION_WARNING,
-                    {title: i18nLabels.no_data_available_for_current_selection}
+                    {
+                        title: i18nLabels.no_data_available_for_current_selection,
+                        text: i18nLabels.please_make_another_selection
+                    }
                 );
                 return false;
             }
