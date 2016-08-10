@@ -80,7 +80,8 @@ define([
                     REQUEST_FIXED_PARAMETERS: {
                         show_flags: 1,
                         show_codes: 1,
-                        show_unit: 1
+                        show_unit: 1,
+                        pivot: true
                     }
                 },
 
