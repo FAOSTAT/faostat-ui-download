@@ -712,6 +712,7 @@ define([
             if (addSize === true && obj.hasOwnProperty("querySize")) {
                o.querySize = obj.querySize;
             }
+            log.info('InteractiveDownload.getAnalyticsLabel;', o)
 
             return o;
 
@@ -722,7 +723,7 @@ define([
             amplify.publish(E.GOOGLE_ANALYTICS_EVENT,
                 $.extend({}, true,
                     A.interactive_download.table_query_size,
-                    this.getAnalyticsLabel(obj, true)
+                    { label: this.getAnalyticsLabel(obj, true) }
                 )
             );
 
@@ -733,7 +734,7 @@ define([
             amplify.publish(E.GOOGLE_ANALYTICS_EVENT,
                 $.extend({}, true,
                     A.interactive_download.pivot_query_size,
-                    this.getAnalyticsLabel(obj, true)
+                    { label: this.getAnalyticsLabel(obj, true) }
                 )
             );
 
@@ -744,7 +745,7 @@ define([
             amplify.publish(E.GOOGLE_ANALYTICS_EVENT,
                 $.extend({}, true,
                     A.interactive_download.table_preview,
-                    this.getAnalyticsLabel(obj)
+                    { label: this.getAnalyticsLabel(obj) }
                 )
             );
 
@@ -757,7 +758,7 @@ define([
             amplify.publish(E.GOOGLE_ANALYTICS_EVENT,
                 $.extend({}, true,
                     A.interactive_download.table_download_csv,
-                    this.getAnalyticsLabel(obj)
+                    { label: this.getAnalyticsLabel(obj) }
                 )
             );
 
@@ -770,7 +771,7 @@ define([
             amplify.publish(E.GOOGLE_ANALYTICS_EVENT,
                 $.extend({}, true,
                     A.interactive_download.pivot_preview,
-                    this.getAnalyticsLabel(obj)
+                    { label: this.getAnalyticsLabel(obj) }
                 )
             );
 
@@ -783,7 +784,7 @@ define([
             amplify.publish(E.GOOGLE_ANALYTICS_EVENT,
                 $.extend({}, true,
                     A.interactive_download.pivot_download,
-                    this.getAnalyticsLabel(obj)
+                    { label: this.getAnalyticsLabel(obj) }
                 )
             );
 
