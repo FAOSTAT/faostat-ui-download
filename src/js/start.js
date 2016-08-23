@@ -29,7 +29,8 @@ define([
               //FAOSTATTable,
               Table,
               FAOSTATPivot, PivotExporter,
-              FAOSTATAPI, Handlebars, _) {
+              API,
+              Handlebars, _) {
 
         'use strict';
 
@@ -110,7 +111,6 @@ define([
         InteractiveDownload.prototype.init = function (config) {
 
             this.o = $.extend(true, {}, defaultOptions, config);
-            this.api = new FAOSTATAPI();
 
             log.info("InteractiveDownload.init; o:", this.o);
 
@@ -203,7 +203,7 @@ define([
 
             try {
                 // get query size
-                this.api.datasize(requestObj).then(function (d) {
+                API.datasize(requestObj).then(function (d) {
 
                     if(self.checkDataSize(d)) {
 
@@ -262,7 +262,7 @@ define([
             if(querySizeCheck) {
 
                 // Table
-                self.api.databean(r).then(function(d) {
+                API.databean(r).then(function(d) {
 
                     amplify.publish(E.SCROLL_TO_SELECTOR, {
                         container: self.$OUTPUT_CONTAINER,
@@ -332,7 +332,7 @@ define([
 
                                         // if is it not the cached model
                                         if (( pageSize !== self.o.TABLE.PAGE_SIZE && pageNumber === 1) || pageNumber !== 1) {
-                                            self.api.databean(r).then(function (v) {
+                                            API.databean(r).then(function (v) {
 
                                                 amplify.publish(E.WAITING_HIDE, {});
 
@@ -411,7 +411,7 @@ define([
             // check if data size is right
             if(querySizeCheck) {
 
-                this.api.databean(r).then(function(d) {
+                API.databean(r).then(function(d) {
        
                     amplify.publish(E.SCROLL_TO_SELECTOR, {
                         container: self.$OUTPUT_CONTAINER,
@@ -494,7 +494,7 @@ define([
 
             try {
                 // get query size
-                this.api.datasize(requestObj).then(function (d) {
+                API.datasize(requestObj).then(function (d) {
 
                     if (self.checkDataSize(d)) {
 
@@ -610,8 +610,6 @@ define([
             return $.extend(true, {},
                 this.o.DEFAULT_REQUEST,
                 {
-                    datasource: C.DATASOURCE,
-                    lang: Common.getLocale(),
                     domain_codes: domain_codes
                 },
                 selectionRequest,
