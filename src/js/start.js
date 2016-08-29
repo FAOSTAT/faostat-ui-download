@@ -7,13 +7,10 @@ define([
         'config/Analytics',
         'globals/Common',
         'text!fs-i-d/html/templates.hbs',
-        //'i18n!fs-i-d/nls/translate',
         'i18n!nls/download',
         'fs-s-m/start',
         'fs-d-o/start',
-        //'FAOSTAT_UI_TABLE',
         'fs-t-c/table',
-        //'lib/table/table',
         'FAOSTAT_UI_PIVOT',
         'pivot_exporter',
         'faostatapiclient',
@@ -26,7 +23,6 @@ define([
               Common, template, i18nLabels,
               SelectorManager, 
               DownloadOptions,
-              //FAOSTATTable,
               Table,
               FAOSTATPivot, PivotExporter,
               API,
@@ -79,26 +75,22 @@ define([
                     // this is due of how the pivot is rendered
                     // it requires all the fields
                     REQUEST_FIXED_PARAMETERS: {
-                        show_flags: 1,
-                        show_codes: 1,
-                        show_unit: 1,
+                        show_flags: true,
+                        show_codes: true,
+                        show_unit: true,
                         pivot: true
                     }
                 },
 
                 DEFAULT_REQUEST: {
-                    limit:-1,
+                  /*  limit:-1,
                     page_size: 0,
                     per_page: 0,
                     page_number: -1,
                     null_values: false,
-                    List1Codes: null,
-                    List2Codes: null,
-                    List3Codes: null,
-                    List4Codes: null,
-                    List5Codes: null,
-                    List6Codes: null,
-                    List7Codes: null
+                    show_flags: true,
+                    show_codes: true,
+                    show_unit: true,*/
                 }
 
             };
@@ -144,12 +136,7 @@ define([
             // if this.o.output_area
             if (this.o.hasOwnProperty('output_container')) {
 
-
-                log.info(this.o.output_container.length)
-
                 this.$OUTPUT_CONTAINER = $(this.o.output_container);
-
-                log.info(this.$OUTPUT_CONTAINER.length)
                     
                 // show the container
                 this.$OUTPUT_CONTAINER.show();
@@ -203,7 +190,9 @@ define([
 
             try {
                 // get query size
-                API.datasize(requestObj).then(function (d) {
+                API.data_new($.extend(true, {}, requestObj, {
+                    no_records: true
+                })).then(function (d) {
 
                     if(self.checkDataSize(d)) {
 
@@ -235,9 +224,9 @@ define([
             log.info(" InteractiveDownload.previewTable size:", d);
 
             var rowsNumber = d.data[0].NoRecords,
-                show_flags = (requestObj.show_flags === 1)? true : false,
-                show_codes = (requestObj.show_codes === 1)? true : false,
-                show_units = (requestObj.show_unit === 1)? true : false,
+                show_flags = (requestObj.show_flags === true)? true : false,
+                show_codes = (requestObj.show_codes === true)? true : false,
+                show_units = (requestObj.show_unit === true)? true : false,
                 thousand_separator = options.options.thousand_separator,
                 decimal_separator = options.options.decimal_separator,
                 querySizeCheck = rowsNumber <= this.o.TABLE.MAX_ROWS,
@@ -262,7 +251,7 @@ define([
             if(querySizeCheck) {
 
                 // Table
-                API.databean(r).then(function(d) {
+                API.data_new(r).then(function(d) {
 
                     amplify.publish(E.SCROLL_TO_SELECTOR, {
                         container: self.$OUTPUT_CONTAINER,
@@ -332,7 +321,7 @@ define([
 
                                         // if is it not the cached model
                                         if (( pageSize !== self.o.TABLE.PAGE_SIZE && pageNumber === 1) || pageNumber !== 1) {
-                                            API.databean(r).then(function (v) {
+                                            API.data_new(r).then(function (v) {
 
                                                 amplify.publish(E.WAITING_HIDE, {});
 
@@ -379,9 +368,9 @@ define([
         InteractiveDownload.prototype.previewPivot = function (d, requestObj, options, exportPivot) {
 
             var rowsNumber = d.data[0].NoRecords,
-                show_flags = (requestObj.show_flags === 1)? true : false,
-                show_codes = (requestObj.show_codes === 1)? true : false,
-                show_units = (requestObj.show_unit === 1)? true : false,
+                show_flags = (requestObj.show_flags === true)? true : false,
+                show_codes = (requestObj.show_codes === true)? true : false,
+                show_units = (requestObj.show_unit === true)? true : false,
                 render = (exportPivot !== undefined || exportPivot === true)? false : true,
                 thousand_separator = options.options.thousand_separator,
                 decimal_separator = options.options.decimal_separator,
@@ -411,7 +400,7 @@ define([
             // check if data size is right
             if(querySizeCheck) {
 
-                API.databean(r).then(function(d) {
+                API.data_new(r).then(function(d) {
        
                     amplify.publish(E.SCROLL_TO_SELECTOR, {
                         container: self.$OUTPUT_CONTAINER,
@@ -494,7 +483,9 @@ define([
 
             try {
                 // get query size
-                API.datasize(requestObj).then(function (d) {
+                API.data_new($.extend(true, {}, requestObj, {
+                    no_records: true
+                })).then(function (d) {
 
                     if (self.checkDataSize(d)) {
 
@@ -592,11 +583,10 @@ define([
         InteractiveDownload.prototype.getRequestObject = function () {
 
             // get options and selections
-
             // get selections
             var selections = this.selectorsManager.getSelections(),
                 options = this.downloadOptions.getSelections(),
-                domain_codes = [this.o.code],
+                domain_code = this.o.code,
                 selectionRequest = {};
 
             // get request for each selection
@@ -606,15 +596,17 @@ define([
 
             log.info('InteractiveDownload.preview; selections', selections);
             log.info('InteractiveDownload.preview; options', options);
+            log.info('InteractiveDownload.preview; selectionRequest', selectionRequest);
 
             return $.extend(true, {},
                 this.o.DEFAULT_REQUEST,
                 {
-                    domain_codes: domain_codes
+                    domain_code: domain_code
                 },
                 selectionRequest,
                 options.request
             );
+
 
         };
 
