@@ -7,13 +7,10 @@ define([
         'config/Analytics',
         'globals/Common',
         'text!fs-i-d/html/templates.hbs',
-        //'i18n!fs-i-d/nls/translate',
         'i18n!nls/download',
         'fs-s-m/start',
         'fs-d-o/start',
-        //'FAOSTAT_UI_TABLE',
         'fs-t-c/table',
-        //'lib/table/table',
         'FAOSTAT_UI_PIVOT',
         'pivot_exporter',
         'faostatapiclient',
@@ -26,7 +23,6 @@ define([
               Common, template, i18nLabels,
               SelectorManager, 
               DownloadOptions,
-              //FAOSTATTable,
               Table,
               FAOSTATPivot, PivotExporter,
               API,
@@ -144,12 +140,7 @@ define([
             // if this.o.output_area
             if (this.o.hasOwnProperty('output_container')) {
 
-
-                log.info(this.o.output_container.length)
-
                 this.$OUTPUT_CONTAINER = $(this.o.output_container);
-
-                log.info(this.$OUTPUT_CONTAINER.length)
                     
                 // show the container
                 this.$OUTPUT_CONTAINER.show();
