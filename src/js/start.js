@@ -190,7 +190,7 @@ define([
 
             try {
                 // get query size
-                API.data_new($.extend(true, {}, requestObj, {
+                API.data($.extend(true, {}, requestObj, {
                     no_records: true
                 })).then(function (d) {
 
@@ -251,7 +251,7 @@ define([
             if(querySizeCheck) {
 
                 // Table
-                API.data_new(r).then(function(d) {
+                API.data(r).then(function(d) {
 
                     amplify.publish(E.SCROLL_TO_SELECTOR, {
                         container: self.$OUTPUT_CONTAINER,
@@ -321,7 +321,7 @@ define([
 
                                         // if is it not the cached model
                                         if (( pageSize !== self.o.TABLE.PAGE_SIZE && pageNumber === 1) || pageNumber !== 1) {
-                                            API.data_new(r).then(function (v) {
+                                            API.data(r).then(function (v) {
 
                                                 amplify.publish(E.WAITING_HIDE, {});
 
@@ -400,7 +400,7 @@ define([
             // check if data size is right
             if(querySizeCheck) {
 
-                API.data_new(r).then(function(d) {
+                API.data(r).then(function(d) {
        
                     amplify.publish(E.SCROLL_TO_SELECTOR, {
                         container: self.$OUTPUT_CONTAINER,
@@ -483,7 +483,7 @@ define([
 
             try {
                 // get query size
-                API.data_new($.extend(true, {}, requestObj, {
+                API.data($.extend(true, {}, requestObj, {
                     no_records: true
                 })).then(function (d) {
 
