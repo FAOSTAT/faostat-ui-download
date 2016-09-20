@@ -16,6 +16,7 @@ define([
         'faostatapiclient',
         'handlebars',
         'underscore',
+        'lib/onboarding/onboarding',
         'amplify'
     ],
     function ($, log,
@@ -26,7 +27,10 @@ define([
               Table,
               FAOSTATPivot, PivotExporter,
               API,
-              Handlebars, _) {
+              Handlebars,
+              _,
+              OnBoarding
+) {
 
         'use strict';
 
@@ -75,26 +79,22 @@ define([
                     // this is due of how the pivot is rendered
                     // it requires all the fields
                     REQUEST_FIXED_PARAMETERS: {
-                        show_flags: 1,
-                        show_codes: 1,
-                        show_unit: 1,
+                        show_flags: true,
+                        show_codes: true,
+                        show_unit: true,
                         pivot: true
                     }
                 },
 
                 DEFAULT_REQUEST: {
-                    limit:-1,
+                  /*  limit:-1,
                     page_size: 0,
                     per_page: 0,
                     page_number: -1,
                     null_values: false,
-                    List1Codes: null,
-                    List2Codes: null,
-                    List3Codes: null,
-                    List4Codes: null,
-                    List5Codes: null,
-                    List6Codes: null,
-                    List7Codes: null
+                    show_flags: true,
+                    show_codes: true,
+                    show_unit: true,*/
                 }
 
             };
@@ -180,6 +180,51 @@ define([
 
         };
 
+        InteractiveDownload.prototype.initTour = function() {
+
+            var self = this;
+
+            var intro = new OnBoarding();
+
+            intro.setOptions({
+                id: "download_data",
+                steps: [
+                    {
+                        intro: "<h4>Bulk downloads</h4>If you want to directly bulk download the data contained in the domain",
+                        element: '[data-role="bulk-downloads-panel"]'
+                    },
+                    {
+                        intro: '<h4>Filter the data</h4>If you want to refine your data, select at least one "indicator" for each of the selection boxes',
+                        element: '[data-role="selector"]',
+                        target: self.$SELECTORS
+                    },
+                    {
+                        intro: "<h4>Show Data</h4>After the selection, <i>Click Here</i> if you want to preview your data",
+                        element: self.$PREVIEW_BUTTON
+                    },
+                    {
+                        intro: "<h4>Download Data</h4>or <i>Click Here</i> if you want to download your data",
+                        element: self.$EXPORT_BUTTON
+                    },
+                    {
+                        intro: "<h4>Metadata</h4>If you want to know something more about the metadata",
+                        element: '[data-role="fs-download-metadata-button"]'
+                    },
+                    {
+                        intro: "<h4>Definitions and standards</h4>or the definitions and standards used",
+                        element: '[data-role="fs-download-definitions-button"]'
+                    },
+                    {
+                        intro: "<h4>Any doubts or feedback?</h4>Drop us a line",
+                        element: '[data-role="google-form"]',
+                        position: 'left'
+                    }
+                ]
+            });
+            intro.start();
+
+        };
+
         InteractiveDownload.prototype.preview = function () {
 
             var requestObj = this.getRequestObject(),
@@ -194,7 +239,9 @@ define([
 
             try {
                 // get query size
-                API.datasize(requestObj).then(function (d) {
+                API.data($.extend(true, {}, requestObj, {
+                    no_records: true
+                })).then(function (d) {
 
                     if(self.checkDataSize(d)) {
 
@@ -226,9 +273,9 @@ define([
             log.info(" InteractiveDownload.previewTable size:", d);
 
             var rowsNumber = d.data[0].NoRecords,
-                show_flags = (requestObj.show_flags === 1)? true : false,
-                show_codes = (requestObj.show_codes === 1)? true : false,
-                show_units = (requestObj.show_unit === 1)? true : false,
+                show_flags = (requestObj.show_flags === true)? true : false,
+                show_codes = (requestObj.show_codes === true)? true : false,
+                show_units = (requestObj.show_unit === true)? true : false,
                 thousand_separator = options.options.thousand_separator,
                 decimal_separator = options.options.decimal_separator,
                 querySizeCheck = rowsNumber <= this.o.TABLE.MAX_ROWS,
@@ -253,7 +300,7 @@ define([
             if(querySizeCheck) {
 
                 // Table
-                API.databean(r).then(function(d) {
+                API.data(r).then(function(d) {
 
                     amplify.publish(E.SCROLL_TO_SELECTOR, {
                         container: self.$OUTPUT_CONTAINER,
@@ -323,7 +370,7 @@ define([
 
                                         // if is it not the cached model
                                         if (( pageSize !== self.o.TABLE.PAGE_SIZE && pageNumber === 1) || pageNumber !== 1) {
-                                            API.databean(r).then(function (v) {
+                                            API.data(r).then(function (v) {
 
                                                 amplify.publish(E.WAITING_HIDE, {});
 
@@ -370,9 +417,9 @@ define([
         InteractiveDownload.prototype.previewPivot = function (d, requestObj, options, exportPivot) {
 
             var rowsNumber = d.data[0].NoRecords,
-                show_flags = (requestObj.show_flags === 1)? true : false,
-                show_codes = (requestObj.show_codes === 1)? true : false,
-                show_units = (requestObj.show_unit === 1)? true : false,
+                show_flags = (requestObj.show_flags === true)? true : false,
+                show_codes = (requestObj.show_codes === true)? true : false,
+                show_units = (requestObj.show_unit === true)? true : false,
                 render = (exportPivot !== undefined || exportPivot === true)? false : true,
                 thousand_separator = options.options.thousand_separator,
                 decimal_separator = options.options.decimal_separator,
@@ -402,7 +449,7 @@ define([
             // check if data size is right
             if(querySizeCheck) {
 
-                API.databean(r).then(function(d) {
+                API.data(r).then(function(d) {
        
                     amplify.publish(E.SCROLL_TO_SELECTOR, {
                         container: self.$OUTPUT_CONTAINER,
@@ -485,7 +532,9 @@ define([
 
             try {
                 // get query size
-                API.datasize(requestObj).then(function (d) {
+                API.data($.extend(true, {}, requestObj, {
+                    no_records: true
+                })).then(function (d) {
 
                     if (self.checkDataSize(d)) {
 
@@ -583,11 +632,10 @@ define([
         InteractiveDownload.prototype.getRequestObject = function () {
 
             // get options and selections
-
             // get selections
             var selections = this.selectorsManager.getSelections(),
                 options = this.downloadOptions.getSelections(),
-                domain_codes = [this.o.code],
+                domain_code = this.o.code,
                 selectionRequest = {};
 
             // get request for each selection
@@ -597,15 +645,17 @@ define([
 
             log.info('InteractiveDownload.preview; selections', selections);
             log.info('InteractiveDownload.preview; options', options);
+            log.info('InteractiveDownload.preview; selectionRequest', selectionRequest);
 
             return $.extend(true, {},
                 this.o.DEFAULT_REQUEST,
                 {
-                    domain_codes: domain_codes
+                    domain_code: domain_code
                 },
                 selectionRequest,
                 options.request
             );
+
 
         };
 
@@ -660,8 +710,6 @@ define([
             this.stateOutputInSelection();
 
         };
-
-
 
         InteractiveDownload.prototype.checkDataSize = function (d) {
 
@@ -811,6 +859,8 @@ define([
             });
 
             amplify.subscribe(E.DOWNLOAD_SELECTION_CHANGE, this, this.selectionChange);
+
+            amplify.subscribe(E.TOUR_DOWNLOAD, this, this.initTour());
 
         };
 
