@@ -16,6 +16,7 @@ define([
         'faostatapiclient',
         'handlebars',
         'underscore',
+        //'bootstrap-tour',
         'amplify'
     ],
     function ($, log,
@@ -26,7 +27,10 @@ define([
               Table,
               FAOSTATPivot, PivotExporter,
               API,
-              Handlebars, _) {
+              Handlebars,
+              _
+              //,Tour
+    ) {
 
         'use strict';
 
@@ -173,6 +177,31 @@ define([
         };
 
         InteractiveDownload.prototype.configurePage = function () {
+
+        };
+
+        InteractiveDownload.prototype.initTour = function() {
+
+            /*log.info($('.fs-download-selector-filter').length);
+            var tour = new Tour({
+                steps: [
+                    {
+                        element: this.$EXPORT_BUTTON,
+                        title: "Export button",
+                        content: "Export button",
+                    },
+                    {
+                        element: this.$PREVIEW_BUTTON,
+                        title: "Preivew Button",
+                        content: "Preivew Button"
+                    }
+                ]});
+
+            // Initialize the tour
+            tour.init();
+
+            // Start the tour
+            tour.start();*/
 
         };
 
@@ -662,8 +691,6 @@ define([
 
         };
 
-
-
         InteractiveDownload.prototype.checkDataSize = function (d) {
 
             log.info("InteractiveDownload.checkDataSize; ", d);
@@ -812,6 +839,8 @@ define([
             });
 
             amplify.subscribe(E.DOWNLOAD_SELECTION_CHANGE, this, this.selectionChange);
+
+            amplify.subscribe(E.TOUR_DOWNLOAD, this, this.initTour());
 
         };
 
