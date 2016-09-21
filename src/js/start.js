@@ -221,6 +221,7 @@ define([
                     }
                 ]
             });
+
             intro.start();
 
         };
