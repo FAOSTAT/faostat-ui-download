@@ -16,7 +16,7 @@ define([
         'faostatapiclient',
         'handlebars',
         'underscore',
-        //'bootstrap-tour',
+        'lib/onboarding/onboarding',
         'amplify'
     ],
     function ($, log,
@@ -28,9 +28,9 @@ define([
               FAOSTATPivot, PivotExporter,
               API,
               Handlebars,
-              _
-              //,Tour
-    ) {
+              _,
+              OnBoarding
+) {
 
         'use strict';
 
@@ -182,26 +182,46 @@ define([
 
         InteractiveDownload.prototype.initTour = function() {
 
-            /*log.info($('.fs-download-selector-filter').length);
-            var tour = new Tour({
+            var self = this;
+
+            var intro = new OnBoarding();
+
+            intro.setOptions({
+                id: "download_data",
                 steps: [
                     {
-                        element: this.$EXPORT_BUTTON,
-                        title: "Export button",
-                        content: "Export button",
+                        intro: "<h4>Bulk downloads</h4>If you want to directly bulk download the data contained in the domain",
+                        element: '[data-role="bulk-downloads-panel"]'
                     },
                     {
-                        element: this.$PREVIEW_BUTTON,
-                        title: "Preivew Button",
-                        content: "Preivew Button"
+                        intro: '<h4>Filter the data</h4>If you want to refine your data, select at least one "indicator" for each of the selection boxes',
+                        element: '[data-role="selector"]',
+                        target: self.$SELECTORS
+                    },
+                    {
+                        intro: "<h4>Show Data</h4>After the selection, <i>Click Here</i> if you want to preview your data",
+                        element: self.$PREVIEW_BUTTON
+                    },
+                    {
+                        intro: "<h4>Download Data</h4>or <i>Click Here</i> if you want to download your data",
+                        element: self.$EXPORT_BUTTON
+                    },
+                    {
+                        intro: "<h4>Metadata</h4>If you want to know something more about the metadata",
+                        element: '[data-role="fs-download-metadata-button"]'
+                    },
+                    {
+                        intro: "<h4>Definitions and standards</h4>or the definitions and standards used",
+                        element: '[data-role="fs-download-definitions-button"]'
+                    },
+                    {
+                        intro: "<h4>Any doubts or feedback?</h4>Drop us a line",
+                        element: '[data-role="google-form"]',
+                        position: 'left'
                     }
-                ]});
-
-            // Initialize the tour
-            tour.init();
-
-            // Start the tour
-            tour.start();*/
+                ]
+            });
+            intro.start();
 
         };
 
