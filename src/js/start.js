@@ -56,7 +56,9 @@ define([
                 },
 
                 // this is used to check if the pivot table is rendered or not
-                PIVOT_TABLE: '[data-role="pivot"]'
+                PIVOT_TABLE: '[data-role="pivot"]',
+
+                ONBOARDING: '[data-role="onboarding"]'
 
             },
             defaultOptions = {
@@ -119,9 +121,10 @@ define([
 
         InteractiveDownload.prototype.initVariables = function () {
 
-            this.$CONTAINER = $(this.o.container);
+            var html = $(template).filter('#main_structure').html(),
+                t = Handlebars.compile(html);
 
-            var t = Handlebars.compile(template);
+            this.$CONTAINER = $(this.o.container);
 
             this.$CONTAINER.html(t(i18nLabels));
 
@@ -151,12 +154,24 @@ define([
 
             }
 
-            if (this.o.hasOwnProperty('onboarding') && this.o.onboarding.hasOwnProperty('container')) {
+            if (this.o.hasOwnProperty('additional_information') && this.o.additional_information.hasOwnProperty('container')) {
 
-                this.$ONBOARDING = $(this.o.onboarding.container);
+                var html = $(template).filter('#onboarding').html(),
+                    t = Handlebars.compile(html);
+
+                this.$ADDITIONAL_INFORMATION = $(this.o.additional_information.container);
+                this.$ADDITIONAL_INFORMATION.html(t({
+                    onboarding_text: "Help on download data?"
+                }));
+
+                this.$ONBOARDING = this.$ADDITIONAL_INFORMATION.find(s.ONBOARDING);
 
                 // show the onboarding
-                this.$ONBOARDING.show();
+                this.$ADDITIONAL_INFORMATION.show();
+
+     /*           style="display:none;" class="btn btn-info btn-block waves-effect truncate" data-role="fs-download-onboarding">
+                    <i class="material-icons left">help_outline</i>
+                    <span data-role="text"></span>*/
 
             }
 
@@ -193,45 +208,46 @@ define([
 
             var self = this;
 
-            var intro = new OnBoarding();
+            if (this.onboarding === undefined) {
+                this.onboarding = new OnBoarding();
+                this.onboarding.setOptions({
+                    id: "download_data",
+                    steps: [
+                        {
+                            intro: "<h4>Bulk downloads</h4>Quickly download all the data contained in the domain",
+                            element: '[data-role="bulk-downloads-panel"]'
+                        },
+                        {
+                            intro: '<h4>Filter the data</h4>or select from the filter boxes exactly what you need',
+                            element: '[data-role="selector"]',
+                            target: self.$SELECTORS
+                        },
+                        {
+                            intro: "<h4>Show Data</h4><i>Click Here</i> after the selection if you want to preview your data",
+                            element: self.$PREVIEW_BUTTON
+                        },
+                        {
+                            intro: "<h4>Download Data</h4>or <i>Click Here</i> if you want to download your data",
+                            element: self.$EXPORT_BUTTON
+                        },
+                        {
+                            intro: "<h4>Metadata</h4>If you want to know something more about the metadata",
+                            element: '[data-role="fs-download-metadata-button"]'
+                        },
+                        {
+                            intro: "<h4>Definitions and standards</h4>or the definitions and standards used",
+                            element: '[data-role="fs-download-definitions-button"]'
+                        },
+                        {
+                            intro: "<h4>Any doubt or suggestion?</h4>Drop us a line",
+                            element: '[data-role="google-form"]',
+                            position: 'left'
+                        }
+                    ]
+                });
+            }
 
-            intro.setOptions({
-                id: "download_data",
-                steps: [
-                    {
-                        intro: "<h4>Bulk downloads</h4>Quickly download all the data contained in the domain",
-                        element: '[data-role="bulk-downloads-panel"]'
-                    },
-                    {
-                        intro: '<h4>Filter the data</h4>or select from the filter boxes exactly what you need',
-                        element: '[data-role="selector"]',
-                        target: self.$SELECTORS
-                    },
-                    {
-                        intro: "<h4>Show Data</h4><i>Click Here</i> after the selection if you want to preview your data",
-                        element: self.$PREVIEW_BUTTON
-                    },
-                    {
-                        intro: "<h4>Download Data</h4>or <i>Click Here</i> if you want to download your data",
-                        element: self.$EXPORT_BUTTON
-                    },
-                    {
-                        intro: "<h4>Metadata</h4>If you want to know something more about the metadata",
-                        element: '[data-role="fs-download-metadata-button"]'
-                    },
-                    {
-                        intro: "<h4>Definitions and standards</h4>or the definitions and standards used",
-                        element: '[data-role="fs-download-definitions-button"]'
-                    },
-                    {
-                        intro: "<h4>Any doubt or suggestion?</h4>Drop us a line",
-                        element: '[data-role="google-form"]',
-                        position: 'left'
-                    }
-                ]
-            });
-
-            intro.start(force);
+            this.onboarding.start(force);
 
         };
 
@@ -877,7 +893,7 @@ define([
 
             amplify.subscribe(E.DOWNLOAD_SELECTION_CHANGE, this, this.selectionChange);
 
-            //amplify.subscribe(E.ONBOARDING_DOWNLOAD, this, this.initTour());
+            amplify.subscribe(E.ONBOARDING_DOWNLOAD, this, this.initTour);
 
         };
 
@@ -932,6 +948,10 @@ define([
         InteractiveDownload.prototype.destroy = function () {
 
             log.info('InteractiveDownload.destroy;');
+
+            if (this.$ONBOARDING_TEXT !== undefined) {
+                this.$ONBOARDING_TEXT.empty();
+            }
 
             this.unbindEventListeners();
 

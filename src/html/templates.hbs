@@ -1,66 +1,52 @@
-<!--<h5>{{last_update}}Last update <span data-role="date-update"></span></h5>-->
-<!--</<p>{{{interactive_download_welcome}}}</p>
-<br>
--->
+<template id="main_structure">
+    <div class="panel panel-default hoverable">
+        <div class="panel-body">
 
-<!--<div class="row">
-    <div class="col-xs-12">
-        <div data-role="note">
-            <h4>{{please_note}}Notes</h4>
-            <h5>{{date_update}}Updated on: <span data-role="date-update"></span></h5>
-&lt;!&ndash;            <h5>
-                <li>Aggregates are the sum of available data.
-                <li>For some item aggregates, conversion factors are applied to values when calculating totals. Please see item Metadata for the factors.
-            </h5>&ndash;&gt;
-        </div>
-    </div>
-</div>-->
+            <div style="min-height:300px;" data-role="selectors"></div>
+
+            <div class="fs-download-options">
 
 
-<div class="panel panel-default hoverable">
-    <div class="panel-body">
+                <div class="panel-body">
+                    <div class="row">
 
-        <div style="min-height:300px;" data-role="selectors"></div>
+                        <div class="col-xs-12">
+                            <div data-role="options"></div>
+                        </div>
 
-        <div class="fs-download-options">
-
-
-            <div class="panel-body">
-                <div class="row">
-
-                    <div class="col-xs-12">
-                        <div data-role="options"></div>
                     </div>
 
-                </div>
+                    <div class="row fs-download-options-buttons">
 
-                <div class="row fs-download-options-buttons">
+                        <div class="hidden-xs col-sm-4"></div>
 
-                    <div class="hidden-xs col-sm-4">
-                        <!--<a class="btn btn-link btn-block" target="_blank" href="https://en.wikipedia.org/wiki/Comma-separated_values"><i class="material-icons">info_outline</i>{{what_is_a_csv}}</a>-->
-                    </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <button class="btn btn-primary btn-block waves-effect truncate" data-role="preview">
+                                <i class="material-icons left">search</i>
+                                {{show_data}}
+                            </button>
+                        </div>
 
-                    <div class="col-xs-6 col-sm-4">
-                        <button class="btn btn-primary btn-block waves-effect truncate" data-role="preview">
-                            <i class="material-icons left">search</i>
-                            {{show_data}}
-                        </button>
-                    </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <button class="btn btn-default btn-block waves-effect waves-light truncate" data-role="export">
+                                <i class="material-icons left">file_download</i>
+                                {{download_data}}
+                            </button>
+                        </div>
 
-                    <div class="col-xs-6 col-sm-4">
-                        <button class="btn btn-default btn-block waves-effect waves-light truncate" data-role="export">
-                            <i class="material-icons left">file_download</i>
-                            {{download_data}}
-                        </button>
                     </div>
 
                 </div>
 
             </div>
-
         </div>
     </div>
-</div>
+    <!--<div data-role="output-area"></div>-->
+</template>
 
-
-<!--<div data-role="output-area"></div>-->
+<template id="onboarding">
+    <a class="btn btn-info btn-block waves-effect truncate" data-role="onboarding">
+        <i class="material-icons left">help_outline</i>
+        <span data-role="text">{{onboarding_text}}</span>
+    </a>
+</template>
