@@ -887,6 +887,7 @@ define([
             if (this.$ONBOARDING) {
                 this.$ONBOARDING.on("click", function (e) {
                     e.preventDefault();
+                    self.analyticsOnboarding();
                     self.initTour(true);
                 });
             }
@@ -894,6 +895,17 @@ define([
             amplify.subscribe(E.DOWNLOAD_SELECTION_CHANGE, this, this.selectionChange);
 
             amplify.subscribe(E.ONBOARDING_DOWNLOAD, this, this.initTour);
+
+        };
+
+        InteractiveDownload.prototype.analyticsOnboarding = function () {
+
+            amplify.publish(E.GOOGLE_ANALYTICS_EVENT,
+                $.extend({}, true, A.onboarding, {
+                        action: 'interactive_download',
+                        label: this.o.code
+                    })
+            );
 
         };
 
