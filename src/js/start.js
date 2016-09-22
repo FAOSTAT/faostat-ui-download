@@ -138,9 +138,9 @@ define([
             this.$OUTPUT_CONTAINER = $(this.o.output_container);
 
             // if this.o.output_area
-            if (this.o.hasOwnProperty('output_container')) {
+            if (this.o.hasOwnProperty('output') && this.o.output.hasOwnProperty('container')) {
 
-                this.$OUTPUT_CONTAINER = $(this.o.output_container);
+                this.$OUTPUT_CONTAINER = $(this.o.output.container);
                     
                 // show the container
                 this.$OUTPUT_CONTAINER.show();
@@ -148,6 +148,16 @@ define([
                 this.$OUTPUT_CONTENT = this.$OUTPUT_CONTAINER.find(s.OUTPUT.CONTENT);
                 this.$OUTPUT_MESSAGE = this.$OUTPUT_CONTAINER.find(s.OUTPUT.MESSAGE);
                 this.$OUTPUT_EXPORT = this.$OUTPUT_CONTAINER.find(s.OUTPUT.EXPORT);
+
+            }
+
+            log.info("---------------", this.o.onboarding);
+            if (this.o.hasOwnProperty('onboarding') && this.o.onboarding.hasOwnProperty('container')) {
+
+                this.$ONBOARDING = $(this.o.onboarding.container);
+
+                // show the onboarding
+                this.$ONBOARDING.show();
 
             }
 
@@ -180,7 +190,7 @@ define([
 
         };
 
-        InteractiveDownload.prototype.initTour = function() {
+        InteractiveDownload.prototype.initTour = function(force) {
 
             var self = this;
 
@@ -190,16 +200,16 @@ define([
                 id: "download_data",
                 steps: [
                     {
-                        intro: "<h4>Bulk downloads</h4>If you want to directly bulk download the data contained in the domain",
+                        intro: "<h4>Bulk downloads</h4>Quickly download all the data contained in the domain",
                         element: '[data-role="bulk-downloads-panel"]'
                     },
                     {
-                        intro: '<h4>Filter the data</h4>If you want to refine your data, select at least one "indicator" for each of the selection boxes',
+                        intro: '<h4>Filter the data</h4>or select from the filter boxes exactly what you need',
                         element: '[data-role="selector"]',
                         target: self.$SELECTORS
                     },
                     {
-                        intro: "<h4>Show Data</h4>After the selection, <i>Click Here</i> if you want to preview your data",
+                        intro: "<h4>Show Data</h4><i>Click Here</i> after the selection if you want to preview your data",
                         element: self.$PREVIEW_BUTTON
                     },
                     {
@@ -215,14 +225,14 @@ define([
                         element: '[data-role="fs-download-definitions-button"]'
                     },
                     {
-                        intro: "<h4>Any doubts or feedback?</h4>Drop us a line",
+                        intro: "<h4>Any doubt or suggestion?</h4>Drop us a line",
                         element: '[data-role="google-form"]',
                         position: 'left'
                     }
                 ]
             });
 
-            intro.start();
+            intro.start(force);
 
         };
 
@@ -859,6 +869,13 @@ define([
                 });
             });
 
+            if (this.$ONBOARDING) {
+                this.$ONBOARDING.on("click", function (e) {
+                    e.preventDefault();
+                    self.initTour(true);
+                });
+            }
+
             amplify.subscribe(E.DOWNLOAD_SELECTION_CHANGE, this, this.selectionChange);
 
             amplify.subscribe(E.TOUR_DOWNLOAD, this, this.initTour());
@@ -871,6 +888,10 @@ define([
             this.$EXPORT_BUTTON.off('click');
             this.$METADATA_BUTTON.off('click');
             this.$OUTPUT_EXPORT.off('click');
+            if (this.$ONBOARDING) {
+                this.$ONBOARDING.off();
+                this.$ONBOARDING.hide();
+            }
 
             amplify.unsubscribe(E.DOWNLOAD_SELECTION_CHANGE, this.selectionChange);
         };
