@@ -16,21 +16,19 @@ define([
         'faostatapiclient',
         'handlebars',
         'underscore',
-        'lib/onboarding/onboarding',
         'amplify'
     ],
     function ($, log,
               C, E, A,
               Common, template, i18nLabels,
-              SelectorManager, 
+              SelectorManager,
               DownloadOptions,
               Table,
               FAOSTATPivot, PivotExporter,
               API,
               Handlebars,
-              _,
-              OnBoarding
-) {
+              _
+    ) {
 
         'use strict';
 
@@ -57,8 +55,6 @@ define([
 
                 // this is used to check if the pivot table is rendered or not
                 PIVOT_TABLE: '[data-role="pivot"]',
-
-                ONBOARDING: '[data-role="onboarding"]'
 
             },
             defaultOptions = {
@@ -89,14 +85,14 @@ define([
                 },
 
                 DEFAULT_REQUEST: {
-                  /*  limit:-1,
-                    page_size: 0,
-                    per_page: 0,
-                    page_number: -1,
-                    null_values: false,
-                    show_flags: true,
-                    show_codes: true,
-                    show_unit: true,*/
+                    /*  limit:-1,
+                     page_size: 0,
+                     per_page: 0,
+                     page_number: -1,
+                     null_values: false,
+                     show_flags: true,
+                     show_codes: true,
+                     show_unit: true,*/
                 }
 
             };
@@ -144,34 +140,13 @@ define([
             if (this.o.hasOwnProperty('output') && this.o.output.hasOwnProperty('container')) {
 
                 this.$OUTPUT_CONTAINER = $(this.o.output.container);
-                    
+
                 // show the container
                 this.$OUTPUT_CONTAINER.show();
 
                 this.$OUTPUT_CONTENT = this.$OUTPUT_CONTAINER.find(s.OUTPUT.CONTENT);
                 this.$OUTPUT_MESSAGE = this.$OUTPUT_CONTAINER.find(s.OUTPUT.MESSAGE);
                 this.$OUTPUT_EXPORT = this.$OUTPUT_CONTAINER.find(s.OUTPUT.EXPORT);
-
-            }
-
-            if (this.o.hasOwnProperty('additional_information') && this.o.additional_information.hasOwnProperty('container')) {
-
-                var html = $(template).filter('#onboarding').html(),
-                    t = Handlebars.compile(html);
-
-                this.$ADDITIONAL_INFORMATION = $(this.o.additional_information.container);
-                this.$ADDITIONAL_INFORMATION.html(t({
-                    onboarding_text: "Help on download data?"
-                }));
-
-                this.$ONBOARDING = this.$ADDITIONAL_INFORMATION.find(s.ONBOARDING);
-
-                // show the onboarding
-                this.$ADDITIONAL_INFORMATION.show();
-
-     /*           style="display:none;" class="btn btn-info btn-block waves-effect truncate" data-role="fs-download-onboarding">
-                    <i class="material-icons left">help_outline</i>
-                    <span data-role="text"></span>*/
 
             }
 
@@ -204,50 +179,25 @@ define([
 
         };
 
-        InteractiveDownload.prototype.initTour = function(force) {
+        InteractiveDownload.prototype.getOnboardingSteps = function() {
 
             var self = this;
 
-            if (this.onboarding === undefined) {
-                this.onboarding = new OnBoarding();
-                this.onboarding.setOptions({
-                    id: "download_data",
-                    steps: [
-                        {
-                            intro: "<h4>Bulk downloads</h4>Quickly download all the data contained in the domain",
-                            element: '[data-role="bulk-downloads-panel"]'
-                        },
-                        {
-                            intro: '<h4>Filter the data</h4>or select from the filter boxes exactly what you need',
-                            element: '[data-role="selector"]',
-                            target: self.$SELECTORS
-                        },
-                        {
-                            intro: "<h4>Show Data</h4><i>Click Here</i> after the selection if you want to preview your data",
-                            element: self.$PREVIEW_BUTTON
-                        },
-                        {
-                            intro: "<h4>Download Data</h4>or <i>Click Here</i> if you want to download your data",
-                            element: self.$EXPORT_BUTTON
-                        },
-                        {
-                            intro: "<h4>Metadata</h4>If you want to know something more about the metadata",
-                            element: '[data-role="fs-download-metadata-button"]'
-                        },
-                        {
-                            intro: "<h4>Definitions and standards</h4>or the definitions and standards used",
-                            element: '[data-role="fs-download-definitions-button"]'
-                        },
-                        {
-                            intro: "<h4>Any doubt or suggestion?</h4>Drop us a line",
-                            element: '[data-role="google-form"]',
-                            position: 'left'
-                        }
-                    ]
-                });
-            }
-
-            this.onboarding.start(force);
+            return [
+                    {
+                        intro: '<h4>Filter the data</h4>Select from the filter boxes exactly what you need',
+                        element: '[data-role="selector"]',
+                        target: self.$SELECTORS
+                    },
+                    {
+                        intro: "<h4>Show Data</h4><i>Click Here</i> after the selection if you want to preview your data",
+                        element: self.$PREVIEW_BUTTON
+                    },
+                    {
+                        intro: "<h4>Download Data</h4>or <i>Click Here</i> if you want to download your data",
+                        element: self.$EXPORT_BUTTON
+                    }
+                ]
 
         };
 
@@ -309,9 +259,9 @@ define([
                 // Override of the Request with Fixed parameters
                 r = $.extend(true, {}, requestObj, {}); //this.o.PIVOT.REQUEST_FIXED_PARAMETERS);
 
-                // initializing request
-                r.page_number = this.o.TABLE.PAGE_NUMBER;
-                r.page_size = this.o.TABLE.PAGE_SIZE;
+            // initializing request
+            r.page_number = this.o.TABLE.PAGE_NUMBER;
+            r.page_size = this.o.TABLE.PAGE_SIZE;
 
 
             log.info("InteractiveDownload.previewTable; requestObj", requestObj, options);
@@ -331,7 +281,7 @@ define([
                     amplify.publish(E.SCROLL_TO_SELECTOR, {
                         container: self.$OUTPUT_CONTAINER,
                         paddingTop: 0,
-                        force: true, 
+                        force: true,
                         forceInvisible: true
                     });
 
@@ -339,7 +289,7 @@ define([
                     self.stateOutputInPreview();
 
                     //amplify.publish(E.WAITING_HIDE, {});
-                    
+
                     // TODO: the Table requires to be simplified and a refactoring!
                     // TODO: config should be moved to a configuration file
                     var table = new Table();
@@ -476,7 +426,7 @@ define([
             if(querySizeCheck) {
 
                 API.data(r).then(function(d) {
-       
+
                     amplify.publish(E.SCROLL_TO_SELECTOR, {
                         container: self.$OUTPUT_CONTAINER,
                         paddingTop: 0,
@@ -693,17 +643,17 @@ define([
                 text: i18nLabels.suggest_bulk_downloads,
             });
 
-          /*  var self = this;
-            // TODO: focus on bulk downloads
-            if (this.o.hasOwnProperty('$BULK_DOWNLOADS_PANEL')) {
-                amplify.publish(E.SCROLL_TO_SELECTOR, {
-                    container: this.o.$BULK_DOWNLOADS_PANEL,
-                    paddingTop: 150
-                });
-                /!*setTimeout(function() {
-                    self.o.$BULK_DOWNLOADS_PANEL.removeClass('bounce animated').addClass('bounce animated');
-                }, 2000);*!/
-            }*/
+            /*  var self = this;
+             // TODO: focus on bulk downloads
+             if (this.o.hasOwnProperty('$BULK_DOWNLOADS_PANEL')) {
+             amplify.publish(E.SCROLL_TO_SELECTOR, {
+             container: this.o.$BULK_DOWNLOADS_PANEL,
+             paddingTop: 150
+             });
+             /!*setTimeout(function() {
+             self.o.$BULK_DOWNLOADS_PANEL.removeClass('bounce animated').addClass('bounce animated');
+             }, 2000);*!/
+             }*/
 
             this.stateOutputInSelection();
 
@@ -728,10 +678,10 @@ define([
 
 
             // this should be
-/*            this.$OUTPUT_CONTENT.empty();
+            /*            this.$OUTPUT_CONTENT.empty();
 
-            // show message
-            this.$OUTPUT_MESSAGE.show();*/
+             // show message
+             this.$OUTPUT_MESSAGE.show();*/
 
             this.stateOutputInSelection();
 
@@ -768,19 +718,19 @@ define([
 
             var o = {},
                 obj = obj || {};
-            
+
             o.querySizeCheck = obj.hasOwnProperty("querySizeCheck")? obj.querySizeCheck : true;
             o.code = this.o.code;
 
             if (addSize === true && obj.hasOwnProperty("querySize")) {
-               o.querySize = obj.querySize;
+                o.querySize = obj.querySize;
             }
             log.info('InteractiveDownload.getAnalyticsLabel;', o)
 
             return o;
 
         };
-        
+
         InteractiveDownload.prototype.analyticsTableQuerySize = function (obj) {
 
             amplify.publish(E.GOOGLE_ANALYTICS_EVENT,
@@ -884,30 +834,21 @@ define([
                 });
             });
 
-            if (this.$ONBOARDING) {
-                this.$ONBOARDING.on("click", function (e) {
-                    e.preventDefault();
-                    self.analyticsOnboarding();
-                    self.initTour(true);
-                });
-            }
 
             amplify.subscribe(E.DOWNLOAD_SELECTION_CHANGE, this, this.selectionChange);
 
-            amplify.subscribe(E.ONBOARDING_DOWNLOAD, this, this.initTour);
-
         };
 
-        InteractiveDownload.prototype.analyticsOnboarding = function () {
+/*        InteractiveDownload.prototype.analyticsOnboarding = function () {
 
             amplify.publish(E.GOOGLE_ANALYTICS_EVENT,
                 $.extend({}, true, A.onboarding, {
-                        action: 'interactive_download',
-                        label: this.o.code
-                    })
+                    action: 'interactive_download',
+                    label: this.o.code
+                })
             );
 
-        };
+        };*/
 
         InteractiveDownload.prototype.unbindEventListeners = function () {
 
@@ -915,10 +856,6 @@ define([
             this.$EXPORT_BUTTON.off('click');
             this.$METADATA_BUTTON.off('click');
             this.$OUTPUT_EXPORT.off('click');
-            if (this.$ONBOARDING) {
-                this.$ONBOARDING.off();
-                this.$ONBOARDING.hide();
-            }
 
             amplify.unsubscribe(E.DOWNLOAD_SELECTION_CHANGE, this.selectionChange);
         };
@@ -960,10 +897,6 @@ define([
         InteractiveDownload.prototype.destroy = function () {
 
             log.info('InteractiveDownload.destroy;');
-
-            if (this.$ONBOARDING_TEXT !== undefined) {
-                this.$ONBOARDING_TEXT.empty();
-            }
 
             this.unbindEventListeners();
 
