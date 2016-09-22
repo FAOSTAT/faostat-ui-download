@@ -151,7 +151,6 @@ define([
 
             }
 
-            log.info("---------------", this.o.onboarding);
             if (this.o.hasOwnProperty('onboarding') && this.o.onboarding.hasOwnProperty('container')) {
 
                 this.$ONBOARDING = $(this.o.onboarding.container);
@@ -878,7 +877,7 @@ define([
 
             amplify.subscribe(E.DOWNLOAD_SELECTION_CHANGE, this, this.selectionChange);
 
-            amplify.subscribe(E.TOUR_DOWNLOAD, this, this.initTour());
+            //amplify.subscribe(E.ONBOARDING_DOWNLOAD, this, this.initTour());
 
         };
 
