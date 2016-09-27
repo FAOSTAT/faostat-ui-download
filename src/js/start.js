@@ -39,9 +39,6 @@ define([
                 EXPORT_BUTTON: '[data-role="export"]',
                 PREVIEW_BUTTON: '[data-role="preview"]',
 
-                DATE_UPDATE: '[data-role="date-update"]',
-                METADATA_BUTTON: '[data-role="metadata"]',
-
                 // this could be customized if configured in config.
                 OUTPUT: {
                     //CONTAINER: '[data-role="output-area"]',
@@ -128,8 +125,6 @@ define([
             this.$EXPORT_BUTTON = this.$CONTAINER.find(s.EXPORT_BUTTON);
             this.$PREVIEW_BUTTON = this.$CONTAINER.find(s.PREVIEW_BUTTON);
             this.$OPTIONS = this.$CONTAINER.find(s.OPTIONS);
-            this.$METADATA_BUTTON = this.$CONTAINER.find(s.METADATA_BUTTON);
-            this.$DATE_UPDATE = this.$CONTAINER.find(s.DATE_UPDATE);
 
             // output_area
             // this.$OUTPUT_AREA = this.$CONTAINER.find(s.OUTPUT_AREA);
@@ -155,8 +150,6 @@ define([
         InteractiveDownload.prototype.initComponents = function () {
 
             var code = this.o.code;
-
-            this.$DATE_UPDATE.html(this.o.date_update);
 
             // Init Selector Manager
             this.selectorsManager = new SelectorManager();
@@ -828,33 +821,14 @@ define([
 
             });
 
-            this.$METADATA_BUTTON.on('click', function () {
-                amplify.publish(E.METADATA_SHOW, {
-                    code: self.o.code
-                });
-            });
-
-
             amplify.subscribe(E.DOWNLOAD_SELECTION_CHANGE, this, this.selectionChange);
 
         };
-
-/*        InteractiveDownload.prototype.analyticsOnboarding = function () {
-
-            amplify.publish(E.GOOGLE_ANALYTICS_EVENT,
-                $.extend({}, true, A.onboarding, {
-                    action: 'interactive_download',
-                    label: this.o.code
-                })
-            );
-
-        };*/
 
         InteractiveDownload.prototype.unbindEventListeners = function () {
 
             this.$PREVIEW_BUTTON.off('click');
             this.$EXPORT_BUTTON.off('click');
-            this.$METADATA_BUTTON.off('click');
             this.$OUTPUT_EXPORT.off('click');
 
             amplify.unsubscribe(E.DOWNLOAD_SELECTION_CHANGE, this.selectionChange);
