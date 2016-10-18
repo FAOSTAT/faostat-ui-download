@@ -151,6 +151,8 @@ define([
 
             var code = this.o.code;
 
+            amplify.publish(E.LOADING_SHOW, {container: this.$SELECTORS});
+
             // Init Selector Manager
             this.selectorsManager = new SelectorManager();
             this.selectorsManager.init({
